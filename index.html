@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>БухгалтерПро - Система учета сотрудников</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #1e293b;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-dark: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --shadow: 0 5px 15px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
+            --border-radius: 12px;
+        }
+
+        body {
+            background: var(--gradient-dark);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hero {
+            background: var(--gradient);
+            padding: 140px 0 80px;
+            text-align: center;
+            position: relative;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .tabs-container {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .tab-headers {
+            display: flex;
+            background: rgba(15, 23, 42, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-header {
+            padding: 1.2rem 2rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+            flex: 1;
+            text-align: center;
+        }
+
+        .tab-header.active {
+            border-bottom: 3px solid var(--primary);
+            color: white;
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .tab-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2.5rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table th {
+            background: rgba(67, 97, 238, 0.3);
+            font-weight: 600;
+            color: white;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 4rem 0 2rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer {
+            background: rgba(15, 23, 42, 0.95);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab-headers {
+                flex-direction: column;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-table {
+                font-size: 0.9rem;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 12px 15px;
+            }
+        }
+        
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fecaca;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+        }
+        
+        .success-message {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+            color: #bbf7d0;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="#" class="logo">
+                    <div class="logo-icon">Б</div>
+                    <div>БухгалтерПро</div>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Главная</a></li>
+                    <li><a href="#employees">Сотрудники</a></li>
+                    <li><a href="#departments">Отделы</a></li>
+                    <li><a href="#financial">Финансы</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Профессиональная система бухгалтерского учета</h1>
+            <p>Автоматизируйте расчет зарплаты, учет рабочего времени и создание отчетов с помощью современного решения для бухгалтерии. Экономьте время и снижайте количество ошибок.</p>
+            
+            <div class="hero-buttons">
+                <button id="initDbBtn" class="btn btn-primary">
+                    <i class="fas fa-database"></i>
+                    Инициализировать БД
+                </button>
+                <button id="importDataBtn" class="btn btn-outline">
+                    <i class="fas fa-file-import"></i>
+                    Импорт данных
+                </button>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalEmployees">0</div>
+                    <div class="stat-label">Сотрудников в компании</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalSalary">0</div>
+                    <div class="stat-label">Общий фонд оплаты (BYN)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgSalary">0</div>
+                    <div class="stat-label">Средняя зарплата</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalDepartments">0</div>
+                    <div class="stat-label">Отделов компании</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="section-title">
+            <h2>Управление данными компании</h2>
+            <p>Вся актуальная информация о сотрудниках, отделах и финансовых показателях в одном месте</p>
+        </div>
+
+        <div id="messageContainer"></div>
+
+        <div class="tabs-container">
+            <div class="tab-headers">
+                <div class="tab-header active" data-tab="employees">Сотрудники</div>
+                <div class="tab-header" data-tab="departments">Отделы</div>
+                <div class="tab-header" data-tab="financial">Финансы</div>
+            </div>
+
+            <div class="tab-content active" id="employees-tab">
+                <h3><i class="fas fa-users" style="color: #4361ee; margin-right: 10px;"></i> Список сотрудников</h3>
+                <p style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;">Полная информация о сотрудниках компании, включая должности, зарплаты и даты приема на работу</p>
+                <button id="refreshEmployeesBtn" class="btn btn-primary" style="margin-bottom: 1rem;">
+                    <i class="fas fa-sync-alt"></i>
+                    Обновить данные
+                </button>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ФИО</th>
+                            <th>Должность</th>
+                            <th>Оклад</th>
+                            <th>Дата приема</th>
+                            <th>Отдел</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeesTable">
+                        <tr>
+                            <td colspan="7" style="text-align: center;">Загрузка данных...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content" id="departments-tab">
+                <h3><i class="fas fa-building" style="color: #4361ee; margin-right: 10px;"></i> Отделы компании</h3>
+                <p style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;">Структура отделов компании с бюджетами и распределением сотрудников</p>
+                <button id="refreshDepartmentsBtn" class="btn btn-primary" style="margin-bottom: 1rem;">
+                    <i class="fas fa-sync-alt"></i>
+                    Обновить данные
+                </button>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Отдел</th>
+                            <th>Бюджет</th>
+                            <th>Менеджер</th>
+                            <th>Сотрудников</th>
+                            <th>Средняя зарплата</th>
+                        </tr>
+                    </thead>
+                    <tbody id="departmentsTable">
+                        <tr>
+                            <td colspan="6" style="text-align: center;">Загрузка данных...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="tab-content" id="financial-tab">
+                <h3><i class="fas fa-chart-line" style="color: #4361ee; margin-right: 10px;"></i> Финансовые показатели</h3>
+                <p style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;">Ключевые финансовые метрики компании за текущий и предыдущий месяцы</p>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Показатель</th>
+                            <th>Текущий месяц</th>
+                            <th>Прошлый месяц</th>
+                            <th>Динамика</th>
+                        </tr>
+                    </thead>
+                    <tbody id="financialTable">
+                        <tr>
+                            <td colspan="5" style="text-align: center;">Загрузка данных...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <div class="logo-icon">Б</div>
+                    <div>БухгалтерПро</div>
+                </div>
+                <p>Профессиональное решение для автоматизации бухгалтерского учета</p>
+                <div class="footer-links">
+                    <a href="#">О компании</a>
+                    <a href="#">Контакты</a>
+                    <a href="#">Поддержка</a>
+                    <a href="#">Документация</a>
+                </div>
+                <p style="color: rgba(255,255,255,0.7);">&copy; 2023 БухгалтерПро. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = '';
+        
+
+        function showMessage(message, type = 'info') {
+            const messageContainer = document.getElementById('messageContainer');
+            const messageEl = document.createElement('div');
+            messageEl.className = type === 'error' ? 'error-message' : 
+                                type === 'success' ? 'success-message' : 'info-message';
+            messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : type === 'success' ? 'check-circle' : 'info-circle'}"></i> ${message}`;
+            messageContainer.appendChild(messageEl);
+            
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.parentNode.removeChild(messageEl);
+                }
+            }, 5000);
+        }
+        
+        async function apiCall(action, params = {}) {
+            try {
+                const url = new URL(`${API_BASE}api.php`);
+                url.searchParams.set('action', action);
+                
+                Object.keys(params).forEach(key => {
+                    url.searchParams.set(key, params[key]);
+                });
+                
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`Ошибка HTTP: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Ошибка API:', error);
+                showMessage(`Ошибка при загрузке данных: ${error.message}`, 'error');
+                return null;
+            }
+        }
+        
+        async function executeDbOperation(endpoint) {
+            try {
+                const response = await fetch(endpoint);
+                const result = await response.text();
+                
+                if (response.ok) {
+                    showMessage(result, 'success');
+                    return true;
+                } else {
+                    throw new Error(result);
+                }
+            } catch (error) {
+                console.error('Ошибка операции с БД:', error);
+                showMessage(`Ошибка: ${error.message}`, 'error');
+                return false;
+            }
+        }
+        
+        async function loadEmployees() {
+            const employeesTable = document.getElementById('employeesTable');
+            employeesTable.innerHTML = '<tr><td colspan="7" style="text-align: center;"><div class="loading"></div> Загрузка...</td></tr>';
+            
+            const data = await apiCall('get_employees');
+            
+            if (data && data.length > 0) {
+                employeesTable.innerHTML = data.map(emp => `
+                    <tr>
+                        <td><strong>${emp.id}</strong></td>
+                        <td>${emp.name}</td>
+                        <td>${emp.position}</td>
+                        <td>${parseFloat(emp.salary).toLocaleString()} BYN</td>
+                        <td>${emp.hire_date}</td>
+                        <td>${emp.department_name || 'Не назначен'}</td>
+                        <td><span style="color: ${emp.status === 'активен' ? '#4ade80' : '#f87171'}; font-weight: 500;">${emp.status || 'неизвестно'}</span></td>
+                    </tr>
+                `).join('');
+                
+                updateStats(data);
+            } else {
+                employeesTable.innerHTML = '<tr><td colspan="7" style="text-align: center;">Нет данных о сотрудниках</td></tr>';
+            }
+        }
+        
+        async function loadDepartments() {
+            const departmentsTable = document.getElementById('departmentsTable');
+            departmentsTable.innerHTML = '<tr><td colspan="6" style="text-align: center;"><div class="loading"></div> Загрузка...</td></tr>';
+            
+            const data = await apiCall('get_departments');
+            
+            if (data && data.length > 0) {
+                departmentsTable.innerHTML = data.map(dept => `
+                    <tr>
+                        <td><strong>${dept.id}</strong></td>
+                        <td>${dept.name}</td>
+                        <td>${parseFloat(dept.budget).toLocaleString()} BYN</td>
+                        <td>${dept.manager || 'Не назначен'}</td>
+                        <td>${dept.employee_count || 0} чел.</td>
+                        <td>${dept.avg_salary ? parseFloat(dept.avg_salary).toLocaleString() + ' BYN' : 'Н/Д'}</td>
+                    </tr>
+                `).join('');
+                
+                document.getElementById('totalDepartments').textContent = data.length;
+            } else {
+                departmentsTable.innerHTML = '<tr><td colspan="6" style="text-align: center;">Нет данных об отделах</td></tr>';
+            }
+        }
+        
+        function updateStats(employees) {
+            if (!employees || employees.length === 0) return;
+            
+            const totalSalary = employees.reduce((sum, emp) => sum + parseFloat(emp.salary || 0), 0);
+            const avgSalary = Math.round(totalSalary / employees.length);
+            
+            document.getElementById('totalEmployees').textContent = employees.length;
+            document.getElementById('totalSalary').textContent = totalSalary.toLocaleString();
+            document.getElementById('avgSalary').textContent = avgSalary.toLocaleString();
+        }
+        
+        function loadFinancialData() {
+            const financialTable = document.getElementById('financialTable');
+            
+            const financialData = [
+                { id: 1, indicator: "Общий фонд оплаты", current: 245800, previous: 238500, trend: "+3.1%" },
+                { id: 2, indicator: "Средняя зарплата", current: 1420, previous: 1380, trend: "+2.9%" },
+                { id: 3, indicator: "Налоговые отчисления", current: 58900, previous: 57200, trend: "+3.0%" },
+                { id: 4, indicator: "Производственные расходы", current: 187600, previous: 192300, trend: "-2.4%" },
+                { id: 5, indicator: "Чистая прибыль", current: 452300, previous: 428900, trend: "+5.5%" }
+            ];
+            
+            financialTable.innerHTML = financialData.map(fin => `
+                <tr>
+                    <td><strong>${fin.id}</strong></td>
+                    <td>${fin.indicator}</td>
+                    <td>${fin.current.toLocaleString()} BYN</td>
+                    <td>${fin.previous.toLocaleString()} BYN</td>
+                    <td style="color: ${fin.trend.startsWith('+') ? '#4ade80' : '#f87171'}; font-weight: 600;">
+                        ${fin.trend}
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function initTabs() {
+            const tabHeaders = document.querySelectorAll('.tab-header');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    tabHeaders.forEach(h => h.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+
+                    header.classList.add('active');
+
+                    const tabId = header.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    if (tabId === 'employees') {
+                        loadEmployees();
+                    } else if (tabId === 'departments') {
+                        loadDepartments();
+                    } else if (tabId === 'financial') {
+                        loadFinancialData();
+                    }
+                });
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            initTabs();
+            loadEmployees();
+            loadDepartments();
+            loadFinancialData();
+            
+            document.getElementById('initDbBtn').addEventListener('click', () => {
+                executeDbOperation('create_database.php').then(success => {
+                    if (success) {
+                        loadEmployees();
+                        loadDepartments();
+                    }
+                });
+            });
+            
+            document.getElementById('importDataBtn').addEventListener('click', () => {
+                executeDbOperation('import_data.php').then(success => {
+                    if (success) {
+                        loadEmployees();
+                        loadDepartments();
+                    }
+                });
+            });
+            
+            document.getElementById('refreshEmployeesBtn').addEventListener('click', loadEmployees);
+            document.getElementById('refreshDepartmentsBtn').addEventListener('click', loadDepartments);
+        });
+    </script>
+</body>
+</html>
