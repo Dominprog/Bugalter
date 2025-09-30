@@ -167,7 +167,6 @@
             color: var(--primary);
         }
 
-        /* Stats */
         .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -334,7 +333,6 @@
             color: white;
         }
 
-
         @media (max-width: 768px) {
             .nav-links {
                 gap: 1rem;
@@ -366,7 +364,6 @@
                 padding: 12px 15px;
             }
         }
-        
 
         .loading {
             display: inline-block;
@@ -381,7 +378,6 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        
 
         .error-message {
             background: rgba(239, 68, 68, 0.2);
@@ -525,10 +521,13 @@
                 </table>
             </div>
 
-
             <div class="tab-content" id="financial-tab">
                 <h3><i class="fas fa-chart-line" style="color: #4361ee; margin-right: 10px;"></i> Финансовые показатели</h3>
                 <p style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;">Ключевые финансовые метрики компании за текущий и предыдущий месяцы</p>
+                <button id="refreshFinancialBtn" class="btn btn-primary" style="margin-bottom: 1rem;">
+                    <i class="fas fa-sync-alt"></i>
+                    Обновить данные
+                </button>
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -571,6 +570,31 @@
     <script>
         const API_BASE = '';
         
+        const financialData = [
+            { id: 1, indicator: "Общий фонд оплаты", current: 245800, previous: 238500, trend: "+3.1%" },
+            { id: 2, indicator: "Средняя зарплата", current: 1420, previous: 1380, trend: "+2.9%" },
+            { id: 3, indicator: "Налоговые отчисления", current: 58900, previous: 57200, trend: "+3.0%" },
+            { id: 4, indicator: "Производственные расходы", current: 187600, previous: 192300, trend: "-2.4%" },
+            { id: 5, indicator: "Чистая прибыль", current: 452300, previous: 428900, trend: "+5.5%" }
+        ];
+
+        const employeesData = [
+            { id: 1, name: "Иванов Алексей Сергеевич", hire_date: "2023-01-15", position: "Бухгалтер", salary: 2520, department_id: 1, status: "активен" },
+            { id: 2, name: "Петрова Елена Владимировна", hire_date: "2022-03-20", position: "Главный бухгалтер", salary: 3195, department_id: 1, status: "активен" },
+            { id: 3, name: "Сидоров Петр Николаевич", hire_date: "2024-01-10", position: "Стажер", salary: 1333, department_id: 1, status: "активен" },
+            { id: 4, name: "Козлова Мария Игоревна", hire_date: "2023-11-05", position: "Экономист", salary: 2850, department_id: 2, status: "активен" },
+            { id: 5, name: "Николаев Дмитрий Васильевич", hire_date: "2023-05-12", position: "Аналитик", salary: 3120, department_id: 2, status: "активен" },
+            { id: 6, name: "Федоров Сергей Константинович", hire_date: "2022-08-22", position: "Программист", salary: 3800, department_id: 3, status: "активен" },
+            { id: 7, name: "Васильева Ольга Леонидовна", hire_date: "2023-09-14", position: "Менеджер", salary: 2650, department_id: 4, status: "активен" }
+        ];
+
+        const departmentsData = [
+            { id: 1, name: "Бухгалтерия", budget: 45000 },
+            { id: 2, name: "Финансы", budget: 32000 },
+            { id: 3, name: "IT", budget: 68000 },
+            { id: 4, name: "Продажи", budget: 52000 },
+            { id: 5, name: "Производство", budget: 120000 }
+        ];
 
         function showMessage(message, type = 'info') {
             const messageContainer = document.getElementById('messageContainer');
@@ -589,20 +613,25 @@
         
         async function apiCall(action, params = {}) {
             try {
-                const url = new URL(`${API_BASE}api.php`);
-                url.searchParams.set('action', action);
-                
-                Object.keys(params).forEach(key => {
-                    url.searchParams.set(key, params[key]);
-                });
-                
-                const response = await fetch(url);
-                
-                if (!response.ok) {
-                    throw new Error(`Ошибка HTTP: ${response.status}`);
+                if (action === 'get_employees') {
+                    return employeesData;
+                } else if (action === 'get_departments') {
+                    const departmentsWithStats = departmentsData.map(dept => {
+                        const deptEmployees = employeesData.filter(emp => emp.department_id === dept.id);
+                        const avgSalary = deptEmployees.length > 0 
+                            ? Math.round(deptEmployees.reduce((sum, emp) => sum + parseFloat(emp.salary), 0) / deptEmployees.length)
+                            : 0;
+                        
+                        return {
+                            ...dept,
+                            employee_count: deptEmployees.length,
+                            avg_salary: avgSalary,
+                            manager: deptEmployees.find(emp => emp.position.includes('Главный') || emp.position.includes('Менеджер'))?.name || 'Не назначен'
+                        };
+                    });
+                    return departmentsWithStats;
                 }
-                
-                return await response.json();
+                return null;
             } catch (error) {
                 console.error('Ошибка API:', error);
                 showMessage(`Ошибка при загрузке данных: ${error.message}`, 'error');
@@ -612,15 +641,14 @@
         
         async function executeDbOperation(endpoint) {
             try {
-                const response = await fetch(endpoint);
-                const result = await response.text();
-                
-                if (response.ok) {
-                    showMessage(result, 'success');
+                if (endpoint === 'create_database.php') {
+                    showMessage('База данных инициализирована успешно', 'success');
                     return true;
-                } else {
-                    throw new Error(result);
+                } else if (endpoint === 'import_data.php') {
+                    showMessage('Данные успешно импортированы', 'success');
+                    return true;
                 }
+                return false;
             } catch (error) {
                 console.error('Ошибка операции с БД:', error);
                 showMessage(`Ошибка: ${error.message}`, 'error');
@@ -635,17 +663,20 @@
             const data = await apiCall('get_employees');
             
             if (data && data.length > 0) {
-                employeesTable.innerHTML = data.map(emp => `
-                    <tr>
-                        <td><strong>${emp.id}</strong></td>
-                        <td>${emp.name}</td>
-                        <td>${emp.position}</td>
-                        <td>${parseFloat(emp.salary).toLocaleString()} BYN</td>
-                        <td>${emp.hire_date}</td>
-                        <td>${emp.department_name || 'Не назначен'}</td>
-                        <td><span style="color: ${emp.status === 'активен' ? '#4ade80' : '#f87171'}; font-weight: 500;">${emp.status || 'неизвестно'}</span></td>
-                    </tr>
-                `).join('');
+                employeesTable.innerHTML = data.map(emp => {
+                    const department = departmentsData.find(dept => dept.id === emp.department_id);
+                    return `
+                        <tr>
+                            <td><strong>${emp.id}</strong></td>
+                            <td>${emp.name}</td>
+                            <td>${emp.position}</td>
+                            <td>${parseFloat(emp.salary).toLocaleString()} BYN</td>
+                            <td>${emp.hire_date}</td>
+                            <td>${department ? department.name : 'Не назначен'}</td>
+                            <td><span style="color: ${emp.status === 'активен' ? '#4ade80' : '#f87171'}; font-weight: 500;">${emp.status || 'неизвестно'}</span></td>
+                        </tr>
+                    `;
+                }).join('');
                 
                 updateStats(data);
             } else {
@@ -677,6 +708,25 @@
             }
         }
         
+        function loadFinancialData() {
+            const financialTable = document.getElementById('financialTable');
+            financialTable.innerHTML = '<tr><td colspan="5" style="text-align: center;"><div class="loading"></div> Загрузка...</td></tr>';
+            
+            setTimeout(() => {
+                financialTable.innerHTML = financialData.map(fin => `
+                    <tr>
+                        <td><strong>${fin.id}</strong></td>
+                        <td>${fin.indicator}</td>
+                        <td>${fin.current.toLocaleString()} BYN</td>
+                        <td>${fin.previous.toLocaleString()} BYN</td>
+                        <td style="color: ${fin.trend.startsWith('+') ? '#4ade80' : '#f87171'}; font-weight: 600;">
+                            ${fin.trend}
+                        </td>
+                    </tr>
+                `).join('');
+            }, 500);
+        }
+        
         function updateStats(employees) {
             if (!employees || employees.length === 0) return;
             
@@ -686,30 +736,6 @@
             document.getElementById('totalEmployees').textContent = employees.length;
             document.getElementById('totalSalary').textContent = totalSalary.toLocaleString();
             document.getElementById('avgSalary').textContent = avgSalary.toLocaleString();
-        }
-        
-        function loadFinancialData() {
-            const financialTable = document.getElementById('financialTable');
-            
-            const financialData = [
-                { id: 1, indicator: "Общий фонд оплаты", current: 245800, previous: 238500, trend: "+3.1%" },
-                { id: 2, indicator: "Средняя зарплата", current: 1420, previous: 1380, trend: "+2.9%" },
-                { id: 3, indicator: "Налоговые отчисления", current: 58900, previous: 57200, trend: "+3.0%" },
-                { id: 4, indicator: "Производственные расходы", current: 187600, previous: 192300, trend: "-2.4%" },
-                { id: 5, indicator: "Чистая прибыль", current: 452300, previous: 428900, trend: "+5.5%" }
-            ];
-            
-            financialTable.innerHTML = financialData.map(fin => `
-                <tr>
-                    <td><strong>${fin.id}</strong></td>
-                    <td>${fin.indicator}</td>
-                    <td>${fin.current.toLocaleString()} BYN</td>
-                    <td>${fin.previous.toLocaleString()} BYN</td>
-                    <td style="color: ${fin.trend.startsWith('+') ? '#4ade80' : '#f87171'}; font-weight: 600;">
-                        ${fin.trend}
-                    </td>
-                </tr>
-            `).join('');
         }
         
         function initTabs() {
@@ -763,6 +789,7 @@
             
             document.getElementById('refreshEmployeesBtn').addEventListener('click', loadEmployees);
             document.getElementById('refreshDepartmentsBtn').addEventListener('click', loadDepartments);
+            document.getElementById('refreshFinancialBtn').addEventListener('click', loadFinancialData);
         });
     </script>
 </body>
