@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О компании - БухгалтерПро</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #7c3aed;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-800: #1e293b;
+            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+        }
+
+        body {
+            background: var(--gradient-dark);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--gray-200);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hero {
+            background: var(--gradient-primary);
+            padding: 120px 0 60px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 0 0 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .section-title p {
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .about-text {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .about-text p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .about-image {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .about-image i {
+            font-size: 8rem;
+            color: var(--primary-light);
+            opacity: 0.7;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 4rem auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: var(--primary);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            width: calc(50% - 30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: 30px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-right: 30px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-marker {
+            left: calc(50% - 1px);
+        }
+
+        .timeline-item:nth-child(even) .timeline-marker {
+            left: calc(50% - 1px);
+        }
+
+        .timeline-year {
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .timeline-content h3 {
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .timeline-content p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .team {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .team-member {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .member-avatar {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .team-member h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .team-member .position {
+            color: var(--primary-light);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .team-member p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background: rgba(15, 23, 42, 0.95);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                flex-direction: row !important;
+            }
+            
+            .timeline-content {
+                width: calc(100% - 60px);
+                margin-left: 40px !important;
+                margin-right: 0 !important;
+            }
+            
+            .timeline-marker {
+                left: 20px !important;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">БП</div>
+                    <div>БухгалтерПро</div>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="employees.html">Сотрудники</a></li>
+                    <li><a href="reports.html">Отчеты</a></li>
+                    <li><a href="settings.html">Настройки</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>О компании БухгалтерПро</h1>
+            <p>Узнайте больше о нашей миссии, ценностях и команде</p>
+        </div>
+    </section>
+
+    <div class="container main-content">
+        <section class="section">
+            <div class="section-title">
+                <h2>О нашей компании</h2>
+                <p>Мы создаем инновационные решения для автоматизации бухгалтерского учета</p>
+            </div>
+
+            <div class="about-content">
+                <div class="about-text">
+                    <p>БухгалтерПро - это современная система автоматизации бухгалтерского учета, разработанная для предприятий любого масштаба. Наша платформа объединяет в себе простоту использования и мощный функционал, необходимый для эффективного управления финансами компании.</p>
+                    
+                    <p>Мы понимаем, насколько важна точность и своевременность в бухгалтерском учете, поэтому создали решение, которое минимизирует рутинные операции и снижает вероятность ошибок. Наша система постоянно развивается, адаптируясь к изменениям в законодательстве и потребностям бизнеса.</p>
+                    
+                    <p>С 2025 года мы помогаем компаниям оптимизировать финансовые процессы, экономя время и ресурсы. Более 500 компаний уже доверили нам свой бухгалтерский учет и убедились в эффективности нашего решения.</p>
+                    
+                    <a href="index.html" class="btn btn-primary">
+                        <i class="fas fa-arrow-left"></i>
+                        Вернуться на главную
+                    </a>
+                </div>
+                <div class="about-image">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">
+                <h2>Наши преимущества</h2>
+                <p>Почему компании выбирают БухгалтерПро</p>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Высокая скорость</h3>
+                    <p>Оперативная обработка данных и быстрое формирование отчетов любой сложности</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Безопасность</h3>
+                    <p>Многоуровневая система защиты данных и регулярное резервное копирование</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync"></i>
+                    </div>
+                    <h3>Автоматизация</h3>
+                    <p>Автоматическое выполнение рутинных операций и расчетов</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Поддержка 24/7</h3>
+                    <p>Круглосуточная техническая поддержка и консультации по вопросам учета</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Доступность</h3>
+                    <p>Работайте с системой с любого устройства в любое время</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>Аналитика</h3>
+                    <p>Мощные инструменты для анализа финансовых показателей компании</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">
+                <h2>Наша история</h2>
+                <p>Путь развития компании БухгалтерПро</p>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2025</div>
+                        <h3>Основание компании</h3>
+                        <p>Создание компании и начало разработки первой версии системы БухгалтерПро</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2025</div>
+                        <h3>Запуск первой версии</h3>
+                        <p>Выпуск первой версии системы и привлечение первых 50 клиентов</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2026</div>
+                        <h3>Расширение функционала</h3>
+                        <p>Добавление модулей для расчета заработной платы и налоговой отчетности</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2027</div>
+                        <h3>Интеграция с 1С</h3>
+                        <p>Реализация интеграции с популярными системами учета, включая 1С</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2028</div>
+                        <h3>Мобильное приложение</h3>
+                        <p>Запуск мобильного приложения для iOS и Android</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2029</div>
+                        <h3>Искусственный интеллект</h3>
+                        <p>Внедрение AI-алгоритмов для прогнозирования и анализа финансовых данных</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2030</div>
+                        <h3>Облачная платформа</h3>
+                        <p>Запуск облачной версии системы с расширенными возможностями для корпоративных клиентов</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">
+                <h2>Наша команда</h2>
+                <p>Профессионалы, создающие лучшие решения для вас</p>
+            </div>
+
+            <div class="team">
+                <div class="team-member">
+                    <div class="member-avatar">ДД</div>
+                    <h3>Дмитрович Доминик</h3>
+                    <div class="position">Генеральный директор</div>
+                    <p>Основатель компании с 1-летним опытом в области финансового консалтинга</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">СМ</div>
+                    <h3>Сенько Максим</h3>
+                    <div class="position">Технический директор</div>
+                    <p>Эксперт в области разработки программного обеспечения и архитектуры систем</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">АМ</div>
+                    <h3>Арловский Максим</h3>
+                    <div class="position">Главный бухгалтер</div>
+                    <p>Сертифицированный профессиональный бухгалтер с опытом работы более 12 лет</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">КИ</div>
+                    <h3>Кара Иван</h3>
+                    <div class="position">Руководитель отдела разработки</div>
+                    <p>Специалист по созданию масштабируемых и надежных IT-решений</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">
+                <h2>Наши достижения</h2>
+                <p>Цифры, которые говорят сами за себя</p>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value">1+</div>
+                    <div class="stat-label">Довольных клиентов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">99.8%</div>
+                    <div class="stat-label">Надежность системы</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Техническая поддержка</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">1+</div>
+                    <div class="stat-label">Интеграций с другими системами</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon" style="width: 32px; height: 32px; font-size: 0.8rem;">БП</div>
+                    <div>БухгалтерПро</div>
+                </div>
+                <p>Профессиональное решение для автоматизации бухгалтерского учета</p>
+                <div class="footer-links">
+                    <a href="about.html">О компании</a>
+                    <a href="contacts.html">Контакты</a>
+                    <a href="support.html">Поддержка</a>
+                    <a href="docs.html">Документация</a>
+                </div>
+                <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.feature-card, .team-member, .stat-card, .timeline-item');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.style.opacity = "1";
+                    element.style.transform = "translateY(0)";
+                }
+            });
+        }
+
+        function initAnimations() {
+            const elements = document.querySelectorAll('.feature-card, .team-member, .stat-card, .timeline-item');
+            
+            elements.forEach(element => {
+                element.style.opacity = "0";
+                element.style.transform = "translateY(30px)";
+                element.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+            });
+            
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initAnimations();
+        });
+    </script>
+</body>
+</html>

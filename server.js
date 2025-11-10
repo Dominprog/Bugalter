@@ -1,43 +1,51 @@
 const express = require('express');
 const sqlite3 = require('sqlite3');
 const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static('.'));
 
 const db = new sqlite3.Database('./database.sqlite');
 
-app.get('/overtime', (req, res) => {
-    db.all("SELECT * FROM employees WHERE overtime_hours > 0", (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
+db.serialize(() => {
+    const sqlContent = fs.readFileSync('./database.sql', 'utf8');
+    const commands = sqlContent.split(';').filter(cmd => cmd.trim());
+    
+    commands.forEach(command => {
+        db.run(command, (err) => {
+            if (err) console.log('SQL ошибка:', err.message);
+        });
+    });
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/employees', (req, res) => {
+    db.all("SELECT * FROM employees", (err, rows) => {
+        if (err) {
+            console.error('Ошибка БД:', err);
+            return res.status(500).json({ error: err.message });
+        }
         res.json(rows);
     });
 });
 
-app.get('/net-salary', (req, res) => {
-    db.all(`
-        SELECT id, full_name, position, salary_type, 
-               -- Расчет общей зарплаты
-               CASE 
-                   WHEN salary_type = 'оклад' THEN salary + bonus + one_time_payment
-                   WHEN salary_type = 'почасовая' THEN (hourly_rate * worked_hours) + bonus + one_time_payment
-               END as total_salary,
-               -- Зарплата после налога (12%)
-               CASE 
-                   WHEN salary_type = 'оклад' THEN (salary + bonus + one_time_payment) * 0.88
-                   WHEN salary_type = 'почасовая' THEN ((hourly_rate * worked_hours) + bonus + one_time_payment) * 0.88
-               END as net_salary,
-               -- Сумма налога (12%)
-               CASE 
-                   WHEN salary_type = 'оклад' THEN (salary + bonus + one_time_payment) * 0.12
-                   WHEN salary_type = 'почасовая' THEN ((hourly_rate * worked_hours) + bonus + one_time_payment) * 0.12
-               END as tax_amount
-        FROM employees
-    `, (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
+app.get('/departments', (req, res) => {
+    db.all("SELECT * FROM departments", (err, rows) => {
+        if (err) {
+            console.error('Ошибка БД:', err);
+            return res.status(500).json({ error: err.message });
+        }
         res.json(rows);
     });
 });
 
-app.listen(3000, () => console.log('API запущен на порту 3000'));
+app.listen(3000, () => {
+    console.log('✅ Сервер запущен на http://localhost:3000');
+});
