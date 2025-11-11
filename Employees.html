@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>БухгалтерПро - Сотрудники</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #7c3aed;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-800: #1e293b;
+            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+        }
+
+        body {
+            background: var(--gradient-dark);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--gray-200);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hero {
+            background: var(--gradient-primary);
+            padding: 120px 0 60px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .main-content {
+            padding: 3rem 0;
+            flex: 1;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 0 0 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .section-title p {
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .dashboard-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: var(--border-radius-lg);
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .card-title i {
+            color: var(--primary-light);
+        }
+
+        .card-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table th {
+            background: rgba(37, 99, 235, 0.2);
+            font-weight: 600;
+            color: white;
+            font-size: 0.9rem;
+            position: sticky;
+            top: 0;
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .footer {
+            background: rgba(15, 23, 42, 0.95);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fecaca;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+        }
+        
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #bbf7d0;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+        }
+
+        .payment-type {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .payment-hourly {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+        }
+        
+        .payment-salary {
+            background: rgba(16, 185, 129, 0.2);
+            color: #86efac;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            line-height: 24px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .status-active {
+            color: #10b981;
+        }
+
+        .status-inactive {
+            color: #ef4444;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .nav-links a {
+                padding: 0.5rem;
+            }
+            
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">БП</div>
+                    <div>БухгалтерПро</div>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="employees.html" class="active">Сотрудники</a></li>
+                    <li><a href="reports.html">Отчеты</a></li>
+                    <li><a href="about.html">О компании</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Управление сотрудниками</h1>
+            <p>Полная информация о сотрудниках компании с учетом разрядов, типов оплаты и премий</p>
+        </div>
+    </section>
+
+    <div class="container main-content">
+        <div class="section-title">
+            <h2>Список сотрудников</h2>
+            <p>Все сотрудники компании с полной информацией о системе оплаты труда</p>
+        </div>
+
+        <div id="messageContainer"></div>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalEmployees">0</div>
+                <div class="stat-label">Всего сотрудников</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalSalary">0 BYN</div>
+                <div class="stat-label">Общий фонд оплаты</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgSalary">0 BYN</div>
+                <div class="stat-label">Средняя зарплата</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="overtimeEmployees">0</div>
+                <div class="stat-label">Сверхурочные работы</div>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-users"></i>
+                    Таблица сотрудников
+                </div>
+                <div class="card-description">
+                    Вся информация о сотрудниках компании, включая разряды, типы оплаты и премии
+                </div>
+            </div>
+            <div class="card-content">
+                <button id="refreshEmployeesBtn" class="btn btn-primary">
+                    <i class="fas fa-sync-alt"></i>
+                    Обновить данные
+                </button>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>ФИО</th>
+                                <th>Должность</th>
+                                <th>Дата приема</th>
+                                <th>Разряд</th>
+                                <th>Тип оплаты</th>
+                                <th>Ставка/Оклад</th>
+                                <th>Отработано часов</th>
+                                <th>Сверхурочные</th>
+                                <th>Коэф. сверхурочных</th>
+                                <th>Премии</th>
+                                <th>Единоразовые выплаты</th>
+                                <th>Отдел</th>
+                                <th>Статус</th>
+                                <th>Общая зарплата</th>
+                                <th>После налога (12%)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeesTable">
+                            <tr>
+                                <td colspan="16" style="text-align: center; padding: 2rem;">
+                                    <div class="loading"></div>
+                                    <div style="margin-top: 1rem;">Загрузка данных...</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon" style="width: 32px; height: 32px; font-size: 0.8rem;">БП</div>
+                    <div>БухгалтерПро</div>
+                </div>
+                <p>Профессиональное решение для автоматизации бухгалтерского учета</p>
+                <div class="footer-links">
+                    <a href="About the company.html">О компании</a>
+                    <a href="contacts.html">Контакты</a>
+                    <a href="support.html">Поддержка</a>
+                    <a href="docs.html">Документация</a>
+                </div>
+                <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+
+        function calculateSalary(employee) {
+            let salary = 0;
+            
+            if (employee.salary_type === 'почасовая') {
+                salary = employee.hourly_rate * employee.worked_hours;
+                
+                if (employee.overtime_hours > 0) {
+                    salary += employee.overtime_hours * employee.hourly_rate * employee.overtime_rate;
+                }
+            } else {
+                salary = employee.salary;
+                
+                if (employee.overtime_hours > 0) {
+                    const hourlyRateFromSalary = employee.salary / 160;
+                    salary += employee.overtime_hours * hourlyRateFromSalary * employee.overtime_rate;
+                }
+            }
+            
+            salary += (employee.bonus || 0) + (employee.one_time_payment || 0);
+            
+            return Math.round(salary * 100) / 100;
+        }
+
+        function calculateSalaryAfterTax(salary) {
+            return Math.round(salary * 0.88 * 100) / 100;
+        }
+
+        async function apiCall(endpoint) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Ошибка API:', error);
+                showMessage(`Ошибка при загрузке данных: ${error.message}`, 'error');
+                return null;
+            }
+        }
+        
+        function showMessage(message, type = 'info') {
+            const messageContainer = document.getElementById('messageContainer');
+            const messageEl = document.createElement('div');
+            messageEl.className = type === 'error' ? 'error-message' : 'success-message';
+            messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
+            messageContainer.innerHTML = '';
+            messageContainer.appendChild(messageEl);
+            
+            setTimeout(() => {
+                messageEl.remove();
+            }, 5000);
+        }
+
+        function updateStats(employees) {
+            if (!employees || employees.length === 0) return;
+            
+            const totalEmployees = employees.length;
+            let totalSalary = 0;
+            let overtimeCount = 0;
+            
+            employees.forEach(emp => {
+                const salary = calculateSalary(emp);
+                totalSalary += salary;
+                if (emp.overtime_hours > 0) overtimeCount++;
+            });
+            
+            const avgSalary = Math.round(totalSalary / totalEmployees);
+            
+            document.getElementById('totalEmployees').textContent = totalEmployees;
+            document.getElementById('totalSalary').textContent = totalSalary.toLocaleString() + ' BYN';
+            document.getElementById('avgSalary').textContent = avgSalary.toLocaleString() + ' BYN';
+            document.getElementById('overtimeEmployees').textContent = overtimeCount;
+        }
+
+        async function loadEmployees() {
+            const employeesTable = document.getElementById('employeesTable');
+            employeesTable.innerHTML = '<tr><td colspan="16" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Загрузка сотрудников...</div></td></tr>';
+            
+            const employees = await apiCall('/employees');
+            const departments = await apiCall('/departments');
+            
+            if (employees && employees.length > 0) {
+                employeesTable.innerHTML = employees.map(emp => {
+                    const department = departments ? departments.find(dept => dept.id === emp.department_id) : null;
+                    const salary = calculateSalary(emp);
+                    const salaryAfterTax = calculateSalaryAfterTax(salary);
+                    
+                    return `
+                        <tr>
+                            <td><strong>${emp.id}</strong></td>
+                            <td>${emp.full_name}</td>
+                            <td>${emp.position}</td>
+                            <td>${new Date(emp.hire_date).toLocaleDateString('ru-RU')}</td>
+                            <td><span class="rank-badge">${emp.grade}</span></td>
+                            <td><span class="payment-type ${emp.salary_type === 'почасовая' ? 'payment-hourly' : 'payment-salary'}">${emp.salary_type}</span></td>
+                            <td>${parseFloat(emp.salary_type === 'почасовая' ? emp.hourly_rate : emp.salary).toLocaleString('ru-RU')} BYN</td>
+                            <td>${emp.worked_hours}</td>
+                            <td>${emp.overtime_hours}</td>
+                            <td>${emp.overtime_rate}</td>
+                            <td>${parseFloat(emp.bonus || 0).toLocaleString('ru-RU')} BYN</td>
+                            <td>${parseFloat(emp.one_time_payment || 0).toLocaleString('ru-RU')} BYN</td>
+                            <td>${department ? department.name : 'Не назначен'}</td>
+                            <td><span class="status-${emp.status === 'активен' ? 'active' : 'inactive'}">${emp.status}</span></td>
+                            <td><strong>${salary.toLocaleString('ru-RU')} BYN</strong></td>
+                            <td><strong>${salaryAfterTax.toLocaleString('ru-RU')} BYN</strong></td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                updateStats(employees);
+                showMessage(`Данные успешно загружены (${employees.length} сотрудников)`, 'success');
+            } else {
+                employeesTable.innerHTML = '<tr><td colspan="16" style="text-align: center; padding: 2rem;">Нет данных о сотрудниках</td></tr>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadEmployees();
+            document.getElementById('refreshEmployeesBtn').addEventListener('click', loadEmployees);
+        });
+    </script>
+</body>
+</html>
