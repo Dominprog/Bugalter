@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поддержка - БухгалтерПро</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #7c3aed;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-800: #1e293b;
+            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+        }
+
+        body {
+            background: var(--gradient-dark);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--gray-200);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hero {
+            background: var(--gradient-primary);
+            padding: 120px 0 60px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 0 0 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .section-title p {
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .dashboard-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: var(--border-radius-lg);
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .card-title i {
+            color: var(--primary-light);
+        }
+
+        .card-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .faq-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .faq-question h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 1000px;
+        }
+
+        .instructions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .instruction-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .instruction-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .instruction-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .instruction-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .instruction-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+        }
+
+        .instruction-steps {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .instruction-steps li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .instruction-steps li:last-child {
+            border-bottom: none;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .contact-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .contact-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer {
+            background: rgba(15, 23, 42, 0.95);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .instructions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">БП</div>
+                    <div>БухгалтерПро</div>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="employees.html">Сотрудники</a></li>
+                    <li><a href="overtime.html">Отделы</a></li>
+                    <li><a href="reports.html">Отчеты</a></li>
+                    <li><a href="settings.html">Настройки</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Центр поддержки</h1>
+            <p>Найдите ответы на ваши вопросы и получите помощь по работе с системой</p>
+        </div>
+    </section>
+
+    <div class="container main-content">
+        <div class="section-title">
+            <h2>Часто задаваемые вопросы</h2>
+            <p>Быстрые ответы на самые популярные вопросы</p>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-question-circle"></i>
+                    FAQ по системе
+                </div>
+                <div class="card-description">
+                    Ответы на вопросы о функционале системы
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Как ввести данные по отработанным часам сотрудника?</h3>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Для ввода данных по отработанным часам:</p>
+                            <ol>
+                                <li>Перейдите в раздел "Сотрудники"</li>
+                                <li>Выберите нужного сотрудника из списка</li>
+                                <li>Нажмите кнопку "Редактировать"</li>
+                                <li>В разделе "Отработанные часы" введите количество часов за каждый день месяца</li>
+                                <li>Нажмите "Сохранить" для применения изменений</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Как посмотреть сотрудников со сверхурочными часами?</h3>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Чтобы найти сотрудников со сверхурочными часами:</p>
+                            <ol>
+                                <li>Перейдите в раздел "Сверхурочные"</li>
+                                <li>Система автоматически отобразит всех сотрудников с часами сверх нормы</li>
+                                <li>Вы можете отсортировать список по количеству сверхурочных часов или отделу</li>
+                                <li>Для детальной информации нажмите на имя сотрудника</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Как рассчитывается зарплата за вычетом подоходного налога?</h3>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Расчет зарплаты с учетом налога:</p>
+                            <ol>
+                                <li>Система автоматически рассчитывает общую сумму заработка</li>
+                                <li>Из этой суммы вычитается 12% подоходного налога</li>
+                                <li>Для просмотра зарплаты с учетом налога перейдите в раздел "Отчеты"</li>
+                                <li>Выберите отчет "Зарплата за вычетом налога"</li>
+                                <li>Система отобразит список всех сотрудников с суммой к выплате</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Как найти сотрудников с зарплатой ниже указанной?</h3>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Для поиска сотрудников с зарплатой ниже определенного уровня:</p>
+                            <ol>
+                                <li>Перейдите в раздел "Отчеты"</li>
+                                <li>Выберите опцию "Сотрудники с низкой зарплатой"</li>
+                                <li>Введите пороговое значение зарплаты</li>
+                                <li>Нажмите кнопку "Поиск"</li>
+                                <li>Система отобразит всех сотрудников с зарплатой ниже указанной</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Как учитываются премии и единоразовые выплаты?</h3>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Учет премий и единоразовых выплат:</p>
+                            <ol>
+                                <li>Премии добавляются в разделе "Сотрудники" → "Дополнительные выплаты"</li>
+                                <li>Выберите тип выплаты: премия или единоразовая выплата</li>
+                                <li>Укажите сумму и дату выплаты</li>
+                                <li>Система автоматически учтет эти суммы при расчете общей зарплаты</li>
+                                <li>Премии и единоразовые выплаты также учитываются при расчете налога</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <h2>Инструкции по работе с системой</h2>
+            <p>Пошаговые руководства по основным функциям</p>
+        </div>
+
+        <div class="instructions-grid">
+            <div class="instruction-card">
+                <div class="instruction-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h3>Добавление нового сотрудника</h3>
+                <p>Инструкция по внесению данных о новом сотруднике в систему</p>
+                <ul class="instruction-steps">
+                    <li>1. Перейдите в раздел "Сотрудники"</li>
+                    <li>2. Нажмите кнопку "Добавить сотрудника"</li>
+                    <li>3. Заполните все обязательные поля</li>
+                    <li>4. Укажите тип оплаты (оклад/почасовая)</li>
+                    <li>5. Сохраните данные</li>
+                </ul>
+            </div>
+
+            <div class="instruction-card">
+                <div class="instruction-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3>Учет рабочего времени</h3>
+                <p>Как правильно вводить данные об отработанных часах</p>
+                <ul class="instruction-steps">
+                    <li>1. Откройте карточку сотрудника</li>
+                    <li>2. Перейдите во вкладку "Рабочее время"</li>
+                    <li>3. Введите часы по дням месяца</li>
+                    <li>4. Сверхурочные часы отмечаются автоматически</li>
+                    <li>5. Сохраните изменения</li>
+                </ul>
+            </div>
+
+            <div class="instruction-card">
+                <div class="instruction-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h3>Расчет заработной платы</h3>
+                <p>Процесс расчета зарплаты с учетом всех факторов</p>
+                <ul class="instruction-steps">
+                    <li>1. Система автоматически рассчитывает зарплату</li>
+                    <li>2. Учитываются отработанные часы и ставка</li>
+                    <li>3. Добавляются премии и надбавки</li>
+                    <li>4. Вычитается подоходный налог (12%)</li>
+                    <li>5. Результат можно посмотреть в отчетах</li>
+                </ul>
+            </div>
+
+            <div class="instruction-card">
+                <div class="instruction-icon">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+                <h3>Формирование отчетов</h3>
+                <p>Создание различных отчетов по зарплате и рабочему времени</p>
+                <ul class="instruction-steps">
+                    <li>1. Перейдите в раздел "Отчеты"</li>
+                    <li>2. Выберите тип отчета</li>
+                    <li>3. Укажите период формирования</li>
+                    <li>4. Настройте параметры отчета</li>
+                    <li>5. Сгенерируйте и сохраните отчет</li>
+                </ul>
+            </div>
+
+            <div class="instruction-card">
+                <div class="instruction-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <h3>Настройка ставок и тарифов</h3>
+                <p>Изменение почасовых ставок и тарифов для сотрудников</p>
+                <ul class="instruction-steps">
+                    <li>1. Откройте раздел "Настройки"</li>
+                    <li>2. Перейдите во вкладку "Тарифы"</li>
+                    <li>3. Выберите разряд сотрудника</li>
+                    <li>4. Установите новую ставку</li>
+                    <li>5. Сохраните изменения</li>
+                </ul>
+            </div>
+
+            <div class="instruction-card">
+                <div class="instruction-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3>Анализ данных</h3>
+                <p>Использование аналитических инструментов системы</p>
+                <ul class="instruction-steps">
+                    <li>1. Откройте раздел "Аналитика"</li>
+                    <li>2. Выберите интересующий показатель</li>
+                    <li>3. Настройте параметры анализа</li>
+                    <li>4. Просмотрите графики и диаграммы</li>
+                    <li>5. Экспортируйте данные при необходимости</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <h2>Свяжитесь с нами</h2>
+            <p>Мы всегда готовы помочь с решением ваших вопросов</p>
+        </div>
+
+        <div class="contact-info">
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <h3>Телефон поддержки</h3>
+                <p>+375 (29) 345-63-23</p>
+                <p>Пн-Пт: 9:00 - 18:00</p>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3>Электронная почта</h3>
+                <p>supportbuhpro.byt@gmail.com</p>
+                <p>Ответ в течение 24 часов</p>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>Онлайн-чат</h3>
+                <p>Доступен в рабочее время</p>
+                <p>Быстрая помощь по срочным вопросам</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon" style="width: 32px; height: 32px; font-size: 0.8rem;">БП</div>
+                    <div>БухгалтерПро</div>
+                </div>
+                <p>Профессиональное решение для автоматизации бухгалтерского учета</p>
+                <div class="footer-links">
+                    <a href="about.html">О компании</a>
+                    <a href="contacts.html">Контакты</a>
+                    <a href="support.html">Поддержка</a>
+                    <a href="docs.html">Документация</a>
+                </div>
+                <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', () => {
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    item.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

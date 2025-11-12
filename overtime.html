@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>БухгалтерПро - Управление отделами</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #7c3aed;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-800: #1e293b;
+            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+        }
+
+        body {
+            background: var(--gradient-dark);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--gray-200);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hero {
+            background: var(--gradient-primary);
+            padding: 120px 0 60px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 0 0 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .section-title p {
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .dashboard-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: var(--border-radius-lg);
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .card-title i {
+            color: var(--primary-light);
+        }
+
+        .card-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table th {
+            background: rgba(37, 99, 235, 0.2);
+            font-weight: 600;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: white;
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .department-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .department-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .department-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .department-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .department-budget {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .department-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .department-stat {
+            text-align: center;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+        }
+
+        .department-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .department-stat-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.25rem;
+        }
+
+        .footer {
+            background: rgba(15, 23, 42, 0.95);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fecaca;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+        }
+        
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #bbf7d0;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .department-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .department-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">БП</div>
+                    <div>БухгалтерПро</div>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="employees.html">Сотрудники</a></li>
+                    <li><a href="departments.html" class="active">Отделы</a></li>
+                    <li><a href="reports.html">Отчеты</a></li>
+                    <li><a href="settings.html">Настройки</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Управление отделами компании</h1>
+            <p>Полная информация об организационной структуре и распределении ресурсов</p>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalDepartments">0</div>
+                    <div class="stat-label">Отделов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalEmployees">0</div>
+                    <div class="stat-label">Сотрудников</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalBudget">0</div>
+                    <div class="stat-label">Общий бюджет</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalOvertime">0</div>
+                    <div class="stat-label">Сверхурочные часы</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container main-content">
+        <div class="section-title">
+            <h2>Управление организационной структурой</h2>
+            <p>Контролируйте распределение сотрудников, бюджеты и рабочее время</p>
+        </div>
+
+        <div id="messageContainer"></div>
+
+        <div class="dashboard-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-sitemap"></i>
+                    Организационная структура
+                </div>
+                <div class="card-description">
+                    Управление отделами компании и анализ рабочего времени
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="tabs">
+                    <div class="tab active" data-tab="departments">Отделы компании</div>
+                    <div class="tab" data-tab="overtime">Сверхурочные работы</div>
+                </div>
+
+                <div id="departments" class="tab-content active">
+                    <button id="refreshDepartmentsBtn" class="btn btn-primary">
+                        <i class="fas fa-sync-alt"></i>
+                        Обновить данные
+                    </button>
+                    <div id="departmentsList">
+                        <div style="text-align: center; padding: 3rem;">
+                            <div class="loading"></div>
+                            <div style="margin-top: 1rem;">Загрузка данных об отделах...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="overtime" class="tab-content">
+                    <button id="refreshOvertimeBtn" class="btn btn-secondary">
+                        <i class="fas fa-sync-alt"></i>
+                        Обновить данные
+                    </button>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Сотрудник</th>
+                                <th>Отдел</th>
+                                <th>Должность</th>
+                                <th>Сверхурочные часы</th>
+                                <th>Доплата</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody id="overtimeTable">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 2rem;">
+                                    <div class="loading"></div>
+                                    <div style="margin-top: 1rem;">Загрузка данных о сверхурочных...</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon" style="width: 32px; height: 32px; font-size: 0.8rem;">БП</div>
+                    <div>БухгалтерПро</div>
+                </div>
+                <p>Профессиональное решение для автоматизации бухгалтерского учета</p>
+                <div class="footer-links">
+                    <a href="about.html">О компании</a>
+                    <a href="contacts.html">Контакты</a>
+                    <a href="support.html">Поддержка</a>
+                    <a href="docs.html">Документация</a>
+                </div>
+                <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+
+        async function apiCall(endpoint) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Ошибка API:', error);
+                showMessage(`Ошибка при загрузке данных: ${error.message}`, 'error');
+                return null;
+            }
+        }
+        
+        function showMessage(message, type = 'info') {
+            const messageContainer = document.getElementById('messageContainer');
+            const messageEl = document.createElement('div');
+            messageEl.className = type === 'error' ? 'error-message' : 'success-message';
+            messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
+            messageContainer.innerHTML = '';
+            messageContainer.appendChild(messageEl);
+            
+            setTimeout(() => {
+                messageEl.remove();
+            }, 5000);
+        }
+
+        function formatCurrency(amount) {
+            return parseFloat(amount || 0).toLocaleString('ru-RU', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + ' BYN';
+        }
+
+        function calculateOvertimePayment(employee) {
+            if (employee.overtime_hours <= 0) return 0;
+            
+            let hourlyRate;
+            if (employee.salary_type === 'почасовая') {
+                hourlyRate = employee.hourly_rate;
+            } else {
+                hourlyRate = employee.salary / 160;
+            }
+            
+            return employee.overtime_hours * hourlyRate * (employee.overtime_rate || 1.5);
+        }
+
+        async function loadDepartments() {
+            const departmentsList = document.getElementById('departmentsList');
+            departmentsList.innerHTML = '<div style="text-align: center; padding: 3rem;"><div class="loading"></div><div style="margin-top: 1rem;">Загрузка данных об отделах...</div></div>';
+            
+            const departments = await apiCall('/departments');
+            const employees = await apiCall('/employees');
+            
+            if (departments && departments.length > 0) {
+                // Фильтруем отделы - убираем "Производство" где нет сотрудников
+                const activeDepartments = departments.filter(dept => {
+                    const deptEmployees = employees.filter(emp => emp.department_id === dept.id);
+                    return deptEmployees.length > 0 || dept.name !== 'Производство';
+                });
+                
+                departmentsList.innerHTML = activeDepartments.map(dept => {
+                    const deptEmployees = employees.filter(emp => emp.department_id === dept.id);
+                    
+                    if (deptEmployees.length === 0) {
+                        return '';
+                    }
+                    
+                    const totalSalary = deptEmployees.reduce((sum, emp) => {
+                        let salary = parseFloat(emp.salary || 0);
+                        if (emp.salary_type === 'почасовая') {
+                            salary = emp.hourly_rate * emp.worked_hours;
+                        }
+                        return sum + salary + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
+                    }, 0);
+                    
+                    const overtimeHours = deptEmployees.reduce((sum, emp) => sum + (emp.overtime_hours || 0), 0);
+                    
+                    return `
+                        <div class="department-card">
+                            <div class="department-header">
+                                <div class="department-name">${dept.name}</div>
+                                <div class="department-budget">${formatCurrency(dept.budget)}</div>
+                            </div>
+                            <div class="department-stats">
+                                <div class="department-stat">
+                                    <div class="department-stat-value">${deptEmployees.length}</div>
+                                    <div class="department-stat-label">Сотрудников</div>
+                                </div>
+                                <div class="department-stat">
+                                    <div class="department-stat-value">${formatCurrency(totalSalary)}</div>
+                                    <div class="department-stat-label">Фонд оплаты</div>
+                                </div>
+                                <div class="department-stat">
+                                    <div class="department-stat-value">${overtimeHours}</div>
+                                    <div class="department-stat-label">Сверхурочные часы</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                updateStats(activeDepartments, employees);
+                showMessage(`Данные об отделах успешно загружены (${activeDepartments.length} отделов)`, 'success');
+            } else {
+                departmentsList.innerHTML = '<div style="text-align: center; padding: 2rem;">Нет данных об отделах</div>';
+            }
+        }
+
+        async function loadOvertime() {
+            const overtimeTable = document.getElementById('overtimeTable');
+            overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Загрузка данных о сверхурочных...</div></td></tr>';
+            
+            const employees = await apiCall('/employees');
+            const departments = await apiCall('/departments');
+            
+            if (employees && employees.length > 0) {
+                const overtimeEmployees = employees.filter(emp => emp.overtime_hours > 0);
+                
+                if (overtimeEmployees.length > 0) {
+                    overtimeTable.innerHTML = overtimeEmployees.map(emp => {
+                        const department = departments ? departments.find(dept => dept.id === emp.department_id) : null;
+                        const overtimePayment = calculateOvertimePayment(emp);
+                        
+                        return `
+                            <tr>
+                                <td><strong>${emp.full_name}</strong></td>
+                                <td>${department ? department.name : 'Не назначен'}</td>
+                                <td>${emp.position}</td>
+                                <td>${emp.overtime_hours} ч.</td>
+                                <td>${formatCurrency(overtimePayment)}</td>
+                                <td><span style="color: ${emp.status === 'активен' ? '#10b981' : '#ef4444'};">${emp.status || 'неизвестно'}</span></td>
+                            </tr>
+                        `;
+                    }).join('');
+                } else {
+                    overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Нет сотрудников со сверхурочными часами</td></tr>';
+                }
+                
+                showMessage(`Данные о сверхурочных успешно загружены (${overtimeEmployees.length} сотрудников)`, 'success');
+            } else {
+                overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Нет данных о сотрудниках</td></tr>';
+            }
+        }
+
+        function updateStats(departments, employees) {
+            if (!departments || departments.length === 0) return;
+            
+            // Фильтруем бюджеты - не включаем отдел "Производство"
+            const totalBudget = departments.reduce((sum, dept) => {
+                if (dept.name === 'Производство') return sum;
+                return sum + parseFloat(dept.budget || 0);
+            }, 0);
+            
+            const totalOvertime = employees ? employees.reduce((sum, emp) => sum + (emp.overtime_hours || 0), 0) : 0;
+            
+            document.getElementById('totalDepartments').textContent = departments.length;
+            document.getElementById('totalEmployees').textContent = employees ? employees.length : '0';
+            document.getElementById('totalBudget').textContent = formatCurrency(totalBudget);
+            document.getElementById('totalOvertime').textContent = totalOvertime;
+        }
+
+        function initTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    if (tabId === 'overtime') {
+                        loadOvertime();
+                    } else if (tabId === 'departments') {
+                        loadDepartments();
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDepartments();
+            initTabs();
+            
+            document.getElementById('refreshDepartmentsBtn').addEventListener('click', loadDepartments);
+            document.getElementById('refreshOvertimeBtn').addEventListener('click', loadOvertime);
+        });
+    </script>
+</body>
+</html>
