@@ -579,10 +579,10 @@
                 </div>
                 <p>Профессиональное решение для автоматизации бухгалтерского учета</p>
                 <div class="footer-links">
-                    <a href="about.html">О компании</a>
+                    <a href="About the company.html">О компании</a>
                     <a href="contacts.html">Контакты</a>
-                    <a href="support.html">Поддержка</a>
-                    <a href="docs.html">Документация</a>
+                    <a href="Support.html">Поддержка</a>
+                    <a href="documentation.html">Документация</a>
                 </div>
                 <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
             </div>
@@ -647,7 +647,6 @@
             const employees = await apiCall('/employees');
             
             if (departments && departments.length > 0) {
-                // Фильтруем отделы - убираем "Производство" где нет сотрудников
                 const activeDepartments = departments.filter(dept => {
                     const deptEmployees = employees.filter(emp => emp.department_id === dept.id);
                     return deptEmployees.length > 0 || dept.name !== 'Производство';
@@ -740,7 +739,6 @@
         function updateStats(departments, employees) {
             if (!departments || departments.length === 0) return;
             
-            // Фильтруем бюджеты - не включаем отдел "Производство"
             const totalBudget = departments.reduce((sum, dept) => {
                 if (dept.name === 'Производство') return sum;
                 return sum + parseFloat(dept.budget || 0);

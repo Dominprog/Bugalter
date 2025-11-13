@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>БухгалтерПро - Документация API</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #7c3aed;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-800: #1e293b;
+            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+        }
+
+        body {
+            background: var(--gradient-dark);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--gray-200);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hero {
+            background: var(--gradient-primary);
+            padding: 120px 0 60px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 0 0 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .section-title p {
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .api-section {
+            margin: 3rem 0;
+        }
+
+        .api-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: var(--border-radius-lg);
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .card-title i {
+            color: var(--primary-light);
+        }
+
+        .card-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .endpoint {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+        }
+
+        .method {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .method.get {
+            background: var(--success);
+            color: white;
+        }
+
+        .method.post {
+            background: var(--warning);
+            color: white;
+        }
+
+        .method.put {
+            background: var(--primary);
+            color: white;
+        }
+
+        .method.delete {
+            background: var(--error);
+            color: white;
+        }
+
+        .url {
+            font-family: 'Monaco', 'Consolas', monospace;
+            color: var(--light);
+            flex: 1;
+        }
+
+        .code-block {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            color: var(--light);
+            font-family: 'Monaco', 'Consolas', monospace;
+            line-height: 1.5;
+        }
+
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .param-table th,
+        .param-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .param-table th {
+            background: rgba(37, 99, 235, 0.2);
+            font-weight: 600;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .param-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .footer {
+            background: rgba(15, 23, 42, 0.95);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .endpoint {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .url {
+                width: 100%;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">БП</div>
+                    <div>БухгалтерПро</div>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="employees.html">Сотрудники</a></li>
+                    <li><a href="overtime.html">Отделы</a></li>
+                    <li><a href="reports.html">Отчеты</a></li>
+                    <li><a href="settings.html">Настройки</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Документация API</h1>
+            <p>Полное руководство по работе с API системы БухгалтерПро</p>
+        </div>
+    </section>
+
+    <div class="container main-content">
+        <div class="section-title">
+            <h2>REST API Endpoints</h2>
+            <p>Все доступные методы API для интеграции с системой</p>
+        </div>
+
+        <div class="api-section">
+            <div class="api-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-users"></i>
+                        Сотрудники
+                    </div>
+                    <div class="card-description">
+                        Управление данными сотрудников компании
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="endpoint">
+                        <span class="method get">GET</span>
+                        <span class="url">/employees</span>
+                    </div>
+                    <p>Получение списка всех сотрудников</p>
+                    
+                    <div class="code-block">
+                        <pre>fetch('http://localhost:3000/employees')
+  .then(response => response.json())
+  .then(data => console.log(data));</pre>
+                    </div>
+
+                    <h4>Ответ:</h4>
+                    <div class="code-block">
+                        <pre>[
+  {
+    "id": 1,
+    "full_name": "Иванов Алексей Сергеевич",
+    "hire_date": "2023-01-15",
+    "position": "Бухгалтер",
+    "salary_type": "оклад",
+    "salary": 2520,
+    "department_id": 1,
+    "status": "активен"
+  }
+]</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-building"></i>
+                        Отделы
+                    </div>
+                    <div class="card-description">
+                        Управление организационной структурой
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="endpoint">
+                        <span class="method get">GET</span>
+                        <span class="url">/departments</span>
+                    </div>
+                    <p>Получение списка всех отделов</p>
+                    
+                    <div class="code-block">
+                        <pre>fetch('http://localhost:3000/departments')
+  .then(response => response.json())
+  .then(data => console.log(data));</pre>
+                    </div>
+
+                    <h4>Ответ:</h4>
+                    <div class="code-block">
+                        <pre>[
+  {
+    "id": 1,
+    "name": "Бухгалтерия",
+    "budget": 45000
+  },
+  {
+    "id": 2,
+    "name": "Финансы", 
+    "budget": 32000
+  }
+]</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-database"></i>
+                        Структура данных
+                    </div>
+                    <div class="card-description">
+                        Описание таблиц и полей базы данных
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3>Таблица employees</h3>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>Поле</th>
+                                <th>Тип</th>
+                                <th>Описание</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>id</td>
+                                <td>INTEGER</td>
+                                <td>Уникальный идентификатор</td>
+                            </tr>
+                            <tr>
+                                <td>full_name</td>
+                                <td>VARCHAR(200)</td>
+                                <td>ФИО сотрудника</td>
+                            </tr>
+                            <tr>
+                                <td>hire_date</td>
+                                <td>DATE</td>
+                                <td>Дата приема на работу</td>
+                            </tr>
+                            <tr>
+                                <td>position</td>
+                                <td>VARCHAR(100)</td>
+                                <td>Должность</td>
+                            </tr>
+                            <tr>
+                                <td>salary_type</td>
+                                <td>VARCHAR(20)</td>
+                                <td>Тип оплаты (оклад/почасовая)</td>
+                            </tr>
+                            <tr>
+                                <td>salary</td>
+                                <td>DECIMAL(10,2)</td>
+                                <td>Оклад</td>
+                            </tr>
+                            <tr>
+                                <td>department_id</td>
+                                <td>INTEGER</td>
+                                <td>ID отдела</td>
+                            </tr>
+                            <tr>
+                                <td>status</td>
+                                <td>VARCHAR(20)</td>
+                                <td>Статус сотрудника</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Таблица departments</h3>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>Поле</th>
+                                <th>Тип</th>
+                                <th>Описание</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>id</td>
+                                <td>INTEGER</td>
+                                <td>Уникальный идентификатор</td>
+                            </tr>
+                            <tr>
+                                <td>name</td>
+                                <td>VARCHAR(100)</td>
+                                <td>Название отдела</td>
+                            </tr>
+                            <tr>
+                                <td>budget</td>
+                                <td>DECIMAL(10,2)</td>
+                                <td>Бюджет отдела</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="api-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-code"></i>
+                        Примеры использования
+                    </div>
+                    <div class="card-description">
+                        Практические примеры работы с API
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3>Получение сотрудников с отделами</h3>
+                    <div class="code-block">
+                        <pre>async function loadEmployeesWithDepartments() {
+  try {
+    const [employees, departments] = await Promise.all([
+      fetch('http://localhost:3000/employees').then(r => r.json()),
+      fetch('http://localhost:3000/departments').then(r => r.json())
+    ]);
+    
+    const employeesWithDept = employees.map(emp => ({
+      ...emp,
+      department: departments.find(dept => dept.id === emp.department_id)
+    }));
+    
+    return employeesWithDept;
+  } catch (error) {
+    console.error('Ошибка загрузки:', error);
+  }
+}</pre>
+                    </div>
+
+                    <h3>Расчет фонда оплаты труда</h3>
+                    <div class="code-block">
+                        <pre>async function calculateSalaryFund() {
+  const employees = await fetch('http://localhost:3000/employees')
+    .then(response => response.json());
+  
+  const totalSalary = employees.reduce((sum, emp) => {
+    return sum + parseFloat(emp.salary || 0);
+  }, 0);
+  
+  return totalSalary;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon" style="width: 32px; height: 32px; font-size: 0.8rem;">БП</div>
+                    <div>БухгалтерПро</div>
+                </div>
+                <p>Профессиональное решение для автоматизации бухгалтерского учета</p>
+                <div class="footer-links">
+                    <a href="About the company.html">О компании</a>
+                    <a href="contacts.html">Контакты</a>
+                    <a href="support.html">Поддержка</a>
+                    <a href="docs.html" class="active">Документация</a>
+                </div>
+                <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
