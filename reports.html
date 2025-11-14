@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>БухгалтерПро - Отчеты</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #7c3aed;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-800: #1e293b;
+            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+        }
+
+        body {
+            background: var(--gradient-dark);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--gray-200);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hero {
+            background: var(--gradient-primary);
+            padding: 120px 0 60px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 0 0 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .section-title p {
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .dashboard-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: var(--border-radius-lg);
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .card-title i {
+            color: var(--primary-light);
+        }
+
+        .card-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #0da271;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table th {
+            background: rgba(37, 99, 235, 0.2);
+            font-weight: 600;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .footer {
+            background: rgba(15, 23, 42, 0.95);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fecaca;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+        }
+        
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #bbf7d0;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #bbf7d0;
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fde68a;
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fecaca;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                margin-right: 0;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">БП</div>
+                    <div>БухгалтерПро</div>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="employees.html">Сотрудники</a></li>
+                    <li><a href="overtime.html">Отделы</a></li>
+                    <li><a href="reports.html" class="active">Отчеты</a></li>
+                    <li><a href="settings.html">Настройки</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Отчеты по заработной плате</h1>
+            <p>Аналитика, расчеты и управление оплатой труда сотрудников</p>
+        </div>
+    </section>
+
+    <div class="container main-content">
+        <div class="section-title">
+            <h2>Финансовая аналитика</h2>
+            <p>Полные отчеты по заработной плате и производительности</p>
+        </div>
+
+        <div id="messageContainer"></div>
+
+        <div class="dashboard-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-clock"></i>
+                    Ввод отработанных часов
+                </div>
+                <div class="card-description">
+                    Обновите данные по отработанным часам сотрудников за текущий месяц
+                </div>
+            </div>
+            <div class="card-content">
+                <form id="hoursForm">
+                    <div class="form-group">
+                        <label class="form-label">Сотрудник</label>
+                        <select id="employeeSelect" class="form-control" required>
+                            <option value="">Выберите сотрудника</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Отработанные часы</label>
+                            <input type="number" id="workedHours" class="form-control" min="0" max="300" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Сверхурочные часы</label>
+                            <input type="number" id="overtimeHours" class="form-control" min="0" max="100" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        Сохранить данные
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-user-clock"></i>
+                    Сотрудники со сверхурочными часами
+                </div>
+                <div class="card-description">
+                    Список сотрудников, отработавших сверхурочные часы в текущем месяце
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="export-buttons">
+                    <button id="loadOvertimeBtn" class="btn btn-secondary">
+                        <i class="fas fa-sync-alt"></i>
+                        Загрузить данные
+                    </button>
+                    <button id="exportOvertimeTxt" class="btn btn-success">
+                        <i class="fas fa-file-alt"></i>
+                        Экспорт в TXT
+                    </button>
+                    <button id="exportOvertimeDocx" class="btn btn-primary">
+                        <i class="fas fa-file-word"></i>
+                        Экспорт в DOCX
+                    </button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ФИО</th>
+                            <th>Должность</th>
+                            <th>Отработано часов</th>
+                            <th>Сверхурочные</th>
+                            <th>Ставка сверхурочных</th>
+                            <th>Доплата за сверхурочные</th>
+                        </tr>
+                    </thead>
+                    <tbody id="overtimeTable">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 2rem;">
+                                <div>Нажмите "Загрузить данные" для отображения информации</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    Зарплата за вычетом налога
+                </div>
+                <div class="card-description">
+                    Расчет заработной платы сотрудников после вычета подоходного налога (12%)
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="export-buttons">
+                    <button id="loadSalaryTaxBtn" class="btn btn-primary">
+                        <i class="fas fa-calculator"></i>
+                        Рассчитать зарплаты
+                    </button>
+                    <button id="exportSalaryTxt" class="btn btn-success">
+                        <i class="fas fa-file-alt"></i>
+                        Экспорт в TXT
+                    </button>
+                    <button id="exportSalaryDocx" class="btn btn-primary">
+                        <i class="fas fa-file-word"></i>
+                        Экспорт в DOCX
+                    </button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ФИО</th>
+                            <th>Должность</th>
+                            <th>Тип оплаты</th>
+                            <th>Общая зарплата</th>
+                            <th>Налог (12%)</th>
+                            <th>Зарплата на руки</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salaryTaxTable">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 2rem;">
+                                <div>Нажмите "Рассчитать зарплаты" для отображения информации</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-search-dollar"></i>
+                    Поиск сотрудников с низкой зарплатой
+                </div>
+                <div class="card-description">
+                    Фильтрация сотрудников по уровню заработной платы
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="form-group">
+                    <label class="form-label">Порог зарплаты (BYN)</label>
+                    <input type="number" id="salaryThreshold" class="form-control" min="0" value="2500" step="100">
+                </div>
+                <div class="export-buttons">
+                    <button id="loadLowSalaryBtn" class="btn btn-secondary">
+                        <i class="fas fa-filter"></i>
+                        Найти сотрудников
+                    </button>
+                    <button id="exportLowSalaryTxt" class="btn btn-success">
+                        <i class="fas fa-file-alt"></i>
+                        Экспорт в TXT
+                    </button>
+                    <button id="exportLowSalaryDocx" class="btn btn-primary">
+                        <i class="fas fa-file-word"></i>
+                        Экспорт в DOCX
+                    </button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ФИО</th>
+                            <th>Должность</th>
+                            <th>Тип оплаты</th>
+                            <th>Зарплата</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lowSalaryTable">
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 2rem;">
+                                <div>Установите порог и нажмите "Найти сотрудников"</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon" style="width: 32px; height: 32px; font-size: 0.8rem;">БП</div>
+                    <div>БухгалтерПро</div>
+                </div>
+                <p>Профессиональное решение для автоматизации бухгалтерского учета</p>
+                <div class="footer-links">
+                    <a href="about.html">О компании</a>
+                    <a href="contacts.html">Контакты</a>
+                    <a href="support.html">Поддержка</a>
+                    <a href="documentation.html">Документация</a>
+                </div>
+                <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        let currentOvertimeData = [];
+        let currentSalaryData = [];
+        let currentLowSalaryData = [];
+
+        async function apiCall(endpoint, options = {}) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, options);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Ошибка API:', error);
+                showMessage(`Ошибка при загрузке данных: ${error.message}`, 'error');
+                return null;
+            }
+        }
+        
+        function showMessage(message, type = 'info') {
+            const messageContainer = document.getElementById('messageContainer');
+            const messageEl = document.createElement('div');
+            messageEl.className = type === 'error' ? 'error-message' : 'success-message';
+            messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
+            messageContainer.innerHTML = '';
+            messageContainer.appendChild(messageEl);
+            
+            setTimeout(() => {
+                messageEl.remove();
+            }, 5000);
+        }
+
+        function formatCurrency(amount) {
+            return parseFloat(amount || 0).toLocaleString('ru-RU', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + ' BYN';
+        }
+
+        async function loadEmployees() {
+            const data = await apiCall('/employees');
+            if (data && data.length > 0) {
+                const select = document.getElementById('employeeSelect');
+                select.innerHTML = '<option value="">Выберите сотрудника</option>';
+                
+                data.forEach(emp => {
+                    const option = document.createElement('option');
+                    option.value = emp.id;
+                    option.textContent = `${emp.full_name} - ${emp.position}`;
+                    select.appendChild(option);
+                });
+            }
+        }
+
+        async function loadOvertimeEmployees() {
+            const overtimeTable = document.getElementById('overtimeTable');
+            overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Загрузка данных...</div></td></tr>';
+            
+            const data = await apiCall('/employees');
+            
+            if (data && data.length > 0) {
+                currentOvertimeData = data.filter(emp => emp.overtime_hours > 0);
+                
+                if (currentOvertimeData.length > 0) {
+                    overtimeTable.innerHTML = currentOvertimeData.map(emp => {
+                        let overtimePay = 0;
+                        if (emp.salary_type === 'оклад') {
+                            const hourlyRate = emp.salary / 160;
+                            overtimePay = emp.overtime_hours * hourlyRate * emp.overtime_rate;
+                        } else {
+                            overtimePay = emp.overtime_hours * emp.hourly_rate * emp.overtime_rate;
+                        }
+                        
+                        return `
+                            <tr>
+                                <td>${emp.full_name}</td>
+                                <td>${emp.position}</td>
+                                <td>${emp.worked_hours} ч.</td>
+                                <td><span class="badge badge-warning">${emp.overtime_hours} ч.</span></td>
+                                <td>${emp.overtime_rate}x</td>
+                                <td>${formatCurrency(overtimePay)}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                } else {
+                    overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Нет сотрудников со сверхурочными часами</td></tr>';
+                }
+                
+                showMessage(`Найдено ${currentOvertimeData.length} сотрудников со сверхурочными часами`, 'success');
+            } else {
+                overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Ошибка загрузки данных</td></tr>';
+            }
+        }
+
+        async function loadSalaryWithTax() {
+            const salaryTaxTable = document.getElementById('salaryTaxTable');
+            salaryTaxTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Расчет зарплат...</div></td></tr>';
+            
+            const data = await apiCall('/employees');
+            
+            if (data && data.length > 0) {
+                currentSalaryData = data.map(emp => {
+                    let totalSalary = 0;
+                    
+                    if (emp.salary_type === 'оклад') {
+                        const baseSalary = parseFloat(emp.salary || 0);
+                        const hourlyRate = baseSalary / 160;
+                        const overtimePay = emp.overtime_hours * hourlyRate * emp.overtime_rate;
+                        totalSalary = baseSalary + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
+                    } else {
+                        const regularPay = emp.worked_hours * emp.hourly_rate;
+                        const overtimePay = emp.overtime_hours * emp.hourly_rate * emp.overtime_rate;
+                        totalSalary = regularPay + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
+                    }
+                    
+                    const tax = totalSalary * 0.12;
+                    const netSalary = totalSalary - tax;
+                    
+                    return {
+                        ...emp,
+                        totalSalary,
+                        tax,
+                        netSalary
+                    };
+                });
+                
+                salaryTaxTable.innerHTML = currentSalaryData.map(emp => `
+                    <tr>
+                        <td>${emp.full_name}</td>
+                        <td>${emp.position}</td>
+                        <td>${emp.salary_type}</td>
+                        <td>${formatCurrency(emp.totalSalary)}</td>
+                        <td>${formatCurrency(emp.tax)}</td>
+                        <td><strong>${formatCurrency(emp.netSalary)}</strong></td>
+                    </tr>
+                `).join('');
+                
+                showMessage(`Рассчитаны зарплаты для ${currentSalaryData.length} сотрудников`, 'success');
+            } else {
+                salaryTaxTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Ошибка загрузки данных</td></tr>';
+            }
+        }
+
+        async function loadLowSalaryEmployees() {
+            const threshold = parseFloat(document.getElementById('salaryThreshold').value) || 0;
+            const lowSalaryTable = document.getElementById('lowSalaryTable');
+            lowSalaryTable.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Поиск сотрудников...</div></td></tr>';
+            
+            const data = await apiCall('/employees');
+            
+            if (data && data.length > 0) {
+                currentLowSalaryData = data.filter(emp => {
+                    let salary = 0;
+                    
+                    if (emp.salary_type === 'оклад') {
+                        salary = parseFloat(emp.salary || 0);
+                    } else {
+                        salary = emp.worked_hours * emp.hourly_rate;
+                    }
+                    
+                    return salary < threshold;
+                });
+                
+                if (currentLowSalaryData.length > 0) {
+                    lowSalaryTable.innerHTML = currentLowSalaryData.map(emp => {
+                        let salary = 0;
+                        let salaryType = '';
+                        
+                        if (emp.salary_type === 'оклад') {
+                            salary = parseFloat(emp.salary || 0);
+                            salaryType = 'Оклад';
+                        } else {
+                            salary = emp.worked_hours * emp.hourly_rate;
+                            salaryType = 'Почасовая';
+                        }
+                        
+                        const status = salary < threshold * 0.7 ? 'badge badge-danger' : 
+                                      salary < threshold * 0.9 ? 'badge badge-warning' : 'badge badge-success';
+                        const statusText = salary < threshold * 0.7 ? 'Низкая' : 
+                                         salary < threshold * 0.9 ? 'Средняя' : 'Приемлемая';
+                        
+                        return `
+                            <tr>
+                                <td>${emp.full_name}</td>
+                                <td>${emp.position}</td>
+                                <td>${salaryType}</td>
+                                <td>${formatCurrency(salary)}</td>
+                                <td><span class="${status}">${statusText}</span></td>
+                            </tr>
+                        `;
+                    }).join('');
+                } else {
+                    lowSalaryTable.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem;">Нет сотрудников с зарплатой ниже ${formatCurrency(threshold)}</td></tr>`;
+                }
+                
+                showMessage(`Найдено ${currentLowSalaryData.length} сотрудников с зарплатой ниже ${formatCurrency(threshold)}`, 'success');
+            } else {
+                lowSalaryTable.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">Ошибка загрузки данных</td></tr>';
+            }
+        }
+
+        async function updateEmployeeHours(event) {
+            event.preventDefault();
+            
+            const employeeId = document.getElementById('employeeSelect').value;
+            const workedHours = document.getElementById('workedHours').value;
+            const overtimeHours = document.getElementById('overtimeHours').value;
+            
+            if (!employeeId) {
+                showMessage('Выберите сотрудника', 'error');
+                return;
+            }
+            
+            try {
+                const response = await apiCall(`/employees/${employeeId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        worked_hours: parseInt(workedHours),
+                        overtime_hours: parseInt(overtimeHours)
+                    })
+                });
+                
+                if (response) {
+                    showMessage('Данные успешно обновлены', 'success');
+                    document.getElementById('hoursForm').reset();
+                }
+            } catch (error) {
+                showMessage('Ошибка при обновлении данных', 'error');
+            }
+        }
+
+        function exportToTxt(data, filename, headers, rowFormatter) {
+            let content = headers.join('\t') + '\n';
+            
+            data.forEach(item => {
+                const row = rowFormatter(item);
+                content += row.join('\t') + '\n';
+            });
+            
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            saveAs(blob, `${filename}.txt`);
+        }
+
+        function exportToDocx(data, filename, headers, rowFormatter, title) {
+            const { Document, Paragraph, Table, TableCell, TableRow, TextRun, HeadingLevel, AlignmentType } = docx;
+            
+            const tableRows = [
+                new TableRow({
+                    children: headers.map(header => 
+                        new TableCell({
+                            children: [new Paragraph({
+                                children: [new TextRun({ text: header, bold: true })],
+                                alignment: AlignmentType.CENTER
+                            })]
+                        })
+                    ),
+                    tableHeader: true
+                }),
+                ...data.map(item => {
+                    const rowData = rowFormatter(item);
+                    return new TableRow({
+                        children: rowData.map(cell => 
+                            new TableCell({
+                                children: [new Paragraph({ text: cell })]
+                            })
+                        )
+                    });
+                })
+            ];
+            
+            const table = new Table({
+                rows: tableRows,
+                width: {
+                    size: 100,
+                    type: docx.WidthType.PERCENTAGE,
+                },
+            });
+            
+            const doc = new Document({
+                sections: [{
+                    properties: {},
+                    children: [
+                        new Paragraph({
+                            text: title,
+                            heading: HeadingLevel.HEADING_1,
+                            alignment: AlignmentType.CENTER
+                        }),
+                        new Paragraph({ text: "" }),
+                        new Paragraph({
+                            text: `Дата формирования: ${new Date().toLocaleDateString('ru-RU')}`,
+                            alignment: AlignmentType.LEFT
+                        }),
+                        new Paragraph({ text: "" }),
+                        table
+                    ]
+                }]
+            });
+            
+            docx.Packer.toBlob(doc).then(blob => {
+                saveAs(blob, `${filename}.docx`);
+            });
+        }
+
+        function exportOvertimeToTxt() {
+            if (currentOvertimeData.length === 0) {
+                showMessage('Нет данных для экспорта', 'error');
+                return;
+            }
+            
+            const headers = ['ФИО', 'Должность', 'Отработано часов', 'Сверхурочные', 'Ставка', 'Доплата'];
+            
+            exportToTxt(currentOvertimeData, 'сверхурочные_отчет', headers, (emp) => {
+                let overtimePay = 0;
+                if (emp.salary_type === 'оклад') {
+                    const hourlyRate = emp.salary / 160;
+                    overtimePay = emp.overtime_hours * hourlyRate * emp.overtime_rate;
+                } else {
+                    overtimePay = emp.overtime_hours * emp.hourly_rate * emp.overtime_rate;
+                }
+                
+                return [
+                    emp.full_name,
+                    emp.position,
+                    `${emp.worked_hours} ч.`,
+                    `${emp.overtime_hours} ч.`,
+                    `${emp.overtime_rate}x`,
+                    formatCurrency(overtimePay)
+                ];
+            });
+            
+            showMessage('Отчет по сверхурочным экспортирован в TXT', 'success');
+        }
+
+        function exportOvertimeToDocx() {
+            if (currentOvertimeData.length === 0) {
+                showMessage('Нет данных для экспорта', 'error');
+                return;
+            }
+            
+            const headers = ['ФИО', 'Должность', 'Отработано часов', 'Сверхурочные', 'Ставка', 'Доплата'];
+            
+            exportToDocx(currentOvertimeData, 'сверхурочные_отчет', headers, (emp) => {
+                let overtimePay = 0;
+                if (emp.salary_type === 'оклад') {
+                    const hourlyRate = emp.salary / 160;
+                    overtimePay = emp.overtime_hours * hourlyRate * emp.overtime_rate;
+                } else {
+                    overtimePay = emp.overtime_hours * emp.hourly_rate * emp.overtime_rate;
+                }
+                
+                return [
+                    emp.full_name,
+                    emp.position,
+                    `${emp.worked_hours} ч.`,
+                    `${emp.overtime_hours} ч.`,
+                    `${emp.overtime_rate}x`,
+                    formatCurrency(overtimePay)
+                ];
+            }, 'Отчет по сверхурочным работам');
+            
+            showMessage('Отчет по сверхурочным экспортирован в DOCX', 'success');
+        }
+
+        function exportSalaryToTxt() {
+            if (currentSalaryData.length === 0) {
+                showMessage('Нет данных для экспорта', 'error');
+                return;
+            }
+            
+            const headers = ['ФИО', 'Должность', 'Тип оплаты', 'Общая зарплата', 'Налог (12%)', 'Зарплата на руки'];
+            
+            exportToTxt(currentSalaryData, 'зарплата_отчет', headers, (emp) => [
+                emp.full_name,
+                emp.position,
+                emp.salary_type,
+                formatCurrency(emp.totalSalary),
+                formatCurrency(emp.tax),
+                formatCurrency(emp.netSalary)
+            ]);
+            
+            showMessage('Отчет по зарплатам экспортирован в TXT', 'success');
+        }
+
+        function exportSalaryToDocx() {
+            if (currentSalaryData.length === 0) {
+                showMessage('Нет данных для экспорта', 'error');
+                return;
+            }
+            
+            const headers = ['ФИО', 'Должность', 'Тип оплаты', 'Общая зарплата', 'Налог (12%)', 'Зарплата на руки'];
+            
+            exportToDocx(currentSalaryData, 'зарплата_отчет', headers, (emp) => [
+                emp.full_name,
+                emp.position,
+                emp.salary_type,
+                formatCurrency(emp.totalSalary),
+                formatCurrency(emp.tax),
+                formatCurrency(emp.netSalary)
+            ], 'Отчет по заработной плате с учетом налогов');
+            
+            showMessage('Отчет по зарплатам экспортирован в DOCX', 'success');
+        }
+
+        function exportLowSalaryToTxt() {
+            if (currentLowSalaryData.length === 0) {
+                showMessage('Нет данных для экспорта', 'error');
+                return;
+            }
+            
+            const threshold = parseFloat(document.getElementById('salaryThreshold').value) || 0;
+            const headers = ['ФИО', 'Должность', 'Тип оплаты', 'Зарплата', 'Статус'];
+            
+            exportToTxt(currentLowSalaryData, 'низкая_зарплата_отчет', headers, (emp) => {
+                let salary = 0;
+                let salaryType = '';
+                
+                if (emp.salary_type === 'оклад') {
+                    salary = parseFloat(emp.salary || 0);
+                    salaryType = 'Оклад';
+                } else {
+                    salary = emp.worked_hours * emp.hourly_rate;
+                    salaryType = 'Почасовая';
+                }
+                
+                const status = salary < threshold * 0.7 ? 'Низкая' : 
+                              salary < threshold * 0.9 ? 'Средняя' : 'Приемлемая';
+                
+                return [
+                    emp.full_name,
+                    emp.position,
+                    salaryType,
+                    formatCurrency(salary),
+                    status
+                ];
+            });
+            
+            showMessage('Отчет по низким зарплатам экспортирован в TXT', 'success');
+        }
+
+        function exportLowSalaryToDocx() {
+            if (currentLowSalaryData.length === 0) {
+                showMessage('Нет данных для экспорта', 'error');
+                return;
+            }
+            
+            const threshold = parseFloat(document.getElementById('salaryThreshold').value) || 0;
+            const headers = ['ФИО', 'Должность', 'Тип оплаты', 'Зарплата', 'Статус'];
+            
+            exportToDocx(currentLowSalaryData, 'низкая_зарплата_отчет', headers, (emp) => {
+                let salary = 0;
+                let salaryType = '';
+                
+                if (emp.salary_type === 'оклад') {
+                    salary = parseFloat(emp.salary || 0);
+                    salaryType = 'Оклад';
+                } else {
+                    salary = emp.worked_hours * emp.hourly_rate;
+                    salaryType = 'Почасовая';
+                }
+                
+                const status = salary < threshold * 0.7 ? 'Низкая' : 
+                              salary < threshold * 0.9 ? 'Средняя' : 'Приемлемая';
+                
+                return [
+                    emp.full_name,
+                    emp.position,
+                    salaryType,
+                    formatCurrency(salary),
+                    status
+                ];
+            }, `Отчет по сотрудникам с зарплатой ниже ${formatCurrency(threshold)}`);
+            
+            showMessage('Отчет по низким зарплатам экспортирован в DOCX', 'success');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadEmployees();
+            
+            document.getElementById('loadOvertimeBtn').addEventListener('click', loadOvertimeEmployees);
+            document.getElementById('loadSalaryTaxBtn').addEventListener('click', loadSalaryWithTax);
+            document.getElementById('loadLowSalaryBtn').addEventListener('click', loadLowSalaryEmployees);
+            document.getElementById('hoursForm').addEventListener('submit', updateEmployeeHours);
+            
+            document.getElementById('exportOvertimeTxt').addEventListener('click', exportOvertimeToTxt);
+            document.getElementById('exportOvertimeDocx').addEventListener('click', exportOvertimeToDocx);
+            document.getElementById('exportSalaryTxt').addEventListener('click', exportSalaryToTxt);
+            document.getElementById('exportSalaryDocx').addEventListener('click', exportSalaryToDocx);
+            document.getElementById('exportLowSalaryTxt').addEventListener('click', exportLowSalaryToTxt);
+            document.getElementById('exportLowSalaryDocx').addEventListener('click', exportLowSalaryToDocx);
+        });
+    </script>
+</body>
+</html>
