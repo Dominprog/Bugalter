@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>БухгалтерПро - Настройки</title>
+    <title>БухгалтерПро - Настройки системы</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -394,6 +394,26 @@
             font-size: 0.9rem;
         }
 
+        .rates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .rate-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .rate-card label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2rem;
@@ -411,6 +431,10 @@
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 1rem;
+            }
+            
+            .rates-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -436,15 +460,15 @@
 
     <section class="hero">
         <div class="container">
-            <h1>Настройки</h1>
-            <p>Управление настройками вашего аккаунта и системы</p>
+            <h1>Настройки системы</h1>
+            <p>Управление параметрами расчета заработной платы</p>
         </div>
     </section>
 
     <div class="container main-content">
         <div class="section-title">
-            <h2>Панель настроек</h2>
-            <p>Настройте параметры системы под ваши предпочтения</p>
+            <h2>Параметры системы</h2>
+            <p>Настройте расчет заработной платы и налогов для Беларуси</p>
         </div>
 
         <div id="messageContainer"></div>
@@ -452,137 +476,142 @@
         <div class="dashboard-card">
             <div class="card-header">
                 <div class="card-title">
-                    <i class="fas fa-user-cog"></i>
-                    Настройки профиля
+                    <i class="fas fa-money-bill-wave"></i>
+                    Тарифные ставки (BYN/час)
                 </div>
                 <div class="card-description">
-                    Управление личной информацией и настройками аккаунта
+                    Стоимость часа работы по разрядам в белорусских рублях
                 </div>
             </div>
             <div class="card-content">
-                <form id="profileForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Имя пользователя</label>
-                            <input type="text" id="username" class="form-control" value="admin" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Email</label>
-                            <input type="email" id="email" class="form-control" value="admin@buhpro.ru" required>
-                        </div>
+                <div class="rates-grid">
+                    <div class="rate-card">
+                        <label>1 разряд (BYN/час)</label>
+                        <input type="number" id="rate1" class="form-control" value="8.33" min="5" step="0.01">
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Имя</label>
-                            <input type="text" id="firstName" class="form-control" value="Алексей" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Фамилия</label>
-                            <input type="text" id="lastName" class="form-control" value="Иванов" required>
-                        </div>
+                    <div class="rate-card">
+                        <label>2 разряд (BYN/час)</label>
+                        <input type="number" id="rate2" class="form-control" value="9.15" min="5" step="0.01">
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">О себе</label>
-                        <textarea id="bio" class="form-control" rows="3">Главный бухгалтер</textarea>
+                    <div class="rate-card">
+                        <label>3 разряд (BYN/час)</label>
+                        <input type="number" id="rate3" class="form-control" value="10.25" min="5" step="0.01">
                     </div>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i>
-                        Сохранить изменения
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <div class="dashboard-card">
-            <div class="card-header">
-                <div class="card-title">
-                    <i class="fas fa-shield-alt"></i>
-                    Безопасность
-                </div>
-                <div class="card-description">
-                    Настройки безопасности и пароля
-                </div>
-            </div>
-            <div class="card-content">
-                <form id="securityForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Текущий пароль</label>
-                            <input type="password" id="currentPassword" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Новый пароль</label>
-                            <input type="password" id="newPassword" class="form-control" required>
-                        </div>
+                    <div class="rate-card">
+                        <label>4 разряд (BYN/час)</label>
+                        <input type="number" id="rate4" class="form-control" value="11.50" min="5" step="0.01">
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Подтвердите новый пароль</label>
-                        <input type="password" id="confirmPassword" class="form-control" required>
+                    <div class="rate-card">
+                        <label>5 разряд (BYN/час)</label>
+                        <input type="number" id="rate5" class="form-control" value="13.00" min="5" step="0.01">
                     </div>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-key"></i>
-                        Обновить пароль
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <div class="dashboard-card">
-            <div class="card-header">
-                <div class="card-title">
-                    <i class="fas fa-bell"></i>
-                    Уведомления
-                </div>
-                <div class="card-description">
-                    Управление уведомлениями и оповещениями
-                </div>
-            </div>
-            <div class="card-content">
-                <div class="settings-section">
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <div class="setting-title">Email уведомления</div>
-                            <div class="setting-description">Получать уведомления на email</div>
-                        </div>
-                        <label class="switch">
-                            <input type="checkbox" id="emailNotifications" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <div class="setting-title">SMS уведомления</div>
-                            <div class="setting-description">Получать уведомления по SMS</div>
-                        </div>
-                        <label class="switch">
-                            <input type="checkbox" id="smsNotifications">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <div class="setting-title">Уведомления о зарплате</div>
-                            <div class="setting-description">Уведомления о расчете заработной платы</div>
-                        </div>
-                        <label class="switch">
-                            <input type="checkbox" id="salaryNotifications" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <div class="setting-title">Сверхурочные работы</div>
-                            <div class="setting-description">Уведомления о сверхурочных часах</div>
-                        </div>
-                        <label class="switch">
-                            <input type="checkbox" id="overtimeNotifications" checked>
-                            <span class="slider"></span>
-                        </label>
+                    <div class="rate-card">
+                        <label>6 разряд (BYN/час)</label>
+                        <input type="number" id="rate6" class="form-control" value="15.00" min="5" step="0.01">
                     </div>
                 </div>
-                <button class="btn btn-primary" onclick="saveNotificationSettings()">
+                <button class="btn btn-primary" onclick="saveRates()">
                     <i class="fas fa-save"></i>
-                    Сохранить настройки
+                    Сохранить тарифы
+                </button>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-calculator"></i>
+                    Параметры расчета
+                </div>
+                <div class="card-description">
+                    Настройки расчета заработной платы для РБ
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Коэффициент сверхурочных</label>
+                        <input type="number" id="overtimeRate" class="form-control" value="1.5" min="1" max="3" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Коэффициент ночных</label>
+                        <input type="number" id="nightRate" class="form-control" value="1.35" min="1" max="3" step="0.1">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Норма часов в месяц</label>
+                        <input type="number" id="standardHours" class="form-control" value="160" min="120" max="200">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Подоходный налог (%)</label>
+                        <input type="number" id="incomeTax" class="form-control" value="13" min="0" max="20" step="0.1">
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Автоматический расчет сверхурочных</div>
+                        <div class="setting-description">Система автоматически определяет сверхурочные часы</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="autoOvertime" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <button class="btn btn-primary" onclick="saveCalculationSettings()">
+                    <i class="fas fa-save"></i>
+                    Сохранить параметры
+                </button>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-chart-bar"></i>
+                    Настройки отчетов
+                </div>
+                <div class="card-description">
+                    Параметры генерации отчетов для белорусских требований
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Порог зарплаты для оповещения (BYN)</label>
+                        <input type="number" id="salaryThreshold" class="form-control" value="1500" min="0" step="50">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Формат даты в отчетах</label>
+                        <select id="dateFormat" class="form-control">
+                            <option value="dd.mm.yyyy">ДД.ММ.ГГГГ</option>
+                            <option value="dd.mm.yy">ДД.ММ.ГГ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Показывать налоги в отчетах</div>
+                        <div class="setting-description">Отображать расчет налогов в итоговых отчетах</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="showTaxes" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Формировать отчеты по белорусским стандартам</div>
+                        <div class="setting-description">Генерировать отчеты в соответствии с требованиями РБ</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="belarusStandards" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <button class="btn btn-primary" onclick="saveReportSettings()">
+                    <i class="fas fa-save"></i>
+                    Сохранить настройки отчетов
                 </button>
             </div>
         </div>
@@ -607,63 +636,21 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Язык</label>
+                    <label class="form-label">Язык интерфейса</label>
                     <select id="language" class="form-control">
-                        <option value="ru">Русский</option>
-                        <option value="en">English</option>
+                        <option value="ru" selected>Русский</option>
+                        <option value="be">Беларуская</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Часовой пояс</label>
-                    <select id="timezone" class="form-control">
-                        <option value="Europe/Moscow">Москва (UTC+3)</option>
-                        <option value="Europe/London">Лондон (UTC+0)</option>
-                        <option value="America/New_York">Нью-Йорк (UTC-5)</option>
+                    <label class="form-label">Размер шрифта</label>
+                    <select id="fontSize" class="form-control">
+                        <option value="small">Маленький</option>
+                        <option value="medium" selected>Средний</option>
+                        <option value="large">Большой</option>
                     </select>
                 </div>
                 <button class="btn btn-primary" onclick="saveAppearanceSettings()">
-                    <i class="fas fa-save"></i>
-                    Сохранить настройки
-                </button>
-            </div>
-        </div>
-
-        <div class="dashboard-card">
-            <div class="card-header">
-                <div class="card-title">
-                    <i class="fas fa-cogs"></i>
-                    Системные настройки
-                </div>
-                <div class="card-description">
-                    Основные настройки системы бухгалтерского учета
-                </div>
-            </div>
-            <div class="card-content">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Валюта</label>
-                        <select id="currency" class="form-control">
-                            <option value="BYN">Белорусский рубль (BYN)</option>
-                            <option value="RUB">Российский рубль (RUB)</option>
-                            <option value="USD">Доллар США (USD)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Налоговая ставка (%)</label>
-                        <input type="number" id="taxRate" class="form-control" value="12" min="0" max="50" step="0.1">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Коэффициент сверхурочных</label>
-                        <input type="number" id="overtimeRate" class="form-control" value="1.5" min="1" max="3" step="0.1">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Норма часов в месяц</label>
-                        <input type="number" id="standardHours" class="form-control" value="160" min="120" max="200">
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="saveSystemSettings()">
                     <i class="fas fa-save"></i>
                     Сохранить настройки
                 </button>
@@ -677,33 +664,22 @@
                     Управление данными
                 </div>
                 <div class="card-description">
-                    Резервное копирование и управление данными
+                    Резервное копирование и сброс настроек
                 </div>
             </div>
             <div class="card-content">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Автоматическое резервное копирование</label>
-                        <select id="backupFrequency" class="form-control">
-                            <option value="daily">Ежедневно</option>
-                            <option value="weekly" selected>Еженедельно</option>
-                            <option value="monthly">Ежемесячно</option>
-                            <option value="never">Никогда</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Хранить резервные копии (дней)</label>
-                        <input type="number" id="backupRetention" class="form-control" value="30" min="1" max="365">
-                    </div>
-                </div>
-                <div class="form-actions" style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                    <button class="btn btn-primary" onclick="createBackup()">
+                <div class="form-actions" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="exportSettings()">
                         <i class="fas fa-download"></i>
-                        Создать резервную копию
+                        Экспорт настроек
                     </button>
-                    <button class="btn btn-secondary" onclick="restoreBackup()">
+                    <button class="btn btn-secondary" onclick="importSettings()">
                         <i class="fas fa-upload"></i>
-                        Восстановить из копии
+                        Импорт настроек
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetToDefault()" style="background: var(--warning);">
+                        <i class="fas fa-undo"></i>
+                        Сбросить к стандартным
                     </button>
                 </div>
             </div>
@@ -717,7 +693,7 @@
                     <div class="logo-icon" style="width: 32px; height: 32px; font-size: 0.8rem;">БП</div>
                     <div>БухгалтерПро</div>
                 </div>
-                <p>Профессиональное решение для автоматизации бухгалтерского учета</p>
+                <p>Профессиональное решение для автоматизации расчета заработной платы в Беларуси</p>
                 <div class="footer-links">
                     <a href="about.html">О компании</a>
                     <a href="contacts.html">Контакты</a>
@@ -743,60 +719,139 @@
             }, 5000);
         }
 
-        function saveProfile(event) {
-            event.preventDefault();
-            showMessage('Настройки профиля успешно сохранены', 'success');
+        function saveRates() {
+            const rates = {
+                rate1: document.getElementById('rate1').value,
+                rate2: document.getElementById('rate2').value,
+                rate3: document.getElementById('rate3').value,
+                rate4: document.getElementById('rate4').value,
+                rate5: document.getElementById('rate5').value,
+                rate6: document.getElementById('rate6').value
+            };
+            
+            localStorage.setItem('salaryRates', JSON.stringify(rates));
+            showMessage('Тарифные ставки успешно сохранены', 'success');
         }
 
-        function saveSecurity(event) {
-            event.preventDefault();
+        function saveCalculationSettings() {
+            const settings = {
+                overtimeRate: document.getElementById('overtimeRate').value,
+                nightRate: document.getElementById('nightRate').value,
+                standardHours: document.getElementById('standardHours').value,
+                incomeTax: document.getElementById('incomeTax').value,
+                autoOvertime: document.getElementById('autoOvertime').checked
+            };
             
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (!currentPassword) {
-                showMessage('Введите текущий пароль', 'error');
-                return;
-            }
-            
-            if (newPassword !== confirmPassword) {
-                showMessage('Новые пароли не совпадают', 'error');
-                return;
-            }
-            
-            if (newPassword.length < 6) {
-                showMessage('Пароль должен содержать минимум 6 символов', 'error');
-                return;
-            }
-            
-            showMessage('Пароль успешно изменен', 'success');
-            document.getElementById('securityForm').reset();
+            localStorage.setItem('calculationSettings', JSON.stringify(settings));
+            showMessage('Параметры расчета сохранены', 'success');
         }
 
-        function saveNotificationSettings() {
-            showMessage('Настройки уведомлений сохранены', 'success');
+        function saveReportSettings() {
+            const settings = {
+                salaryThreshold: document.getElementById('salaryThreshold').value,
+                dateFormat: document.getElementById('dateFormat').value,
+                showTaxes: document.getElementById('showTaxes').checked,
+                belarusStandards: document.getElementById('belarusStandards').checked
+            };
+            
+            localStorage.setItem('reportSettings', JSON.stringify(settings));
+            showMessage('Настройки отчетов сохранены', 'success');
         }
 
         function saveAppearanceSettings() {
+            const settings = {
+                theme: document.getElementById('theme').value,
+                language: document.getElementById('language').value,
+                fontSize: document.getElementById('fontSize').value
+            };
+            
+            localStorage.setItem('appearanceSettings', JSON.stringify(settings));
             showMessage('Настройки внешнего вида сохранены', 'success');
         }
 
-        function saveSystemSettings() {
-            showMessage('Системные настройки сохранены', 'success');
+        function exportSettings() {
+            const allSettings = {
+                rates: JSON.parse(localStorage.getItem('salaryRates') || '{}'),
+                calculation: JSON.parse(localStorage.getItem('calculationSettings') || '{}'),
+                reports: JSON.parse(localStorage.getItem('reportSettings') || '{}'),
+                appearance: JSON.parse(localStorage.getItem('appearanceSettings') || '{}')
+            };
+            
+            const dataStr = JSON.stringify(allSettings, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'buhpro-settings.json';
+            link.click();
+            
+            showMessage('Настройки экспортированы в файл', 'success');
         }
 
-        function createBackup() {
-            showMessage('Резервная копия создана успешно', 'success');
+        function importSettings() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = e => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const settings = JSON.parse(e.target.result);
+                        
+                        if (settings.rates) {
+                            localStorage.setItem('salaryRates', JSON.stringify(settings.rates));
+                            Object.keys(settings.rates).forEach(key => {
+                                if (document.getElementById(key)) {
+                                    document.getElementById(key).value = settings.rates[key];
+                                }
+                            });
+                        }
+                        
+                        showMessage('Настройки успешно импортированы', 'success');
+                    } catch (error) {
+                        showMessage('Ошибка при импорте настроек', 'error');
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
         }
 
-        function restoreBackup() {
-            showMessage('Данные восстановлены из резервной копии', 'success');
+        function resetToDefault() {
+            if (confirm('Вы уверены, что хотите сбросить все настройки к значениям по умолчанию для Беларуси?')) {
+                localStorage.clear();
+                
+                document.getElementById('rate1').value = 8.33;
+                document.getElementById('rate2').value = 9.15;
+                document.getElementById('rate3').value = 10.25;
+                document.getElementById('rate4').value = 11.50;
+                document.getElementById('rate5').value = 13.00;
+                document.getElementById('rate6').value = 15.00;
+                document.getElementById('overtimeRate').value = 1.5;
+                document.getElementById('nightRate').value = 1.35;
+                document.getElementById('standardHours').value = 160;
+                document.getElementById('incomeTax').value = 13;
+                document.getElementById('salaryThreshold').value = 1500;
+                
+                showMessage('Настройки сброшены к значениям по умолчанию для Беларуси', 'success');
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('profileForm').addEventListener('submit', saveProfile);
-            document.getElementById('securityForm').addEventListener('submit', saveSecurity);
+            const savedRates = localStorage.getItem('salaryRates');
+            if (savedRates) {
+                const rates = JSON.parse(savedRates);
+                Object.keys(rates).forEach(key => {
+                    if (document.getElementById(key)) {
+                        document.getElementById(key).value = rates[key];
+                    }
+                });
+            }
         });
     </script>
 </body>
