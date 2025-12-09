@@ -1,18 +1,11 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" id="htmlLang">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>БухгалтерПро - Настройки системы</title>
+    <title data-i18n="settings.title">БухгалтерПро - Настройки системы</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-        }
-
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
@@ -30,10 +23,16 @@
             --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
             --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             --border-radius: 12px;
             --border-radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         body {
@@ -41,6 +40,66 @@
             color: var(--light);
             line-height: 1.6;
             min-height: 100vh;
+        }
+
+        body.light-theme {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #0f172a;
+        }
+
+        body.light-theme .header {
+            background: rgba(248, 250, 252, 0.95);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .nav-links a {
+            color: #475569;
+        }
+
+        body.light-theme .nav-links a:hover,
+        body.light-theme .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        body.light-theme .dashboard-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .card-header {
+            background: rgba(241, 245, 249, 0.9);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .card-title,
+        body.light-theme .form-label,
+        body.light-theme .setting-title {
+            color: #0f172a;
+        }
+
+        body.light-theme .card-description,
+        body.light-theme .setting-description {
+            color: #475569;
+        }
+
+        body.light-theme .form-control {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+
+        body.light-theme .footer {
+            background: rgba(248, 250, 252, 0.95);
+            color: #0f172a;
+        }
+
+        body.light-theme .footer-links a {
+            color: #64748b;
+        }
+
+        body.light-theme .footer-links a:hover {
+            color: #0f172a;
         }
 
         .container {
@@ -367,10 +426,6 @@
             transform: translateX(26px);
         }
 
-        .settings-section {
-            margin-bottom: 2rem;
-        }
-
         .setting-item {
             display: flex;
             justify-content: space-between;
@@ -414,6 +469,14 @@
             font-weight: 500;
         }
 
+        body.large-font {
+            font-size: 18px;
+        }
+
+        body.small-font {
+            font-size: 14px;
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2rem;
@@ -448,11 +511,11 @@
                     <div>БухгалтерПро</div>
                 </a>
                 <ul class="nav-links">
-                    <li><a href="index.html">Главная</a></li>
-                    <li><a href="employees.html">Сотрудники</a></li>
-                    <li><a href="overtime.html">Отделы</a></li>
-                    <li><a href="reports.html">Отчеты</a></li>
-                    <li><a href="settings.html" class="active">Настройки</a></li>
+                    <li><a href="index.html" data-i18n="nav.home">Главная</a></li>
+                    <li><a href="employees.html" data-i18n="nav.employees">Сотрудники</a></li>
+                    <li><a href="overtime.html" data-i18n="nav.departments">Отделы</a></li>
+                    <li><a href="reports.html" data-i18n="nav.reports">Отчеты</a></li>
+                    <li><a href="settings.html" class="active" data-i18n="nav.settings">Настройки</a></li>
                 </ul>
             </nav>
         </div>
@@ -460,15 +523,15 @@
 
     <section class="hero">
         <div class="container">
-            <h1>Настройки системы</h1>
-            <p>Управление параметрами расчета заработной платы</p>
+            <h1 data-i18n="settings.title">Настройки системы</h1>
+            <p data-i18n="settings.subtitle">Управление параметрами расчета заработной платы</p>
         </div>
     </section>
 
     <div class="container main-content">
         <div class="section-title">
-            <h2>Параметры системы</h2>
-            <p>Настройте расчет заработной платы и налогов для Беларуси</p>
+            <h2 data-i18n="settings.system_params">Параметры системы</h2>
+            <p data-i18n="settings.system_desc">Настройте расчет заработной платы и налогов для Беларуси</p>
         </div>
 
         <div id="messageContainer"></div>
@@ -477,42 +540,42 @@
             <div class="card-header">
                 <div class="card-title">
                     <i class="fas fa-money-bill-wave"></i>
-                    Тарифные ставки (BYN/час)
+                    <span data-i18n="settings.tariff_rates">Тарифные ставки (BYN/час)</span>
                 </div>
-                <div class="card-description">
+                <div class="card-description" data-i18n="settings.tariff_desc">
                     Стоимость часа работы по разрядам в белорусских рублях
                 </div>
             </div>
             <div class="card-content">
                 <div class="rates-grid">
                     <div class="rate-card">
-                        <label>1 разряд (BYN/час)</label>
+                        <label data-i18n="settings.rate1">1 разряд (BYN/час)</label>
                         <input type="number" id="rate1" class="form-control" value="8.33" min="5" step="0.01">
                     </div>
                     <div class="rate-card">
-                        <label>2 разряд (BYN/час)</label>
+                        <label data-i18n="settings.rate2">2 разряд (BYN/час)</label>
                         <input type="number" id="rate2" class="form-control" value="9.15" min="5" step="0.01">
                     </div>
                     <div class="rate-card">
-                        <label>3 разряд (BYN/час)</label>
+                        <label data-i18n="settings.rate3">3 разряд (BYN/час)</label>
                         <input type="number" id="rate3" class="form-control" value="10.25" min="5" step="0.01">
                     </div>
                     <div class="rate-card">
-                        <label>4 разряд (BYN/час)</label>
+                        <label data-i18n="settings.rate4">4 разряд (BYN/час)</label>
                         <input type="number" id="rate4" class="form-control" value="11.50" min="5" step="0.01">
                     </div>
                     <div class="rate-card">
-                        <label>5 разряд (BYN/час)</label>
+                        <label data-i18n="settings.rate5">5 разряд (BYN/час)</label>
                         <input type="number" id="rate5" class="form-control" value="13.00" min="5" step="0.01">
                     </div>
                     <div class="rate-card">
-                        <label>6 разряд (BYN/час)</label>
+                        <label data-i18n="settings.rate6">6 разряд (BYN/час)</label>
                         <input type="number" id="rate6" class="form-control" value="15.00" min="5" step="0.01">
                     </div>
                 </div>
                 <button class="btn btn-primary" onclick="saveRates()">
                     <i class="fas fa-save"></i>
-                    Сохранить тарифы
+                    <span data-i18n="settings.save_rates">Сохранить тарифы</span>
                 </button>
             </div>
         </div>
@@ -521,46 +584,46 @@
             <div class="card-header">
                 <div class="card-title">
                     <i class="fas fa-calculator"></i>
-                    Параметры расчета
+                    <span data-i18n="settings.calc_params">Параметры расчета</span>
                 </div>
-                <div class="card-description">
+                <div class="card-description" data-i18n="settings.calc_desc">
                     Настройки расчета заработной платы для РБ
                 </div>
             </div>
             <div class="card-content">
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Коэффициент сверхурочных</label>
+                        <label class="form-label" data-i18n="settings.overtime_coef">Коэффициент сверхурочных</label>
                         <input type="number" id="overtimeRate" class="form-control" value="1.5" min="1" max="3" step="0.1">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Коэффициент ночных</label>
+                        <label class="form-label" data-i18n="settings.night_coef">Коэффициент ночных</label>
                         <input type="number" id="nightRate" class="form-control" value="1.35" min="1" max="3" step="0.1">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Норма часов в месяц</label>
+                        <label class="form-label" data-i18n="settings.standard_hours">Норма часов в месяц</label>
                         <input type="number" id="standardHours" class="form-control" value="160" min="120" max="200">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Подоходный налог (%)</label>
+                        <label class="form-label" data-i18n="settings.income_tax">Подоходный налог (%)</label>
                         <input type="number" id="incomeTax" class="form-control" value="13" min="0" max="20" step="0.1">
                     </div>
                 </div>
                 <div class="setting-item">
                     <div class="setting-info">
-                        <div class="setting-title">Автоматический расчет сверхурочных</div>
-                        <div class="setting-description">Система автоматически определяет сверхурочные часы</div>
+                        <div class="setting-title" data-i18n="settings.auto_overtime">Автоматический расчет сверхурочных</div>
+                        <div class="setting-description" data-i18n="settings.auto_overtime_desc">Система автоматически определяет сверхурочные часы</div>
                     </div>
                     <label class="switch">
-                        <input type="checkbox" id="autoOvertime" checked>
+                        <input type="checkbox" id="autoOvertime">
                         <span class="slider"></span>
                     </label>
                 </div>
                 <button class="btn btn-primary" onclick="saveCalculationSettings()">
                     <i class="fas fa-save"></i>
-                    Сохранить параметры
+                    <span data-i18n="settings.save_params">Сохранить параметры</span>
                 </button>
             </div>
         </div>
@@ -569,20 +632,20 @@
             <div class="card-header">
                 <div class="card-title">
                     <i class="fas fa-chart-bar"></i>
-                    Настройки отчетов
+                    <span data-i18n="settings.report_settings">Настройки отчетов</span>
                 </div>
-                <div class="card-description">
+                <div class="card-description" data-i18n="settings.report_desc">
                     Параметры генерации отчетов для белорусских требований
                 </div>
             </div>
             <div class="card-content">
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Порог зарплаты для оповещения (BYN)</label>
+                        <label class="form-label" data-i18n="settings.salary_threshold">Порог зарплаты для оповещения (BYN)</label>
                         <input type="number" id="salaryThreshold" class="form-control" value="1500" min="0" step="50">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Формат даты в отчетах</label>
+                        <label class="form-label" data-i18n="settings.date_format">Формат даты в отчетах</label>
                         <select id="dateFormat" class="form-control">
                             <option value="dd.mm.yyyy">ДД.ММ.ГГГГ</option>
                             <option value="dd.mm.yy">ДД.ММ.ГГ</option>
@@ -591,27 +654,27 @@
                 </div>
                 <div class="setting-item">
                     <div class="setting-info">
-                        <div class="setting-title">Показывать налоги в отчетах</div>
-                        <div class="setting-description">Отображать расчет налогов в итоговых отчетах</div>
+                        <div class="setting-title" data-i18n="settings.show_taxes">Показывать налоги в отчетах</div>
+                        <div class="setting-description" data-i18n="settings.show_taxes_desc">Отображать расчет налогов в итоговых отчетах</div>
                     </div>
                     <label class="switch">
-                        <input type="checkbox" id="showTaxes" checked>
+                        <input type="checkbox" id="showTaxes">
                         <span class="slider"></span>
                     </label>
                 </div>
                 <div class="setting-item">
                     <div class="setting-info">
-                        <div class="setting-title">Формировать отчеты по белорусским стандартам</div>
-                        <div class="setting-description">Генерировать отчеты в соответствии с требованиями РБ</div>
+                        <div class="setting-title" data-i18n="settings.belarus_standards">Формировать отчеты по белорусским стандартам</div>
+                        <div class="setting-description" data-i18n="settings.belarus_standards_desc">Генерировать отчеты в соответствии с требованиями РБ</div>
                     </div>
                     <label class="switch">
-                        <input type="checkbox" id="belarusStandards" checked>
+                        <input type="checkbox" id="belarusStandards">
                         <span class="slider"></span>
                     </label>
                 </div>
                 <button class="btn btn-primary" onclick="saveReportSettings()">
                     <i class="fas fa-save"></i>
-                    Сохранить настройки отчетов
+                    <span data-i18n="settings.save_report">Сохранить настройки отчетов</span>
                 </button>
             </div>
         </div>
@@ -620,15 +683,15 @@
             <div class="card-header">
                 <div class="card-title">
                     <i class="fas fa-palette"></i>
-                    Внешний вид
+                    <span data-i18n="settings.appearance">Внешний вид</span>
                 </div>
-                <div class="card-description">
+                <div class="card-description" data-i18n="settings.appearance_desc">
                     Настройте внешний вид приложения
                 </div>
             </div>
             <div class="card-content">
                 <div class="form-group">
-                    <label class="form-label">Тема оформления</label>
+                    <label class="form-label" data-i18n="settings.theme">Тема оформления</label>
                     <select id="theme" class="form-control">
                         <option value="dark">Темная</option>
                         <option value="light">Светлая</option>
@@ -636,23 +699,24 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Язык интерфейса</label>
+                    <label class="form-label" data-i18n="settings.language">Язык интерфейса</label>
                     <select id="language" class="form-control">
-                        <option value="ru" selected>Русский</option>
+                        <option value="ru">Русский</option>
+                        <option value="en">English</option>
                         <option value="be">Беларуская</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Размер шрифта</label>
+                    <label class="form-label" data-i18n="settings.font_size">Размер шрифта</label>
                     <select id="fontSize" class="form-control">
                         <option value="small">Маленький</option>
-                        <option value="medium" selected>Средний</option>
+                        <option value="medium">Средний</option>
                         <option value="large">Большой</option>
                     </select>
                 </div>
                 <button class="btn btn-primary" onclick="saveAppearanceSettings()">
                     <i class="fas fa-save"></i>
-                    Сохранить настройки
+                    <span data-i18n="settings.save_appearance">Сохранить настройки</span>
                 </button>
             </div>
         </div>
@@ -661,9 +725,9 @@
             <div class="card-header">
                 <div class="card-title">
                     <i class="fas fa-database"></i>
-                    Управление данными
+                    <span data-i18n="settings.data_management">Управление данными</span>
                 </div>
-                <div class="card-description">
+                <div class="card-description" data-i18n="settings.data_desc">
                     Резервное копирование и сброс настроек
                 </div>
             </div>
@@ -671,15 +735,15 @@
                 <div class="form-actions" style="display: flex; gap: 1rem; flex-wrap: wrap;">
                     <button class="btn btn-primary" onclick="exportSettings()">
                         <i class="fas fa-download"></i>
-                        Экспорт настроек
+                        <span data-i18n="settings.export">Экспорт настроек</span>
                     </button>
                     <button class="btn btn-secondary" onclick="importSettings()">
                         <i class="fas fa-upload"></i>
-                        Импорт настроек
+                        <span data-i18n="settings.import">Импорт настроек</span>
                     </button>
                     <button class="btn btn-secondary" onclick="resetToDefault()" style="background: var(--warning);">
                         <i class="fas fa-undo"></i>
-                        Сбросить к стандартным
+                        <span data-i18n="settings.reset">Сбросить к стандартным</span>
                     </button>
                 </div>
             </div>
@@ -693,166 +757,522 @@
                     <div class="logo-icon" style="width: 32px; height: 32px; font-size: 0.8rem;">БП</div>
                     <div>БухгалтерПро</div>
                 </div>
-                <p>Профессиональное решение для автоматизации расчета заработной платы в Беларуси</p>
+                <p data-i18n="footer.description">Профессиональное решение для автоматизации расчета заработной платы в Беларуси</p>
                 <div class="footer-links">
-                    <a href="About the company.html">О компании</a>
-                    <a href="contacts.html">Контакты</a>
-                    <a href="support.html">Поддержка</a>
-                    <a href="documentation.html">Документация</a>
+                    <a href="about.html" data-i18n="footer.about">О компании</a>
+                    <a href="contacts.html" data-i18n="footer.contacts">Контакты</a>
+                    <a href="support.html" data-i18n="footer.support">Поддержка</a>
                 </div>
-                <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
+                <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. <span data-i18n="footer.rights">Все права защищены.</span></p>
             </div>
         </div>
     </footer>
 
-    <script>
-        function showMessage(message, type = 'info') {
-            const messageContainer = document.getElementById('messageContainer');
-            const messageEl = document.createElement('div');
-            messageEl.className = type === 'error' ? 'error-message' : 'success-message';
-            messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
-            messageContainer.innerHTML = '';
-            messageContainer.appendChild(messageEl);
-            
-            setTimeout(() => {
-                messageEl.remove();
-            }, 5000);
-        }
+   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        loadAllSettings();
+        
+        const saveAllBtn = document.createElement('button');
+        saveAllBtn.className = 'btn btn-primary';
+        saveAllBtn.id = 'saveAllBtn';
+        saveAllBtn.style.marginTop = '20px';
+        saveAllBtn.innerHTML = '<i class="fas fa-save"></i> Сохранить все настройки';
+        saveAllBtn.onclick = saveAllSettings;
+        
+        document.querySelector('.card-content:last-child').appendChild(saveAllBtn);
 
-        function saveRates() {
-            const rates = {
-                rate1: document.getElementById('rate1').value,
-                rate2: document.getElementById('rate2').value,
-                rate3: document.getElementById('rate3').value,
-                rate4: document.getElementById('rate4').value,
-                rate5: document.getElementById('rate5').value,
-                rate6: document.getElementById('rate6').value
-            };
-            
-            localStorage.setItem('salaryRates', JSON.stringify(rates));
-            showMessage('Тарифные ставки успешно сохранены', 'success');
-        }
+        document.getElementById('theme').addEventListener('change', function() {
+            applyTheme(this.value);
+        });
+        
+        document.getElementById('language').addEventListener('change', function() {
+            applyTranslations(this.value);
+        });
+        
+        document.getElementById('fontSize').addEventListener('change', function() {
+            applyFontSize(this.value);
+        });
+    });
 
-        function saveCalculationSettings() {
-            const settings = {
-                overtimeRate: document.getElementById('overtimeRate').value,
-                nightRate: document.getElementById('nightRate').value,
-                standardHours: document.getElementById('standardHours').value,
-                incomeTax: document.getElementById('incomeTax').value,
-                autoOvertime: document.getElementById('autoOvertime').checked
-            };
-            
-            localStorage.setItem('calculationSettings', JSON.stringify(settings));
-            showMessage('Параметры расчета сохранены', 'success');
-        }
+    function showMessage(message, type = 'info') {
+        const messageContainer = document.getElementById('messageContainer');
+        const messageEl = document.createElement('div');
+        messageEl.className = type === 'error' ? 'error-message' : 'success-message';
+        messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
+        messageContainer.innerHTML = '';
+        messageContainer.appendChild(messageEl);
+        
+        setTimeout(() => {
+            messageEl.remove();
+        }, 5000);
+    }
 
-        function saveReportSettings() {
-            const settings = {
-                salaryThreshold: document.getElementById('salaryThreshold').value,
-                dateFormat: document.getElementById('dateFormat').value,
-                showTaxes: document.getElementById('showTaxes').checked,
-                belarusStandards: document.getElementById('belarusStandards').checked
-            };
-            
-            localStorage.setItem('reportSettings', JSON.stringify(settings));
-            showMessage('Настройки отчетов сохранены', 'success');
-        }
+    function saveAllSettings() {
+        saveRates();
+        saveCalculationSettings();
+        saveReportSettings();
+        saveAppearanceSettings();
+        showMessage('Все настройки успешно сохранены', 'success');
+        applyAllSettings();
+    }
 
-        function saveAppearanceSettings() {
-            const settings = {
-                theme: document.getElementById('theme').value,
-                language: document.getElementById('language').value,
-                fontSize: document.getElementById('fontSize').value
-            };
-            
-            localStorage.setItem('appearanceSettings', JSON.stringify(settings));
-            showMessage('Настройки внешнего вида сохранены', 'success');
+    function applyAllSettings() {
+        const appearance = JSON.parse(localStorage.getItem('appearanceSettings') || '{}');
+        
+        if (appearance.theme === 'light') {
+            document.body.classList.add('light-theme');
+        } else {
+            document.body.classList.remove('light-theme');
         }
-
-        function exportSettings() {
-            const allSettings = {
-                rates: JSON.parse(localStorage.getItem('salaryRates') || '{}'),
-                calculation: JSON.parse(localStorage.getItem('calculationSettings') || '{}'),
-                reports: JSON.parse(localStorage.getItem('reportSettings') || '{}'),
-                appearance: JSON.parse(localStorage.getItem('appearanceSettings') || '{}')
-            };
-            
-            const dataStr = JSON.stringify(allSettings, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(dataBlob);
-            link.download = 'buhpro-settings.json';
-            link.click();
-            
-            showMessage('Настройки экспортированы в файл', 'success');
+        
+        if (appearance.fontSize === 'large') {
+            document.body.classList.add('large-font');
+            document.body.classList.remove('small-font');
+        } else if (appearance.fontSize === 'small') {
+            document.body.classList.add('small-font');
+            document.body.classList.remove('large-font');
+        } else {
+            document.body.classList.remove('small-font', 'large-font');
         }
+        
+        applyTranslations(appearance.language || 'ru');
+    }
 
-        function importSettings() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            
-            input.onchange = e => {
-                const file = e.target.files[0];
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    try {
-                        const settings = JSON.parse(e.target.result);
-                        
-                        if (settings.rates) {
-                            localStorage.setItem('salaryRates', JSON.stringify(settings.rates));
-                            Object.keys(settings.rates).forEach(key => {
-                                if (document.getElementById(key)) {
-                                    document.getElementById(key).value = settings.rates[key];
-                                }
-                            });
-                        }
-                        
-                        showMessage('Настройки успешно импортированы', 'success');
-                    } catch (error) {
-                        showMessage('Ошибка при импорте настроек', 'error');
-                    }
-                };
-                
-                reader.readAsText(file);
-            };
-            
-            input.click();
+    function applyTheme(theme) {
+        document.body.classList.remove('light-theme');
+        if (theme === 'light') {
+            document.body.classList.add('light-theme');
         }
+    }
 
-        function resetToDefault() {
-            if (confirm('Вы уверены, что хотите сбросить все настройки к значениям по умолчанию для Беларуси?')) {
-                localStorage.clear();
-                
-                document.getElementById('rate1').value = 8.33;
-                document.getElementById('rate2').value = 9.15;
-                document.getElementById('rate3').value = 10.25;
-                document.getElementById('rate4').value = 11.50;
-                document.getElementById('rate5').value = 13.00;
-                document.getElementById('rate6').value = 15.00;
-                document.getElementById('overtimeRate').value = 1.5;
-                document.getElementById('nightRate').value = 1.35;
-                document.getElementById('standardHours').value = 160;
-                document.getElementById('incomeTax').value = 13;
-                document.getElementById('salaryThreshold').value = 1500;
-                
-                showMessage('Настройки сброшены к значениям по умолчанию для Беларуси', 'success');
-            }
+    function applyFontSize(size) {
+        document.body.classList.remove('small-font', 'large-font');
+        if (size === 'large') {
+            document.body.classList.add('large-font');
+        } else if (size === 'small') {
+            document.body.classList.add('small-font');
         }
+    }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedRates = localStorage.getItem('salaryRates');
-            if (savedRates) {
-                const rates = JSON.parse(savedRates);
-                Object.keys(rates).forEach(key => {
-                    if (document.getElementById(key)) {
-                        document.getElementById(key).value = rates[key];
-                    }
-                });
+    // Используем более простой подход - словари перевода
+    const translations = {
+        'ru': {
+            'settings.title': 'Настройки системы',
+            'settings.subtitle': 'Управление параметрами расчета заработной платы',
+            'nav.home': 'Главная',
+            'nav.employees': 'Сотрудники',
+            'nav.departments': 'Отделы',
+            'nav.reports': 'Отчеты',
+            'nav.settings': 'Настройки',
+            'settings.system_params': 'Параметры системы',
+            'settings.system_desc': 'Настройте расчет заработной платы и налогов для Беларуси',
+            'settings.tariff_rates': 'Тарифные ставки (BYN/час)',
+            'settings.tariff_desc': 'Стоимость часа работы по разрядам в белорусских рублях',
+            'settings.rate1': '1 разряд (BYN/час)',
+            'settings.rate2': '2 разряд (BYN/час)',
+            'settings.rate3': '3 разряд (BYN/час)',
+            'settings.rate4': '4 разряд (BYN/час)',
+            'settings.rate5': '5 разряд (BYN/час)',
+            'settings.rate6': '6 разряд (BYN/час)',
+            'settings.save_rates': 'Сохранить тарифы',
+            'settings.calc_params': 'Параметры расчета',
+            'settings.calc_desc': 'Настройки расчета заработной платы для РБ',
+            'settings.overtime_coef': 'Коэффициент сверхурочных',
+            'settings.night_coef': 'Коэффициент ночных',
+            'settings.standard_hours': 'Норма часов в месяц',
+            'settings.income_tax': 'Подоходный налог (%)',
+            'settings.auto_overtime': 'Автоматический расчет сверхурочных',
+            'settings.auto_overtime_desc': 'Система автоматически определяет сверхурочные часы',
+            'settings.save_params': 'Сохранить параметры',
+            'settings.report_settings': 'Настройки отчетов',
+            'settings.report_desc': 'Параметры генерации отчетов для белорусских требований',
+            'settings.salary_threshold': 'Порог зарплаты для оповещения (BYN)',
+            'settings.date_format': 'Формат даты в отчетах',
+            'settings.show_taxes': 'Показывать налоги в отчетах',
+            'settings.show_taxes_desc': 'Отображать расчет налогов в итоговых отчетах',
+            'settings.belarus_standards': 'Формировать отчеты по белорусским стандартам',
+            'settings.belarus_standards_desc': 'Генерировать отчеты в соответствии с требованиями РБ',
+            'settings.save_report': 'Сохранить настройки отчетов',
+            'settings.appearance': 'Внешний вид',
+            'settings.appearance_desc': 'Настройте внешний вид приложения',
+            'settings.theme': 'Тема оформления',
+            'settings.language': 'Язык интерфейса',
+            'settings.font_size': 'Размер шрифта',
+            'settings.save_appearance': 'Сохранить настройки',
+            'settings.data_management': 'Управление данными',
+            'settings.data_desc': 'Резервное копирование и сброс настроек',
+            'settings.export': 'Экспорт настроек',
+            'settings.import': 'Импорт настроек',
+            'settings.reset': 'Сбросить к стандартным',
+            'footer.description': 'Профессиональное решение для автоматизации расчета заработной платы в Беларуси',
+            'footer.about': 'О компании',
+            'footer.contacts': 'Контакты',
+            'footer.support': 'Поддержка',
+            'footer.rights': 'Все права защищены.'
+        },
+        'en': {
+            'settings.title': 'System Settings',
+            'settings.subtitle': 'Payroll calculation parameters management',
+            'nav.home': 'Home',
+            'nav.employees': 'Employees',
+            'nav.departments': 'Departments',
+            'nav.reports': 'Reports',
+            'nav.settings': 'Settings',
+            'settings.system_params': 'System Parameters',
+            'settings.system_desc': 'Configure payroll and tax calculations for Belarus',
+            'settings.tariff_rates': 'Tariff Rates (BYN/hour)',
+            'settings.tariff_desc': 'Hourly rates by grade in Belarusian rubles',
+            'settings.rate1': 'Grade 1 (BYN/hour)',
+            'settings.rate2': 'Grade 2 (BYN/hour)',
+            'settings.rate3': 'Grade 3 (BYN/hour)',
+            'settings.rate4': 'Grade 4 (BYN/hour)',
+            'settings.rate5': 'Grade 5 (BYN/hour)',
+            'settings.rate6': 'Grade 6 (BYN/hour)',
+            'settings.save_rates': 'Save Rates',
+            'settings.calc_params': 'Calculation Parameters',
+            'settings.calc_desc': 'Payroll calculation settings for Belarus',
+            'settings.overtime_coef': 'Overtime Coefficient',
+            'settings.night_coef': 'Night Shift Coefficient',
+            'settings.standard_hours': 'Standard Hours per Month',
+            'settings.income_tax': 'Income Tax (%)',
+            'settings.auto_overtime': 'Automatic Overtime Calculation',
+            'settings.auto_overtime_desc': 'System automatically detects overtime hours',
+            'settings.save_params': 'Save Parameters',
+            'settings.report_settings': 'Report Settings',
+            'settings.report_desc': 'Report generation parameters for Belarusian requirements',
+            'settings.salary_threshold': 'Salary Alert Threshold (BYN)',
+            'settings.date_format': 'Date Format in Reports',
+            'settings.show_taxes': 'Show Taxes in Reports',
+            'settings.show_taxes_desc': 'Display tax calculations in final reports',
+            'settings.belarus_standards': 'Generate Reports According to Belarusian Standards',
+            'settings.belarus_standards_desc': 'Generate reports in accordance with RB requirements',
+            'settings.save_report': 'Save Report Settings',
+            'settings.appearance': 'Appearance',
+            'settings.appearance_desc': 'Customize application appearance',
+            'settings.theme': 'Theme',
+            'settings.language': 'Interface Language',
+            'settings.font_size': 'Font Size',
+            'settings.save_appearance': 'Save Settings',
+            'settings.data_management': 'Data Management',
+            'settings.data_desc': 'Backup and reset settings',
+            'settings.export': 'Export Settings',
+            'settings.import': 'Import Settings',
+            'settings.reset': 'Reset to Default',
+            'footer.description': 'Professional solution for payroll automation in Belarus',
+            'footer.about': 'About Company',
+            'footer.contacts': 'Contacts',
+            'footer.support': 'Support',
+            'footer.rights': 'All rights reserved.'
+        }
+    };
+
+    function applyTranslations(lang) {
+        document.getElementById('htmlLang').setAttribute('lang', lang);
+        localStorage.setItem('selectedLanguage', lang);
+        
+        const langData = translations[lang] || translations['ru'];
+        
+        // Обновляем title
+        document.title = lang === 'en' ? 'AccountantPro - System Settings' : 'БухгалтерПро - Настройки системы';
+        
+        // Обновляем все элементы с data-i18n
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            if (langData[key]) {
+                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                    element.placeholder = langData[key];
+                } else if (element.tagName === 'OPTION') {
+                    // Для option обновляем текст
+                    element.textContent = langData[key];
+                } else {
+                    element.textContent = langData[key];
+                }
             }
         });
-    </script>
+        
+        // Обновляем кнопки без data-i18n
+        const buttons = document.querySelectorAll('.btn-primary');
+        if (lang === 'en') {
+            buttons[0].innerHTML = '<i class="fas fa-save"></i> Save Rates';
+            buttons[1].innerHTML = '<i class="fas fa-save"></i> Save Parameters';
+            buttons[2].innerHTML = '<i class="fas fa-save"></i> Save Report Settings';
+            buttons[3].innerHTML = '<i class="fas fa-save"></i> Save Settings';
+            buttons[4].innerHTML = '<i class="fas fa-download"></i> Export Settings';
+            buttons[5].innerHTML = '<i class="fas fa-upload"></i> Import Settings';
+            buttons[6].innerHTML = '<i class="fas fa-undo"></i> Reset to Default';
+            document.getElementById('saveAllBtn').innerHTML = '<i class="fas fa-save"></i> Save All Settings';
+            
+            // Обновляем опции в select
+            const themeSelect = document.getElementById('theme');
+            themeSelect.options[0].text = 'Dark';
+            themeSelect.options[1].text = 'Light';
+            themeSelect.options[2].text = 'System';
+            
+            const langSelect = document.getElementById('language');
+            langSelect.options[0].text = 'Russian';
+            langSelect.options[1].text = 'English';
+            langSelect.options[2].text = 'Belarusian';
+            
+            const fontSizeSelect = document.getElementById('fontSize');
+            fontSizeSelect.options[0].text = 'Small';
+            fontSizeSelect.options[1].text = 'Medium';
+            fontSizeSelect.options[2].text = 'Large';
+            
+            const dateFormatSelect = document.getElementById('dateFormat');
+            dateFormatSelect.options[0].text = 'DD.MM.YYYY';
+            dateFormatSelect.options[1].text = 'DD.MM.YY';
+            
+            // Обновляем логотип в футере
+            const footerLogo = document.querySelector('.footer-logo div:last-child');
+            if (footerLogo) {
+                footerLogo.textContent = 'AccountantPro';
+            }
+            
+            // Обновляем копирайт
+            const copyright = document.querySelector('.footer p:last-child');
+            if (copyright) {
+                copyright.innerHTML = '&copy; 2025 AccountantPro. <span data-i18n="footer.rights">All rights reserved.</span>';
+            }
+        } else {
+            buttons[0].innerHTML = '<i class="fas fa-save"></i> Сохранить тарифы';
+            buttons[1].innerHTML = '<i class="fas fa-save"></i> Сохранить параметры';
+            buttons[2].innerHTML = '<i class="fas fa-save"></i> Сохранить настройки отчетов';
+            buttons[3].innerHTML = '<i class="fas fa-save"></i> Сохранить настройки';
+            buttons[4].innerHTML = '<i class="fas fa-download"></i> Экспорт настроек';
+            buttons[5].innerHTML = '<i class="fas fa-upload"></i> Импорт настроек';
+            buttons[6].innerHTML = '<i class="fas fa-undo"></i> Сбросить к стандартным';
+            document.getElementById('saveAllBtn').innerHTML = '<i class="fas fa-save"></i> Сохранить все настройки';
+            
+            // Обновляем опции в select
+            const themeSelect = document.getElementById('theme');
+            themeSelect.options[0].text = 'Темная';
+            themeSelect.options[1].text = 'Светлая';
+            themeSelect.options[2].text = 'Системная';
+            
+            const langSelect = document.getElementById('language');
+            langSelect.options[0].text = 'Русский';
+            langSelect.options[1].text = 'English';
+            langSelect.options[2].text = 'Беларуская';
+            
+            const fontSizeSelect = document.getElementById('fontSize');
+            fontSizeSelect.options[0].text = 'Маленький';
+            fontSizeSelect.options[1].text = 'Средний';
+            fontSizeSelect.options[2].text = 'Большой';
+            
+            const dateFormatSelect = document.getElementById('dateFormat');
+            dateFormatSelect.options[0].text = 'ДД.ММ.ГГГГ';
+            dateFormatSelect.options[1].text = 'ДД.ММ.ГГ';
+            
+            // Обновляем логотип в футере
+            const footerLogo = document.querySelector('.footer-logo div:last-child');
+            if (footerLogo) {
+                footerLogo.textContent = 'БухгалтерПро';
+            }
+            
+            // Обновляем копирайт
+            const copyright = document.querySelector('.footer p:last-child');
+            if (copyright) {
+                copyright.innerHTML = '&copy; 2025 БухгалтерПро. <span data-i18n="footer.rights">Все права защищены.</span>';
+            }
+        }
+    }
+
+    function loadAllSettings() {
+        const savedRates = localStorage.getItem('salaryRates');
+        if (savedRates) {
+            const rates = JSON.parse(savedRates);
+            document.getElementById('rate1').value = rates.rate1 || 8.33;
+            document.getElementById('rate2').value = rates.rate2 || 9.15;
+            document.getElementById('rate3').value = rates.rate3 || 10.25;
+            document.getElementById('rate4').value = rates.rate4 || 11.50;
+            document.getElementById('rate5').value = rates.rate5 || 13.00;
+            document.getElementById('rate6').value = rates.rate6 || 15.00;
+        }
+        
+        const savedCalc = localStorage.getItem('calculationSettings');
+        if (savedCalc) {
+            const calc = JSON.parse(savedCalc);
+            document.getElementById('overtimeRate').value = calc.overtimeRate || 1.5;
+            document.getElementById('nightRate').value = calc.nightRate || 1.35;
+            document.getElementById('standardHours').value = calc.standardHours || 160;
+            document.getElementById('incomeTax').value = calc.incomeTax || 13;
+            document.getElementById('autoOvertime').checked = calc.autoOvertime !== false;
+        }
+        
+        const savedReports = localStorage.getItem('reportSettings');
+        if (savedReports) {
+            const reports = JSON.parse(savedReports);
+            document.getElementById('salaryThreshold').value = reports.salaryThreshold || 1500;
+            document.getElementById('dateFormat').value = reports.dateFormat || 'dd.mm.yyyy';
+            document.getElementById('showTaxes').checked = reports.showTaxes !== false;
+            document.getElementById('belarusStandards').checked = reports.belarusStandards !== false;
+        }
+        
+        const savedAppearance = localStorage.getItem('appearanceSettings');
+        if (savedAppearance) {
+            const appearance = JSON.parse(savedAppearance);
+            document.getElementById('theme').value = appearance.theme || 'dark';
+            document.getElementById('language').value = appearance.language || 'ru';
+            document.getElementById('fontSize').value = appearance.fontSize || 'medium';
+            
+            applyTheme(appearance.theme || 'dark');
+            applyFontSize(appearance.fontSize || 'medium');
+            applyTranslations(appearance.language || 'ru');
+        } else {
+            applyTranslations('ru');
+        }
+        
+        applyAllSettings();
+    }
+
+    function saveRates() {
+        const rates = {
+            rate1: document.getElementById('rate1').value,
+            rate2: document.getElementById('rate2').value,
+            rate3: document.getElementById('rate3').value,
+            rate4: document.getElementById('rate4').value,
+            rate5: document.getElementById('rate5').value,
+            rate6: document.getElementById('rate6').value
+        };
+        localStorage.setItem('salaryRates', JSON.stringify(rates));
+        const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+        showMessage(isEnglish ? 'Tariff rates saved' : 'Тарифные ставки сохранены', 'success');
+    }
+
+    function saveCalculationSettings() {
+        const settings = {
+            overtimeRate: document.getElementById('overtimeRate').value,
+            nightRate: document.getElementById('nightRate').value,
+            standardHours: document.getElementById('standardHours').value,
+            incomeTax: document.getElementById('incomeTax').value,
+            autoOvertime: document.getElementById('autoOvertime').checked
+        };
+        localStorage.setItem('calculationSettings', JSON.stringify(settings));
+        const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+        showMessage(isEnglish ? 'Calculation parameters saved' : 'Параметры расчета сохранены', 'success');
+    }
+
+    function saveReportSettings() {
+        const settings = {
+            salaryThreshold: document.getElementById('salaryThreshold').value,
+            dateFormat: document.getElementById('dateFormat').value,
+            showTaxes: document.getElementById('showTaxes').checked,
+            belarusStandards: document.getElementById('belarusStandards').checked
+        };
+        localStorage.setItem('reportSettings', JSON.stringify(settings));
+        const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+        showMessage(isEnglish ? 'Report settings saved' : 'Настройки отчетов сохранены', 'success');
+    }
+
+    function saveAppearanceSettings() {
+        const settings = {
+            theme: document.getElementById('theme').value,
+            language: document.getElementById('language').value,
+            fontSize: document.getElementById('fontSize').value
+        };
+        localStorage.setItem('appearanceSettings', JSON.stringify(settings));
+        const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+        showMessage(isEnglish ? 'Appearance settings saved' : 'Настройки внешнего вида сохранены', 'success');
+        applyTheme(settings.theme);
+        applyFontSize(settings.fontSize);
+        applyTranslations(settings.language);
+    }
+
+    function exportSettings() {
+        const allSettings = {
+            rates: JSON.parse(localStorage.getItem('salaryRates') || '{}'),
+            calculation: JSON.parse(localStorage.getItem('calculationSettings') || '{}'),
+            reports: JSON.parse(localStorage.getItem('reportSettings') || '{}'),
+            appearance: JSON.parse(localStorage.getItem('appearanceSettings') || '{}')
+        };
+        
+        const dataStr = JSON.stringify(allSettings, null, 2);
+        const dataBlob = new Blob([dataStr], {type: 'application/json'});
+        
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(dataBlob);
+        link.download = 'buhpro-settings.json';
+        link.click();
+        
+        const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+        showMessage(isEnglish ? 'Settings successfully exported' : 'Настройки успешно экспортированы', 'success');
+    }
+
+    function importSettings() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        
+        input.onchange = e => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const settings = JSON.parse(e.target.result);
+                    
+                    if (settings.rates) {
+                        localStorage.setItem('salaryRates', JSON.stringify(settings.rates));
+                        document.getElementById('rate1').value = settings.rates.rate1 || 8.33;
+                        document.getElementById('rate2').value = settings.rates.rate2 || 9.15;
+                        document.getElementById('rate3').value = settings.rates.rate3 || 10.25;
+                        document.getElementById('rate4').value = settings.rates.rate4 || 11.50;
+                        document.getElementById('rate5').value = settings.rates.rate5 || 13.00;
+                        document.getElementById('rate6').value = settings.rates.rate6 || 15.00;
+                    }
+                    
+                    if (settings.calculation) {
+                        localStorage.setItem('calculationSettings', JSON.stringify(settings.calculation));
+                        document.getElementById('overtimeRate').value = settings.calculation.overtimeRate || 1.5;
+                        document.getElementById('nightRate').value = settings.calculation.nightRate || 1.35;
+                        document.getElementById('standardHours').value = settings.calculation.standardHours || 160;
+                        document.getElementById('incomeTax').value = settings.calculation.incomeTax || 13;
+                        document.getElementById('autoOvertime').checked = settings.calculation.autoOvertime !== false;
+                    }
+                    
+                    if (settings.reports) {
+                        localStorage.setItem('reportSettings', JSON.stringify(settings.reports));
+                        document.getElementById('salaryThreshold').value = settings.reports.salaryThreshold || 1500;
+                        document.getElementById('dateFormat').value = settings.reports.dateFormat || 'dd.mm.yyyy';
+                        document.getElementById('showTaxes').checked = settings.reports.showTaxes !== false;
+                        document.getElementById('belarusStandards').checked = settings.reports.belarusStandards !== false;
+                    }
+                    
+                    if (settings.appearance) {
+                        localStorage.setItem('appearanceSettings', JSON.stringify(settings.appearance));
+                        document.getElementById('theme').value = settings.appearance.theme || 'dark';
+                        document.getElementById('language').value = settings.appearance.language || 'ru';
+                        document.getElementById('fontSize').value = settings.appearance.fontSize || 'medium';
+                        
+                        applyTheme(settings.appearance.theme);
+                        applyFontSize(settings.appearance.fontSize);
+                        applyTranslations(settings.appearance.language);
+                    }
+                    
+                    const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+                    showMessage(isEnglish ? 'Settings successfully imported' : 'Настройки успешно импортированы', 'success');
+                } catch (error) {
+                    const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+                    showMessage(isEnglish ? 'Error importing settings' : 'Ошибка при импорте настроек', 'error');
+                }
+            };
+            
+            reader.readAsText(file);
+        };
+        
+        input.click();
+    }
+
+    function resetToDefault() {
+        const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+        const message = isEnglish ? 'Are you sure you want to reset all settings to default values?' : 'Вы уверены, что хотите сбросить все настройки к значениям по умолчанию?';
+        
+        if (confirm(message)) {
+            localStorage.clear();
+            loadAllSettings();
+            showMessage(isEnglish ? 'Settings reset to default values' : 'Настройки сброшены к значениям по умолчанию', 'success');
+        }
+    }
+</script>
 </body>
 </html>

@@ -1,18 +1,11 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" id="htmlLang">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>БухгалтерПро - Сотрудники</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-        }
-
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
@@ -30,10 +23,16 @@
             --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
             --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             --border-radius: 12px;
             --border-radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         body {
@@ -43,6 +42,66 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        body.light-theme {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #0f172a;
+        }
+
+        body.light-theme .header {
+            background: rgba(248, 250, 252, 0.95);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .nav-links a {
+            color: #475569;
+        }
+
+        body.light-theme .nav-links a:hover,
+        body.light-theme .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        body.light-theme .dashboard-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .card-header {
+            background: rgba(241, 245, 249, 0.9);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .card-title,
+        body.light-theme .form-label,
+        body.light-theme .setting-title {
+            color: #0f172a;
+        }
+
+        body.light-theme .card-description,
+        body.light-theme .setting-description {
+            color: #475569;
+        }
+
+        body.light-theme .form-control {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+
+        body.light-theme .footer {
+            background: rgba(248, 250, 252, 0.95);
+            color: #0f172a;
+        }
+
+        body.light-theme .footer-links a {
+            color: #64748b;
+        }
+
+        body.light-theme .footer-links a:hover {
+            color: #0f172a;
         }
 
         .container {
@@ -386,6 +445,14 @@
             font-size: 0.9rem;
         }
 
+        body.large-font {
+            font-size: 18px;
+        }
+
+        body.small-font {
+            font-size: 14px;
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2rem;
@@ -535,7 +602,6 @@
                     <a href="about.html">О компании</a>
                     <a href="contacts.html">Контакты</a>
                     <a href="support.html">Поддержка</a>
-                    <a href="documentation.html">Документация</a>
                 </div>
                 <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
             </div>
@@ -543,129 +609,308 @@
     </footer>
 
     <script>
-        const API_BASE = 'http://localhost:3000';
+    const API_BASE = 'http://localhost:3000';
 
-        function calculateSalary(employee) {
-            let salary = 0;
+    function calculateSalary(employee) {
+        let salary = 0;
+        
+        if (employee.salary_type === 'почасовая') {
+            salary = employee.hourly_rate * (employee.worked_hours || 160);
             
-            if (employee.salary_type === 'почасовая') {
-                salary = employee.hourly_rate * employee.worked_hours;
-                
-                if (employee.overtime_hours > 0) {
-                    salary += employee.overtime_hours * employee.hourly_rate * employee.overtime_rate;
-                }
-            } else {
-                salary = employee.salary;
-                
-                if (employee.overtime_hours > 0) {
-                    const hourlyRateFromSalary = employee.salary / 160;
-                    salary += employee.overtime_hours * hourlyRateFromSalary * employee.overtime_rate;
-                }
+            if (employee.overtime_hours > 0) {
+                salary += employee.overtime_hours * employee.hourly_rate * employee.overtime_rate;
             }
+        } else {
+            salary = employee.salary;
             
-            salary += (employee.bonus || 0) + (employee.one_time_payment || 0);
-            
-            return Math.round(salary * 100) / 100;
-        }
-
-        function calculateSalaryAfterTax(salary) {
-            return Math.round(salary * 0.88 * 100) / 100;
-        }
-
-        async function apiCall(endpoint) {
-            try {
-                const response = await fetch(`${API_BASE}${endpoint}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return await response.json();
-            } catch (error) {
-                console.error('Ошибка API:', error);
-                showMessage(`Ошибка при загрузке данных: ${error.message}`, 'error');
-                return null;
+            if (employee.overtime_hours > 0) {
+                const hourlyRateFromSalary = employee.salary / 160;
+                salary += employee.overtime_hours * hourlyRateFromSalary * employee.overtime_rate;
             }
         }
         
-        function showMessage(message, type = 'info') {
-            const messageContainer = document.getElementById('messageContainer');
-            const messageEl = document.createElement('div');
-            messageEl.className = type === 'error' ? 'error-message' : 'success-message';
-            messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
-            messageContainer.innerHTML = '';
-            messageContainer.appendChild(messageEl);
-            
-            setTimeout(() => {
-                messageEl.remove();
-            }, 5000);
-        }
+        salary += (employee.bonus || 0) + (employee.one_time_payment || 0);
+        
+        return Math.round(salary * 100) / 100;
+    }
 
-        function updateStats(employees) {
-            if (!employees || employees.length === 0) return;
-            
-            const totalEmployees = employees.length;
-            let totalSalary = 0;
-            let overtimeCount = 0;
-            
-            employees.forEach(emp => {
-                const salary = calculateSalary(emp);
-                totalSalary += salary;
-                if (emp.overtime_hours > 0) overtimeCount++;
-            });
-            
-            const avgSalary = Math.round(totalSalary / totalEmployees);
-            
-            document.getElementById('totalEmployees').textContent = totalEmployees;
-            document.getElementById('totalSalary').textContent = totalSalary.toLocaleString() + ' BYN';
-            document.getElementById('avgSalary').textContent = avgSalary.toLocaleString() + ' BYN';
-            document.getElementById('overtimeEmployees').textContent = overtimeCount;
-        }
+    function calculateSalaryAfterTax(salary) {
+        return Math.round(salary * 0.88 * 100) / 100;
+    }
 
-        async function loadEmployees() {
-            const employeesTable = document.getElementById('employeesTable');
-            employeesTable.innerHTML = '<tr><td colspan="16" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Загрузка сотрудников...</div></td></tr>';
-            
-            const employees = await apiCall('/employees');
+    async function apiCall(endpoint) {
+        try {
+            const response = await fetch(`${API_BASE}${endpoint}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Ошибка API:', error);
+            showMessage(`Ошибка при загрузке данных: ${error.message}`, 'error');
+            return null;
+        }
+    }
+
+    function showMessage(message, type = 'info') {
+        const messageContainer = document.getElementById('messageContainer');
+        const messageEl = document.createElement('div');
+        messageEl.className = type === 'error' ? 'error-message' : 'success-message';
+        messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
+        messageContainer.innerHTML = '';
+        messageContainer.appendChild(messageEl);
+        
+        setTimeout(() => {
+            messageEl.remove();
+        }, 5000);
+    }
+
+    async function loadEmployees() {
+        const employeesTable = document.getElementById('employeesTable');
+        employeesTable.innerHTML = '<tr><td colspan="16" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Загрузка сотрудников...</div></td></tr>';
+        
+        const employees = await apiCall('/employees/all');
+        const monthlyData = await apiCall('/monthly-data?month=12&year=2024');
+        
+        if (employees && employees.length > 0) {
             const departments = await apiCall('/departments');
             
-            if (employees && employees.length > 0) {
-                employeesTable.innerHTML = employees.map(emp => {
-                    const department = departments ? departments.find(dept => dept.id === emp.department_id) : null;
-                    const salary = calculateSalary(emp);
-                    const salaryAfterTax = calculateSalaryAfterTax(salary);
-                    
-                    return `
-                        <tr>
-                            <td><strong>${emp.id}</strong></td>
-                            <td>${emp.full_name}</td>
-                            <td>${emp.position}</td>
-                            <td>${new Date(emp.hire_date).toLocaleDateString('ru-RU')}</td>
-                            <td><span class="rank-badge">${emp.grade}</span></td>
-                            <td><span class="payment-type ${emp.salary_type === 'почасовая' ? 'payment-hourly' : 'payment-salary'}">${emp.salary_type}</span></td>
-                            <td>${parseFloat(emp.salary_type === 'почасовая' ? emp.hourly_rate : emp.salary).toLocaleString('ru-RU')} BYN</td>
-                            <td>${emp.worked_hours}</td>
-                            <td>${emp.overtime_hours}</td>
-                            <td>${emp.overtime_rate}</td>
-                            <td>${parseFloat(emp.bonus || 0).toLocaleString('ru-RU')} BYN</td>
-                            <td>${parseFloat(emp.one_time_payment || 0).toLocaleString('ru-RU')} BYN</td>
-                            <td>${department ? department.name : 'Не назначен'}</td>
-                            <td><span class="status-${emp.status === 'активен' ? 'active' : 'inactive'}">${emp.status}</span></td>
-                            <td><strong>${salary.toLocaleString('ru-RU')} BYN</strong></td>
-                            <td><strong>${salaryAfterTax.toLocaleString('ru-RU')} BYN</strong></td>
-                        </tr>
-                    `;
-                }).join('');
+            const employeesWithMonthlyData = employees.map(emp => {
+                const empMonthlyData = monthlyData ? monthlyData.find(md => md.employee_id === emp.id) : null;
+                return {
+                    ...emp,
+                    worked_hours: empMonthlyData ? empMonthlyData.worked_hours : 160,
+                    overtime_hours: empMonthlyData ? empMonthlyData.overtime_hours : 0,
+                    bonus: empMonthlyData ? empMonthlyData.bonus : 0,
+                    one_time_payment: empMonthlyData ? empMonthlyData.one_time_payment : 0
+                };
+            });
+            
+            employeesTable.innerHTML = employeesWithMonthlyData.map(emp => {
+                const department = departments ? departments.find(dept => dept.id === emp.department_id) : null;
+                const salary = calculateSalary(emp);
+                const salaryAfterTax = calculateSalaryAfterTax(salary);
                 
-                updateStats(employees);
-                showMessage(`Данные успешно загружены (${employees.length} сотрудников)`, 'success');
-            } else {
-                employeesTable.innerHTML = '<tr><td colspan="16" style="text-align: center; padding: 2rem;">Нет данных о сотрудниках</td></tr>';
-            }
+                return `
+                    <tr>
+                        <td><strong>${emp.id}</strong></td>
+                        <td>${emp.full_name}</td>
+                        <td>${emp.position}</td>
+                        <td>${new Date(emp.hire_date).toLocaleDateString('ru-RU')}</td>
+                        <td><span class="rank-badge">${emp.grade}</span></td>
+                        <td><span class="payment-type ${emp.salary_type === 'почасовая' ? 'payment-hourly' : 'payment-salary'}">${emp.salary_type}</span></td>
+                        <td>${parseFloat(emp.salary_type === 'почасовая' ? emp.hourly_rate : emp.salary).toLocaleString('ru-RU')} BYN</td>
+                        <td>${emp.worked_hours}</td>
+                        <td>${emp.overtime_hours}</td>
+                        <td>${emp.overtime_rate}</td>
+                        <td>${parseFloat(emp.bonus || 0).toLocaleString('ru-RU')} BYN</td>
+                        <td>${parseFloat(emp.one_time_payment || 0).toLocaleString('ru-RU')} BYN</td>
+                        <td>${department ? department.name : 'Не назначен'}</td>
+                        <td><span class="status-${emp.status === 'активен' ? 'active' : 'inactive'}">${emp.status}</span></td>
+                        <td><strong>${salary.toLocaleString('ru-RU')} BYN</strong></td>
+                        <td><strong>${salaryAfterTax.toLocaleString('ru-RU')} BYN</strong></td>
+                    </tr>
+                `;
+            }).join('');
+            
+            updateStats(employeesWithMonthlyData);
+            showMessage(`Данные успешно загружены (${employees.length} сотрудников)`, 'success');
+        } else {
+            employeesTable.innerHTML = '<tr><td colspan="16" style="text-align: center; padding: 2rem;">Нет данных о сотрудниках</td></tr>';
         }
+    }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            loadEmployees();
-            document.getElementById('refreshEmployeesBtn').addEventListener('click', loadEmployees);
+    function updateStats(employees) {
+        if (!employees || employees.length === 0) return;
+        
+        const totalEmployees = employees.length;
+        let totalSalary = 0;
+        let overtimeCount = 0;
+        
+        employees.forEach(emp => {
+            const salary = calculateSalary(emp);
+            totalSalary += salary;
+            if (emp.overtime_hours > 0) overtimeCount++;
         });
-    </script>
+        
+        const avgSalary = Math.round(totalSalary / totalEmployees);
+        
+        document.getElementById('totalEmployees').textContent = totalEmployees;
+        document.getElementById('totalSalary').textContent = totalSalary.toLocaleString() + ' BYN';
+        document.getElementById('avgSalary').textContent = avgSalary.toLocaleString() + ' BYN';
+        document.getElementById('overtimeEmployees').textContent = overtimeCount;
+    }
+
+    function applySettings() {
+        const appearance = JSON.parse(localStorage.getItem('appearanceSettings') || '{}');
+        
+        if (appearance.theme === 'light') {
+            document.body.classList.add('light-theme');
+        } else {
+            document.body.classList.remove('light-theme');
+        }
+        
+        if (appearance.fontSize === 'large') {
+            document.body.classList.add('large-font');
+            document.body.classList.remove('small-font');
+        } else if (appearance.fontSize === 'small') {
+            document.body.classList.add('small-font');
+            document.body.classList.remove('large-font');
+        } else {
+            document.body.classList.remove('small-font', 'large-font');
+        }
+        
+        if (appearance.language === 'en') {
+            document.getElementById('htmlLang').setAttribute('lang', 'en');
+            
+            document.querySelector('title').textContent = 'AccountantPro - Employees';
+            document.querySelector('.hero h1').textContent = 'Employee Management';
+            document.querySelector('.hero p').textContent = 'Complete information about company employees including grades, payment types and bonuses';
+            document.querySelector('.section-title h2').textContent = 'Employee List';
+            document.querySelector('.section-title p').textContent = 'All company employees with complete information about the payment system';
+            document.querySelector('.card-title').innerHTML = '<i class="fas fa-users"></i> Employee Table';
+            document.querySelector('.card-description').textContent = 'All information about company employees including grades, payment types and bonuses';
+            document.querySelector('#refreshEmployeesBtn').innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Data';
+            document.querySelectorAll('.btn')[1].innerHTML = '<i class="fas fa-clock"></i> Overtime';
+            document.querySelectorAll('.btn')[2].innerHTML = '<i class="fas fa-building"></i> Department Management';
+            
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks[0].textContent = 'Home';
+            navLinks[1].textContent = 'Employees';
+            navLinks[2].textContent = 'Departments';
+            navLinks[3].textContent = 'Reports';
+            navLinks[4].textContent = 'Settings';
+            
+            const logo = document.querySelector('.logo div:last-child');
+            logo.textContent = 'AccountantPro';
+            
+            const th = document.querySelectorAll('th');
+            th[0].textContent = 'ID';
+            th[1].textContent = 'Full Name';
+            th[2].textContent = 'Position';
+            th[3].textContent = 'Hire Date';
+            th[4].textContent = 'Grade';
+            th[5].textContent = 'Payment Type';
+            th[6].textContent = 'Rate/Salary';
+            th[7].textContent = 'Worked Hours';
+            th[8].textContent = 'Overtime';
+            th[9].textContent = 'Overtime Rate';
+            th[10].textContent = 'Bonuses';
+            th[11].textContent = 'One-time Payments';
+            th[12].textContent = 'Department';
+            th[13].textContent = 'Status';
+            th[14].textContent = 'Total Salary';
+            th[15].textContent = 'After Tax (12%)';
+            
+            const stats = document.querySelectorAll('.stat-label');
+            stats[0].textContent = 'Total Employees';
+            stats[1].textContent = 'Total Payroll Fund';
+            stats[2].textContent = 'Average Salary';
+            stats[3].textContent = 'Overtime Work';
+            
+            const paymentTypes = document.querySelectorAll('.payment-type');
+            paymentTypes.forEach(type => {
+                if (type.textContent === 'почасовая') type.textContent = 'hourly';
+                else if (type.textContent === 'оклад') type.textContent = 'salary';
+            });
+            
+            const statuses = document.querySelectorAll('.status-active, .status-inactive');
+            statuses.forEach(status => {
+                if (status.textContent === 'активен') status.textContent = 'active';
+                else if (status.textContent === 'неактивен') status.textContent = 'inactive';
+            });
+            
+            document.querySelector('.footer p').textContent = 'Professional solution for accounting automation';
+            const footerLinks = document.querySelectorAll('.footer-links a');
+            footerLinks[0].textContent = 'About Company';
+            footerLinks[1].textContent = 'Contacts';
+            footerLinks[2].textContent = 'Support';
+            
+            document.querySelector('.footer p:last-child').innerHTML = '&copy; 2025 AccountantPro. All rights reserved.';
+            
+            const loadingText = document.querySelector('.employeesTable td div:last-child');
+            if (loadingText) loadingText.textContent = 'Loading employees...';
+            
+            const noDataText = document.querySelector('.employeesTable td');
+            if (noDataText && noDataText.textContent.includes('Нет данных')) {
+                noDataText.textContent = 'No employee data';
+            }
+        } else {
+            document.getElementById('htmlLang').setAttribute('lang', 'ru');
+            
+            document.querySelector('title').textContent = 'БухгалтерПро - Сотрудники';
+            document.querySelector('.hero h1').textContent = 'Управление сотрудниками';
+            document.querySelector('.hero p').textContent = 'Полная информация о сотрудниках компании с учетом разрядов, типов оплаты и премий';
+            document.querySelector('.section-title h2').textContent = 'Список сотрудников';
+            document.querySelector('.section-title p').textContent = 'Все сотрудники компании с полной информацией о системе оплаты труда';
+            document.querySelector('.card-title').innerHTML = '<i class="fas fa-users"></i> Таблица сотрудников';
+            document.querySelector('.card-description').textContent = 'Вся информация о сотрудниках компании, включая разряды, типы оплаты и премии';
+            document.querySelector('#refreshEmployeesBtn').innerHTML = '<i class="fas fa-sync-alt"></i> Обновить данные';
+            document.querySelectorAll('.btn')[1].innerHTML = '<i class="fas fa-clock"></i> Сверхурочные';
+            document.querySelectorAll('.btn')[2].innerHTML = '<i class="fas fa-building"></i> Управление отделами';
+            
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks[0].textContent = 'Главная';
+            navLinks[1].textContent = 'Сотрудники';
+            navLinks[2].textContent = 'Отделы';
+            navLinks[3].textContent = 'Отчеты';
+            navLinks[4].textContent = 'Настройки';
+            
+            const logo = document.querySelector('.logo div:last-child');
+            logo.textContent = 'БухгалтерПро';
+            
+            const th = document.querySelectorAll('th');
+            th[0].textContent = 'ID';
+            th[1].textContent = 'ФИО';
+            th[2].textContent = 'Должность';
+            th[3].textContent = 'Дата приема';
+            th[4].textContent = 'Разряд';
+            th[5].textContent = 'Тип оплаты';
+            th[6].textContent = 'Ставка/Оклад';
+            th[7].textContent = 'Отработано часов';
+            th[8].textContent = 'Сверхурочные';
+            th[9].textContent = 'Коэф. сверхурочных';
+            th[10].textContent = 'Премии';
+            th[11].textContent = 'Единоразовые выплаты';
+            th[12].textContent = 'Отдел';
+            th[13].textContent = 'Статус';
+            th[14].textContent = 'Общая зарплата';
+            th[15].textContent = 'После налога (12%)';
+            
+            const stats = document.querySelectorAll('.stat-label');
+            stats[0].textContent = 'Всего сотрудников';
+            stats[1].textContent = 'Общий фонд оплаты';
+            stats[2].textContent = 'Средняя зарплата';
+            stats[3].textContent = 'Сверхурочные работы';
+            
+            const paymentTypes = document.querySelectorAll('.payment-type');
+            paymentTypes.forEach(type => {
+                if (type.textContent === 'hourly') type.textContent = 'почасовая';
+                else if (type.textContent === 'salary') type.textContent = 'оклад';
+            });
+            
+            const statuses = document.querySelectorAll('.status-active, .status-inactive');
+            statuses.forEach(status => {
+                if (status.textContent === 'active') status.textContent = 'активен';
+                else if (status.textContent === 'inactive') status.textContent = 'неактивен';
+            });
+            
+            document.querySelector('.footer p').textContent = 'Профессиональное решение для автоматизации бухгалтерского учета';
+            const footerLinks = document.querySelectorAll('.footer-links a');
+            footerLinks[0].textContent = 'О компании';
+            footerLinks[1].textContent = 'Контакты';
+            footerLinks[2].textContent = 'Поддержка';
+            
+            document.querySelector('.footer p:last-child').innerHTML = '&copy; 2025 БухгалтерПро. Все права защищены.';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadEmployees();
+        document.getElementById('refreshEmployeesBtn').addEventListener('click', loadEmployees);
+        
+        applySettings();
+    });
+</script>
 </body>
 </html>

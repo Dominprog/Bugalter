@@ -705,7 +705,6 @@
                     <a href="About the company.html">О компании</a>
                     <a href="contacts.html">Контакты</a>
                     <a href="support.html">Поддержка</a>
-                    <a href="documentation.html">Документация</a>
                 </div>
                 <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
             </div>
@@ -713,81 +712,21 @@
     </footer>
 
     <script>
-        function showMessage(message, type = 'info') {
-            const messageContainer = document.getElementById('messageContainer');
-            const messageEl = document.createElement('div');
-            messageEl.className = type === 'error' ? 'error-message' : 'success-message';
-            messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
-            messageContainer.innerHTML = '';
-            messageContainer.appendChild(messageEl);
-            
-            setTimeout(() => {
-                messageEl.remove();
-            }, 5000);
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
+        const languageSelect = document.getElementById('languageSelect');
+        
+        if (languageSelect) {
+            languageSelect.value = savedLanguage;
+            languageSelect.addEventListener('change', function() {
+                const lang = this.value;
+                localStorage.setItem('selectedLanguage', lang);
+                applyTranslations(lang);
+            });
         }
-
-        function resetForm() {
-            document.getElementById('contactForm').reset();
-            document.getElementById('contactForm').style.display = 'block';
-            document.getElementById('formSuccess').style.display = 'none';
-        }
-
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                company: document.getElementById('company').value,
-                subject: document.getElementById('subject').value,
-                message: document.getElementById('message').value
-            };
-            
-            if (!formData.name || !formData.email || !formData.subject || !formData.message) {
-                showMessage('Пожалуйста, заполните все обязательные поля', 'error');
-                return;
-            }
-            
-            if (!document.getElementById('agreement').checked) {
-                showMessage('Необходимо согласие на обработку персональных данных', 'error');
-                return;
-            }
-            
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<div class="loading"></div> Отправка...';
-            submitBtn.disabled = true;
-            
-            setTimeout(() => {
-                document.getElementById('contactForm').style.display = 'none';
-                document.getElementById('formSuccess').style.display = 'block';
-                showMessage('Ваше сообщение успешно отправлено! Мы свяжемся с вами в ближайшее время.', 'success');
-                
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 2000);
-        });
-
-        document.getElementById('phone').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            
-            if (value.length === 0) {
-                e.target.value = '';
-                return;
-            }
-            
-            if (value.length === 1) value = '+375' + value;
-            if (value.length === 4) value = value + ' (';
-            if (value.length === 7) value = value + ') ';
-            if (value.length === 12) value = value + '-';
-            if (value.length === 15) value = value + '-';
-            
-            if (value.length > 17) value = value.substring(0, 17);
-            
-            e.target.value = value;
-        });
-
+        
+        applyTranslations(savedLanguage);
+        
         const floatingElements = document.querySelectorAll('.floating-element');
         floatingElements.forEach((el, index) => {
             el.style.animationDelay = (index * 0.2) + 's';
@@ -797,6 +736,565 @@
         pulseElements.forEach((el, index) => {
             el.style.animationDelay = (index * 0.1) + 's';
         });
-    </script>
+    });
+
+    function showMessage(message, type = 'info') {
+        const messageContainer = document.getElementById('messageContainer');
+        const messageEl = document.createElement('div');
+        messageEl.className = type === 'error' ? 'error-message' : 'success-message';
+        messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
+        messageContainer.innerHTML = '';
+        messageContainer.appendChild(messageEl);
+        
+        setTimeout(() => {
+            messageEl.remove();
+        }, 5000);
+    }
+
+    function resetForm() {
+        document.getElementById('contactForm').reset();
+        document.getElementById('contactForm').style.display = 'block';
+        document.getElementById('formSuccess').style.display = 'none';
+    }
+
+    document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            company: document.getElementById('company').value,
+            subject: document.getElementById('subject').value,
+            message: document.getElementById('message').value
+        };
+        
+        if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+            const isEnglish = document.documentElement.lang === 'en';
+            showMessage(isEnglish ? 'Please fill in all required fields' : 'Пожалуйста, заполните все обязательные поля', 'error');
+            return;
+        }
+        
+        if (!document.getElementById('agreement').checked) {
+            const isEnglish = document.documentElement.lang === 'en';
+            showMessage(isEnglish ? 'Consent to personal data processing is required' : 'Необходимо согласие на обработку персональных данных', 'error');
+            return;
+        }
+        
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        const isEnglish = document.documentElement.lang === 'en';
+        submitBtn.innerHTML = '<div class="loading"></div> ' + (isEnglish ? 'Sending...' : 'Отправка...');
+        submitBtn.disabled = true;
+        
+        setTimeout(() => {
+            document.getElementById('contactForm').style.display = 'none';
+            document.getElementById('formSuccess').style.display = 'block';
+            showMessage(isEnglish ? 'Your message has been sent successfully! We will contact you shortly.' : 'Ваше сообщение успешно отправлено! Мы свяжемся с вами в ближайшее время.', 'success');
+            
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }, 2000);
+    });
+
+    document.getElementById('phone')?.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        
+        if (value.length === 0) {
+            e.target.value = '';
+            return;
+        }
+        
+        if (value.length === 1) value = '+375' + value;
+        if (value.length === 4) value = value + ' (';
+        if (value.length === 7) value = value + ') ';
+        if (value.length === 12) value = value + '-';
+        if (value.length === 15) value = value + '-';
+        
+        if (value.length > 17) value = value.substring(0, 17);
+        
+        e.target.value = value;
+    });
+
+    const translations = {
+        'ru': {
+            'nav.home': 'Главная',
+            'nav.employees': 'Сотрудники',
+            'nav.departments': 'Отделы',
+            'nav.reports': 'Отчеты',
+            'nav.settings': 'Настройки',
+            'hero.title': 'Свяжитесь с нами',
+            'hero.subtitle': 'Мы всегда готовы ответить на ваши вопросы и помочь с решением задач',
+            'contacts.title': 'Наши контакты',
+            'contacts.subtitle': 'Свяжитесь с нами удобным для вас способом',
+            'contact.office': 'Наш офис',
+            'contact.office.address1': 'г. Минск, пр-т Независимости, 58',
+            'contact.office.address2': 'Бизнес-центр "Столица", 5 этаж',
+            'contact.phones': 'Телефоны',
+            'contact.phones.main': '+375 (25) 123-45-67 - Основной',
+            'contact.phones.mobile': '+375 (29) 765-43-21 - Мобильный',
+            'contact.email': 'Электронная почта',
+            'contact.email.general': 'infobuhgpro@gmail.com - Общие вопросы',
+            'contact.email.support': 'supportbuhpro.byt@gmail.com - Техподдержка',
+            'contact.hours': 'Время работы',
+            'contact.hours.weekdays': 'Понедельник - Пятница: 9:00 - 18:00',
+            'contact.hours.saturday': 'Суббота: 10:00 - 15:00',
+            'contact.hours.sunday': 'Воскресенье: выходной',
+            'departments.title': 'Часы работы отделов',
+            'department.accounting': 'Бухгалтерия',
+            'department.support': 'Техподдержка',
+            'department.sales': 'Отдел продаж',
+            'department.training': 'Обучение',
+            'form.title': 'Форма обратной связи',
+            'form.name': 'Ваше имя *',
+            'form.name.placeholder': 'Введите ваше имя',
+            'form.email': 'Электронная почта *',
+            'form.email.placeholder': 'example@mail.com',
+            'form.phone': 'Телефон',
+            'form.phone.placeholder': '+375 (XX) XXX-XX-XX',
+            'form.company': 'Компания',
+            'form.company.placeholder': 'Название вашей компании',
+            'form.subject': 'Тема обращения *',
+            'form.subject.default': 'Выберите тему',
+            'form.subject.support': 'Техническая поддержка',
+            'form.subject.sales': 'Вопросы по покупке',
+            'form.subject.partnership': 'Партнерство',
+            'form.subject.training': 'Обучение',
+            'form.subject.other': 'Другое',
+            'form.message': 'Сообщение *',
+            'form.message.placeholder': 'Опишите ваш вопрос подробно...',
+            'form.agreement': 'Я соглашаюсь с обработкой персональных данных',
+            'form.submit': 'Отправить сообщение',
+            'form.success.title': 'Сообщение отправлено!',
+            'form.success.message': 'Мы свяжемся с вами в ближайшее время',
+            'form.success.button': 'Отправить еще одно сообщение',
+            'map.title': 'Карта проезда',
+            'map.address': 'г. Минск, пр-т Независимости, 58',
+            'map.metro': 'Станция метро "Площадь Якуба Коласа"',
+            'footer.description': 'Профессиональное решение для автоматизации бухгалтерского учета',
+            'footer.about': 'О компании',
+            'footer.contacts': 'Контакты',
+            'footer.support': 'Поддержка',
+            'footer.copyright': '© 2025 БухгалтерПро. Все права защищены.',
+            'support.hero.title': 'Центр поддержки',
+            'support.hero.subtitle': 'Найдите ответы на ваши вопросы и получите помощь по работе с системой',
+            'support.faq.title': 'Часто задаваемые вопросы',
+            'support.faq.subtitle': 'Быстрые ответы на самые популярные вопросы',
+            'support.faq.card.title': 'FAQ по системе',
+            'support.faq.card.desc': 'Ответы на вопросы о функционале системы',
+            'support.faq.q1': 'Как ввести данные по отработанным часам сотрудника?',
+            'support.faq.a1': 'Для ввода данных по отработанным часам:',
+            'support.faq.step1': 'Перейдите в раздел "Сотрудники"',
+            'support.faq.step2': 'Выберите нужного сотрудника из списка',
+            'support.faq.step3': 'Нажмите кнопку "Редактировать"',
+            'support.faq.step4': 'В разделе "Отработанные часы" введите количество часов за каждый день месяца',
+            'support.faq.step5': 'Нажмите "Сохранить" для применения изменений',
+            'support.faq.q2': 'Как посмотреть сотрудников со сверхурочными часами?',
+            'support.faq.a2': 'Чтобы найти сотрудников со сверхурочными часами:',
+            'support.faq.q3': 'Как рассчитывается зарплата за вычетом подоходного налога?',
+            'support.faq.a3': 'Расчет зарплаты с учетом налога:',
+            'support.faq.q4': 'Как найти сотрудников с зарплатой ниже указанной?',
+            'support.faq.a4': 'Для поиска сотрудников с зарплатой ниже определенного уровня:',
+            'support.faq.q5': 'Как учитываются премии и единоразовые выплаты?',
+            'support.faq.a5': 'Учет премий и единоразовых выплат:',
+            'support.instructions.title': 'Инструкции по работе с системой',
+            'support.instructions.subtitle': 'Пошаговые руководства по основным функциям',
+            'support.instruction1.title': 'Добавление нового сотрудника',
+            'support.instruction1.desc': 'Инструкция по внесению данных о новом сотруднике в систему',
+            'support.instruction1.step1': '1. Перейдите в раздел "Сотрудники"',
+            'support.instruction1.step2': '2. Нажмите кнопку "Добавить сотрудника"',
+            'support.instruction1.step3': '3. Заполните все обязательные поля',
+            'support.instruction1.step4': '4. Укажите тип оплаты (оклад/почасовая)',
+            'support.instruction1.step5': '5. Сохраните данные',
+            'support.instruction2.title': 'Учет рабочего времени',
+            'support.instruction2.desc': 'Как правильно вводить данные об отработанных часах',
+            'support.instruction2.step1': '1. Откройте карточку сотрудника',
+            'support.instruction2.step2': '2. Перейдите во вкладку "Рабочее время"',
+            'support.instruction2.step3': '3. Введите часы по дням месяца',
+            'support.instruction2.step4': '4. Сверхурочные часы отмечаются автоматически',
+            'support.instruction2.step5': '5. Сохраните изменения',
+            'support.instruction3.title': 'Расчет заработной платы',
+            'support.instruction3.desc': 'Процесс расчета зарплаты с учетом всех факторов',
+            'support.instruction3.step1': '1. Система автоматически рассчитывает зарплату',
+            'support.instruction3.step2': '2. Учитываются отработанные часы и ставка',
+            'support.instruction3.step3': '3. Добавляются премии и надбавки',
+            'support.instruction3.step4': '4. Вычитается подоходный налог (12%)',
+            'support.instruction3.step5': '5. Результат можно посмотреть в отчетах',
+            'support.instruction4.title': 'Формирование отчетов',
+            'support.instruction4.desc': 'Создание различных отчетов по зарплате и рабочему времени',
+            'support.instruction4.step1': '1. Перейдите в раздел "Отчеты"',
+            'support.instruction4.step2': '2. Выберите тип отчета',
+            'support.instruction4.step3': '3. Укажите период формирования',
+            'support.instruction4.step4': '4. Настройте параметры отчета',
+            'support.instruction4.step5': '5. Сгенерируйте и сохраните отчет',
+            'support.instruction5.title': 'Настройка ставок и тарифов',
+            'support.instruction5.desc': 'Изменение почасовых ставок и тарифов для сотрудников',
+            'support.instruction5.step1': '1. Откройте раздел "Настройки"',
+            'support.instruction5.step2': '2. Перейдите во вкладку "Тарифы"',
+            'support.instruction5.step3': '3. Выберите разряд сотрудника',
+            'support.instruction5.step4': '4. Установите новую ставку',
+            'support.instruction5.step5': '5. Сохраните изменения',
+            'support.instruction6.title': 'Анализ данных',
+            'support.instruction6.desc': 'Использование аналитических инструментов системы',
+            'support.instruction6.step1': '1. Откройте раздел "Аналитика"',
+            'support.instruction6.step2': '2. Выберите интересующий показатель',
+            'support.instruction6.step3': '3. Настройте параметры анализа',
+            'support.instruction6.step4': '4. Просмотрите графики и диаграммы',
+            'support.instruction6.step5': '5. Экспортируйте данные при необходимости',
+            'support.contact.title': 'Свяжитесь с нами',
+            'support.contact.subtitle': 'Мы всегда готовы помочь с решением ваших вопросов',
+            'support.contact.phone.title': 'Телефон поддержки',
+            'support.contact.phone.number': '+375 (29) 345-63-23',
+            'support.contact.phone.hours': 'Пн-Пт: 9:00 - 18:00',
+            'support.contact.email.title': 'Электронная почта',
+            'support.contact.email.address': 'supportbuhpro.byt@gmail.com',
+            'support.contact.email.response': 'Ответ в течение 24 часов',
+            'support.contact.chat.title': 'Онлайн-чат',
+            'support.contact.chat.availability': 'Доступен в рабочее время',
+            'support.contact.chat.help': 'Быстрая помощь по срочным вопросам'
+        },
+        'en': {
+            'nav.home': 'Home',
+            'nav.employees': 'Employees',
+            'nav.departments': 'Departments',
+            'nav.reports': 'Reports',
+            'nav.settings': 'Settings',
+            'hero.title': 'Contact Us',
+            'hero.subtitle': 'We are always ready to answer your questions and help solve problems',
+            'contacts.title': 'Our Contacts',
+            'contacts.subtitle': 'Contact us in any convenient way',
+            'contact.office': 'Our Office',
+            'contact.office.address1': 'Minsk, Independence Ave, 58',
+            'contact.office.address2': 'Business Center "Capital", 5th floor',
+            'contact.phones': 'Phones',
+            'contact.phones.main': '+375 (25) 123-45-67 - Main',
+            'contact.phones.mobile': '+375 (29) 765-43-21 - Mobile',
+            'contact.email': 'Email',
+            'contact.email.general': 'infobuhgpro@gmail.com - General questions',
+            'contact.email.support': 'supportbuhpro.byt@gmail.com - Technical support',
+            'contact.hours': 'Working Hours',
+            'contact.hours.weekdays': 'Monday - Friday: 9:00 - 18:00',
+            'contact.hours.saturday': 'Saturday: 10:00 - 15:00',
+            'contact.hours.sunday': 'Sunday: Closed',
+            'departments.title': 'Department Hours',
+            'department.accounting': 'Accounting',
+            'department.support': 'Technical Support',
+            'department.sales': 'Sales Department',
+            'department.training': 'Training',
+            'form.title': 'Feedback Form',
+            'form.name': 'Your Name *',
+            'form.name.placeholder': 'Enter your name',
+            'form.email': 'Email *',
+            'form.email.placeholder': 'example@mail.com',
+            'form.phone': 'Phone',
+            'form.phone.placeholder': '+375 (XX) XXX-XX-XX',
+            'form.company': 'Company',
+            'form.company.placeholder': 'Your company name',
+            'form.subject': 'Subject *',
+            'form.subject.default': 'Select topic',
+            'form.subject.support': 'Technical Support',
+            'form.subject.sales': 'Purchase Questions',
+            'form.subject.partnership': 'Partnership',
+            'form.subject.training': 'Training',
+            'form.subject.other': 'Other',
+            'form.message': 'Message *',
+            'form.message.placeholder': 'Describe your question in detail...',
+            'form.agreement': 'I agree to the processing of personal data',
+            'form.submit': 'Send Message',
+            'form.success.title': 'Message Sent!',
+            'form.success.message': 'We will contact you shortly',
+            'form.success.button': 'Send another message',
+            'map.title': 'Location Map',
+            'map.address': 'Minsk, Independence Ave, 58',
+            'map.metro': 'Metro station "Yakub Kolas Square"',
+            'footer.description': 'Professional solution for accounting automation',
+            'footer.about': 'About Company',
+            'footer.contacts': 'Contacts',
+            'footer.support': 'Support',
+            'footer.copyright': '© 2025 AccountantPro. All rights reserved.',
+            'support.hero.title': 'Support Center',
+            'support.hero.subtitle': 'Find answers to your questions and get help with the system',
+            'support.faq.title': 'Frequently Asked Questions',
+            'support.faq.subtitle': 'Quick answers to the most popular questions',
+            'support.faq.card.title': 'System FAQ',
+            'support.faq.card.desc': 'Answers to questions about system functionality',
+            'support.faq.q1': 'How to enter employee working hours data?',
+            'support.faq.a1': 'To enter working hours data:',
+            'support.faq.step1': '1. Go to the "Employees" section',
+            'support.faq.step2': '2. Select the desired employee from the list',
+            'support.faq.step3': '3. Click the "Edit" button',
+            'support.faq.step4': '4. In the "Worked Hours" section, enter hours for each day of the month',
+            'support.faq.step5': '5. Click "Save" to apply changes',
+            'support.faq.q2': 'How to view employees with overtime hours?',
+            'support.faq.a2': 'To find employees with overtime hours:',
+            'support.faq.q3': 'How is salary calculated minus income tax?',
+            'support.faq.a3': 'Salary calculation including tax:',
+            'support.faq.q4': 'How to find employees with salary below specified?',
+            'support.faq.a4': 'To search for employees with salary below a certain level:',
+            'support.faq.q5': 'How are bonuses and one-time payments accounted for?',
+            'support.faq.a5': 'Accounting for bonuses and one-time payments:',
+            'support.instructions.title': 'System Instructions',
+            'support.instructions.subtitle': 'Step-by-step guides for main functions',
+            'support.instruction1.title': 'Adding a New Employee',
+            'support.instruction1.desc': 'Instructions for entering new employee data into the system',
+            'support.instruction1.step1': '1. Go to the "Employees" section',
+            'support.instruction1.step2': '2. Click the "Add Employee" button',
+            'support.instruction1.step3': '3. Fill in all required fields',
+            'support.instruction1.step4': '4. Specify payment type (salary/hourly)',
+            'support.instruction1.step5': '5. Save data',
+            'support.instruction2.title': 'Working Time Tracking',
+            'support.instruction2.desc': 'How to correctly enter worked hours data',
+            'support.instruction2.step1': '1. Open employee card',
+            'support.instruction2.step2': '2. Go to the "Working Time" tab',
+            'support.instruction2.step3': '3. Enter hours by days of the month',
+            'support.instruction2.step4': '4. Overtime hours are marked automatically',
+            'support.instruction2.step5': '5. Save changes',
+            'support.instruction3.title': 'Salary Calculation',
+            'support.instruction3.desc': 'Salary calculation process considering all factors',
+            'support.instruction3.step1': '1. System automatically calculates salary',
+            'support.instruction3.step2': '2. Worked hours and rate are considered',
+            'support.instruction3.step3': '3. Bonuses and allowances are added',
+            'support.instruction3.step4': '4. Income tax (12%) is deducted',
+            'support.instruction3.step5': '5. Result can be viewed in reports',
+            'support.instruction4.title': 'Report Generation',
+            'support.instruction4.desc': 'Creating various reports on salary and working time',
+            'support.instruction4.step1': '1. Go to the "Reports" section',
+            'support.instruction4.step2': '2. Select report type',
+            'support.instruction4.step3': '3. Specify generation period',
+            'support.instruction4.step4': '4. Configure report parameters',
+            'support.instruction4.step5': '5. Generate and save report',
+            'support.instruction5.title': 'Setting Rates and Tariffs',
+            'support.instruction5.desc': 'Changing hourly rates and tariffs for employees',
+            'support.instruction5.step1': '1. Open the "Settings" section',
+            'support.instruction5.step2': '2. Go to the "Tariffs" tab',
+            'support.instruction5.step3': '3. Select employee grade',
+            'support.instruction5.step4': '4. Set new rate',
+            'support.instruction5.step5': '5. Save changes',
+            'support.instruction6.title': 'Data Analysis',
+            'support.instruction6.desc': 'Using system analytical tools',
+            'support.instruction6.step1': '1. Open the "Analytics" section',
+            'support.instruction6.step2': '2. Select the indicator of interest',
+            'support.instruction6.step3': '3. Configure analysis parameters',
+            'support.instruction6.step4': '4. View charts and diagrams',
+            'support.instruction6.step5': '5. Export data if necessary',
+            'support.contact.title': 'Contact Us',
+            'support.contact.subtitle': 'We are always ready to help solve your questions',
+            'support.contact.phone.title': 'Support Phone',
+            'support.contact.phone.number': '+375 (29) 345-63-23',
+            'support.contact.phone.hours': 'Mon-Fri: 9:00 - 18:00',
+            'support.contact.email.title': 'Email',
+            'support.contact.email.address': 'supportbuhpro.byt@gmail.com',
+            'support.contact.email.response': 'Response within 24 hours',
+            'support.contact.chat.title': 'Online Chat',
+            'support.contact.chat.availability': 'Available during working hours',
+            'support.contact.chat.help': 'Quick help for urgent questions'
+        }
+    };
+
+    function applyTranslations(lang) {
+        document.documentElement.setAttribute('lang', lang);
+        
+        const langData = translations[lang] || translations['ru'];
+        
+        document.title = lang === 'en' ? 'AccountantPro - Contacts' : 'БухгалтерПро - Контакты';
+        
+        if (document.querySelector('.hero h1')) {
+            document.querySelector('.hero h1').textContent = langData['hero.title'];
+        }
+        
+        if (document.querySelector('.hero p')) {
+            document.querySelector('.hero p').textContent = langData['hero.subtitle'];
+        }
+        
+        if (document.querySelector('.section-title h2')) {
+            document.querySelector('.section-title h2').textContent = langData['contacts.title'];
+        }
+        
+        if (document.querySelector('.section-title p')) {
+            document.querySelector('.section-title p').textContent = langData['contacts.subtitle'];
+        }
+        
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            if (langData[key]) {
+                element.textContent = langData[key];
+            }
+        });
+        
+        const navLinks = document.querySelectorAll('.nav-links a');
+        navLinks.forEach(link => {
+            const text = link.textContent.trim();
+            if (text === 'Главная' || text === 'Home') link.textContent = langData['nav.home'];
+            if (text === 'Сотрудники' || text === 'Employees') link.textContent = langData['nav.employees'];
+            if (text === 'Отделы' || text === 'Departments') link.textContent = langData['nav.departments'];
+            if (text === 'Отчеты' || text === 'Reports') link.textContent = langData['nav.reports'];
+            if (text === 'Настройки' || text === 'Settings') link.textContent = langData['nav.settings'];
+        });
+        
+        const infoItems = document.querySelectorAll('.info-content h3');
+        if (infoItems.length >= 4) {
+            infoItems[0].textContent = langData['contact.office'];
+            infoItems[1].textContent = langData['contact.phones'];
+            infoItems[2].textContent = langData['contact.email'];
+            infoItems[3].textContent = langData['contact.hours'];
+        }
+        
+        const officeInfo = document.querySelectorAll('.info-content p');
+        if (officeInfo.length >= 7) {
+            officeInfo[0].textContent = langData['contact.office.address1'];
+            officeInfo[1].textContent = langData['contact.office.address2'];
+            officeInfo[2].textContent = langData['contact.phones.main'];
+            officeInfo[3].textContent = langData['contact.phones.mobile'];
+            officeInfo[4].textContent = langData['contact.email.general'];
+            officeInfo[5].textContent = langData['contact.email.support'];
+            officeInfo[6].textContent = langData['contact.hours.weekdays'];
+            if (officeInfo[7]) officeInfo[7].textContent = langData['contact.hours.saturday'];
+            if (officeInfo[8]) officeInfo[8].textContent = langData['contact.hours.sunday'];
+        }
+        
+        const officeHours = document.querySelector('.office-hours h3');
+        if (officeHours) {
+            const icon = officeHours.querySelector('i');
+            const currentText = officeHours.textContent.replace('Часы работы отделов', '').trim();
+            officeHours.textContent = langData['departments.title'];
+            if (icon) officeHours.prepend(icon);
+        }
+        
+        const hoursList = document.querySelectorAll('.hours-list li');
+        if (hoursList.length >= 4) {
+            const daySpans = document.querySelectorAll('.hours-list .day');
+            if (daySpans.length >= 4) {
+                daySpans[0].textContent = langData['department.accounting'];
+                daySpans[1].textContent = langData['department.support'];
+                daySpans[2].textContent = langData['department.sales'];
+                daySpans[3].textContent = langData['department.training'];
+            }
+        }
+        
+        const formTitle = document.querySelector('.contact-form h3');
+        if (formTitle) {
+            const icon = formTitle.querySelector('i');
+            formTitle.textContent = langData['form.title'];
+            if (icon) formTitle.prepend(icon);
+        }
+        
+        const labels = document.querySelectorAll('.form-label');
+        labels.forEach(label => {
+            const text = label.textContent.trim();
+            if (text.includes('Ваше имя') || text.includes('Your Name')) {
+                label.textContent = langData['form.name'];
+            } else if (text.includes('Электронная почта') || text.includes('Email')) {
+                label.textContent = langData['form.email'];
+            } else if (text.includes('Телефон') || text.includes('Phone')) {
+                label.textContent = langData['form.phone'];
+            } else if (text.includes('Компания') || text.includes('Company')) {
+                label.textContent = langData['form.company'];
+            } else if (text.includes('Тема обращения') || text.includes('Subject')) {
+                label.textContent = langData['form.subject'];
+            } else if (text.includes('Сообщение') || text.includes('Message')) {
+                label.textContent = langData['form.message'];
+            } else if (text.includes('Я соглашаюсь') || text.includes('I agree')) {
+                const checkbox = label.querySelector('input');
+                label.textContent = langData['form.agreement'];
+                if (checkbox) label.prepend(checkbox);
+            }
+        });
+        
+        const inputs = document.querySelectorAll('.form-input, .form-textarea');
+        inputs.forEach(input => {
+            const placeholder = input.getAttribute('placeholder');
+            if (placeholder) {
+                if (placeholder.includes('Введите ваше имя') || placeholder.includes('Enter your name')) {
+                    input.setAttribute('placeholder', langData['form.name.placeholder']);
+                } else if (placeholder.includes('example@mail.com')) {
+                    input.setAttribute('placeholder', langData['form.email.placeholder']);
+                } else if (placeholder.includes('+375 (XX)')) {
+                    input.setAttribute('placeholder', langData['form.phone.placeholder']);
+                } else if (placeholder.includes('Название вашей компании') || placeholder.includes('Your company name')) {
+                    input.setAttribute('placeholder', langData['form.company.placeholder']);
+                } else if (placeholder.includes('Опишите ваш вопрос') || placeholder.includes('Describe your question')) {
+                    input.setAttribute('placeholder', langData['form.message.placeholder']);
+                }
+            }
+        });
+        
+        const subjectSelect = document.getElementById('subject');
+        if (subjectSelect) {
+            const options = subjectSelect.options;
+            if (options[0]) options[0].textContent = langData['form.subject.default'];
+            if (options[1]) options[1].textContent = langData['form.subject.support'];
+            if (options[2]) options[2].textContent = langData['form.subject.sales'];
+            if (options[3]) options[3].textContent = langData['form.subject.partnership'];
+            if (options[4]) options[4].textContent = langData['form.subject.training'];
+            if (options[5]) options[5].textContent = langData['form.subject.other'];
+        }
+        
+        const submitBtn = document.querySelector('.btn-primary i.fa-paper-plane')?.closest('.btn');
+        if (submitBtn) {
+            const icon = submitBtn.querySelector('i');
+            submitBtn.textContent = langData['form.submit'];
+            if (icon) submitBtn.prepend(icon);
+        }
+        
+        const formSuccess = document.getElementById('formSuccess');
+        if (formSuccess) {
+            const successTitle = formSuccess.querySelector('h3');
+            const successMessage = formSuccess.querySelector('p');
+            const successBtn = formSuccess.querySelector('.btn');
+            
+            if (successTitle) successTitle.textContent = langData['form.success.title'];
+            if (successMessage) successMessage.textContent = langData['form.success.message'];
+            if (successBtn) {
+                const icon = successBtn.querySelector('i');
+                successBtn.textContent = langData['form.success.button'];
+                if (icon) successBtn.prepend(icon);
+            }
+        }
+        
+        const mapPlaceholder = document.querySelector('.map-placeholder');
+        if (mapPlaceholder) {
+            const h3 = mapPlaceholder.querySelector('h3');
+            const p1 = mapPlaceholder.querySelectorAll('p')[0];
+            const p2 = mapPlaceholder.querySelectorAll('p')[1];
+            
+            if (h3) h3.textContent = langData['map.title'];
+            if (p1) p1.textContent = langData['map.address'];
+            if (p2) p2.textContent = langData['map.metro'];
+        }
+        
+        const footer = document.querySelector('.footer');
+        if (footer) {
+            const description = footer.querySelector('p');
+            const links = footer.querySelectorAll('.footer-links a');
+            const copyright = footer.querySelector('p:last-child');
+            
+            if (description) description.textContent = langData['footer.description'];
+            
+            if (links.length >= 3) {
+                links[0].textContent = langData['footer.about'];
+                links[1].textContent = langData['footer.contacts'];
+                links[2].textContent = langData['footer.support'];
+            }
+            
+            if (copyright) {
+                if (lang === 'en') {
+                    copyright.innerHTML = '&copy; 2025 AccountantPro. All rights reserved.';
+                } else {
+                    copyright.innerHTML = '&copy; 2025 БухгалтерПро. Все права защищены.';
+                }
+            }
+            
+            const footerLogo = footer.querySelector('.footer-logo div:last-child');
+            if (footerLogo) {
+                footerLogo.textContent = lang === 'en' ? 'AccountantPro' : 'БухгалтерПро';
+            }
+        }
+        
+        if (document.querySelector('.support-hero')) {
+            document.querySelector('.support-hero h1').textContent = langData['support.hero.title'];
+            document.querySelector('.support-hero p').textContent = langData['support.hero.subtitle'];
+        }
+    }
+</script>
 </body>
 </html>

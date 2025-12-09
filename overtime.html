@@ -1,18 +1,11 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" id="htmlLang">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>БухгалтерПро - Управление отделами</title>
+    <title>БухгалтерПро - Отделы</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-        }
-
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
@@ -36,11 +29,79 @@
             --border-radius-lg: 16px;
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
         body {
             background: var(--gradient-dark);
             color: var(--light);
             line-height: 1.6;
             min-height: 100vh;
+        }
+
+        body.light-theme {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #0f172a;
+        }
+
+        body.light-theme .header {
+            background: rgba(248, 250, 252, 0.95);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .nav-links a {
+            color: #475569;
+        }
+
+        body.light-theme .nav-links a:hover,
+        body.light-theme .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        body.light-theme .dashboard-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .card-header {
+            background: rgba(241, 245, 249, 0.9);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .card-title,
+        body.light-theme .form-label,
+        body.light-theme .setting-title {
+            color: #0f172a;
+        }
+
+        body.light-theme .card-description,
+        body.light-theme .setting-description {
+            color: #475569;
+        }
+
+        body.light-theme .form-control {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+
+        body.light-theme .footer {
+            background: rgba(248, 250, 252, 0.95);
+            color: #0f172a;
+        }
+
+        body.light-theme .footer-links a {
+            color: #64748b;
+        }
+
+        body.light-theme .footer-links a:hover {
+            color: #0f172a;
         }
 
         .container {
@@ -434,6 +495,14 @@
             margin: 1rem 0;
         }
 
+        body.large-font {
+            font-size: 18px;
+        }
+
+        body.small-font {
+            font-size: 14px;
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2rem;
@@ -469,7 +538,7 @@
                 <ul class="nav-links">
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="employees.html">Сотрудники</a></li>
-                    <li><a href="departments.html" class="active">Отделы</a></li>
+                    <li><a href="overtime.html" class="active">Отделы</a></li>
                     <li><a href="reports.html">Отчеты</a></li>
                     <li><a href="settings.html">Настройки</a></li>
                 </ul>
@@ -579,209 +648,450 @@
                 </div>
                 <p>Профессиональное решение для автоматизации бухгалтерского учета</p>
                 <div class="footer-links">
-                    <a href="About the company.html">О компании</a>
+                    <a href="about.html">О компании</a>
                     <a href="contacts.html">Контакты</a>
-                    <a href="Support.html">Поддержка</a>
-                    <a href="documentation.html">Документация</a>
+                    <a href="support.html">Поддержка</a>
                 </div>
                 <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
             </div>
         </div>
     </footer>
 
-    <script>
-        const API_BASE = 'http://localhost:3000';
+  <script>
+    const API_BASE = 'http://localhost:3000';
 
-        async function apiCall(endpoint) {
-            try {
-                const response = await fetch(`${API_BASE}${endpoint}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return await response.json();
-            } catch (error) {
-                console.error('Ошибка API:', error);
-                showMessage(`Ошибка при загрузке данных: ${error.message}`, 'error');
-                return null;
+    async function apiCall(endpoint) {
+        try {
+            const response = await fetch(`${API_BASE}${endpoint}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            return await response.json();
+        } catch (error) {
+            console.error('API Error:', error);
+            showMessage(`Error loading data: ${error.message}`, 'error');
+            return null;
+        }
+    }
+    
+    function showMessage(message, type = 'info') {
+        const lang = localStorage.getItem('language') || 'ru';
+        const messageContainer = document.getElementById('messageContainer');
+        const messageEl = document.createElement('div');
+        messageEl.className = type === 'error' ? 'error-message' : 'success-message';
+        messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
+        messageContainer.innerHTML = '';
+        messageContainer.appendChild(messageEl);
+        
+        setTimeout(() => {
+            messageEl.remove();
+        }, 5000);
+    }
+
+    function formatCurrency(amount) {
+        return parseFloat(amount || 0).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }) + ' BYN';
+    }
+
+    function calculateOvertimePayment(employee) {
+        if (!employee.overtime_hours || employee.overtime_hours <= 0) return 0;
+        
+        let hourlyRate;
+        if (employee.salary_type === 'почасовая' || employee.salary_type === 'hourly') {
+            hourlyRate = employee.hourly_rate;
+        } else {
+            hourlyRate = employee.salary / 160;
         }
         
-        function showMessage(message, type = 'info') {
-            const messageContainer = document.getElementById('messageContainer');
-            const messageEl = document.createElement('div');
-            messageEl.className = type === 'error' ? 'error-message' : 'success-message';
-            messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
-            messageContainer.innerHTML = '';
-            messageContainer.appendChild(messageEl);
-            
-            setTimeout(() => {
-                messageEl.remove();
-            }, 5000);
-        }
+        return employee.overtime_hours * hourlyRate * (employee.overtime_rate || 1.5);
+    }
 
-        function formatCurrency(amount) {
-            return parseFloat(amount || 0).toLocaleString('ru-RU', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }) + ' BYN';
-        }
-
-        function calculateOvertimePayment(employee) {
-            if (employee.overtime_hours <= 0) return 0;
-            
-            let hourlyRate;
-            if (employee.salary_type === 'почасовая') {
-                hourlyRate = employee.hourly_rate;
-            } else {
-                hourlyRate = employee.salary / 160;
-            }
-            
-            return employee.overtime_hours * hourlyRate * (employee.overtime_rate || 1.5);
-        }
-
-        async function loadDepartments() {
-            const departmentsList = document.getElementById('departmentsList');
+    async function loadDepartments() {
+        const departmentsList = document.getElementById('departmentsList');
+        const lang = localStorage.getItem('language') || 'ru';
+        
+        if (lang === 'en') {
+            departmentsList.innerHTML = '<div style="text-align: center; padding: 3rem;"><div class="loading"></div><div style="margin-top: 1rem;">Loading department data...</div></div>';
+        } else {
             departmentsList.innerHTML = '<div style="text-align: center; padding: 3rem;"><div class="loading"></div><div style="margin-top: 1rem;">Загрузка данных об отделах...</div></div>';
+        }
+        
+        const departments = await apiCall('/departments');
+        const employees = await apiCall('/employees/all');
+        
+        if (departments && departments.length > 0) {
+            const activeDepartments = departments.filter(dept => {
+                const deptEmployees = employees.filter(emp => emp.department_id === dept.id);
+                return deptEmployees.length > 0 || dept.name !== 'Производство';
+            });
             
-            const departments = await apiCall('/departments');
-            const employees = await apiCall('/employees');
+            const departmentStatsLabels = lang === 'en' 
+                ? ['Employees', 'Payroll Fund', 'Overtime Hours']
+                : ['Сотрудников', 'Фонд оплаты', 'Сверхурочные часы'];
             
-            if (departments && departments.length > 0) {
-                const activeDepartments = departments.filter(dept => {
-                    const deptEmployees = employees.filter(emp => emp.department_id === dept.id);
-                    return deptEmployees.length > 0 || dept.name !== 'Производство';
-                });
+            const employeesWithOvertime = await Promise.all(
+                employees.map(async emp => {
+                    const monthlyData = await apiCall(`/monthly-data?employee_id=${emp.id}&month=12&year=2024`);
+                    return {
+                        ...emp,
+                        overtime_hours: monthlyData && monthlyData.length > 0 ? monthlyData[0].overtime_hours : 0
+                    };
+                })
+            );
+            
+            departmentsList.innerHTML = activeDepartments.map(dept => {
+                const deptEmployees = employeesWithOvertime.filter(emp => emp.department_id === dept.id);
                 
-                departmentsList.innerHTML = activeDepartments.map(dept => {
-                    const deptEmployees = employees.filter(emp => emp.department_id === dept.id);
-                    
-                    if (deptEmployees.length === 0) {
-                        return '';
+                if (deptEmployees.length === 0) {
+                    return '';
+                }
+                
+                const totalSalary = deptEmployees.reduce((sum, emp) => {
+                    let salary = parseFloat(emp.salary || 0);
+                    if (emp.salary_type === 'почасовая' || emp.salary_type === 'hourly') {
+                        salary = emp.hourly_rate * 160;
                     }
-                    
-                    const totalSalary = deptEmployees.reduce((sum, emp) => {
-                        let salary = parseFloat(emp.salary || 0);
-                        if (emp.salary_type === 'почасовая') {
-                            salary = emp.hourly_rate * emp.worked_hours;
-                        }
-                        return sum + salary + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
-                    }, 0);
-                    
-                    const overtimeHours = deptEmployees.reduce((sum, emp) => sum + (emp.overtime_hours || 0), 0);
-                    
-                    return `
-                        <div class="department-card">
-                            <div class="department-header">
-                                <div class="department-name">${dept.name}</div>
-                                <div class="department-budget">${formatCurrency(dept.budget)}</div>
+                    return sum + salary;
+                }, 0);
+                
+                const totalOvertimeHours = deptEmployees.reduce((sum, emp) => {
+                    return sum + (emp.overtime_hours || 0);
+                }, 0);
+                
+                const overtimePayment = deptEmployees.reduce((sum, emp) => {
+                    return sum + calculateOvertimePayment(emp);
+                }, 0);
+                
+                return `
+                    <div class="department-card" data-dept-id="${dept.id}">
+                        <div class="department-header">
+                            <div class="department-name">${dept.name}</div>
+                            <div class="department-budget">${formatCurrency(dept.budget)}</div>
+                        </div>
+                        <div class="department-stats">
+                            <div class="department-stat">
+                                <div class="department-stat-value">${deptEmployees.length}</div>
+                                <div class="department-stat-label">${departmentStatsLabels[0]}</div>
                             </div>
-                            <div class="department-stats">
-                                <div class="department-stat">
-                                    <div class="department-stat-value">${deptEmployees.length}</div>
-                                    <div class="department-stat-label">Сотрудников</div>
-                                </div>
-                                <div class="department-stat">
-                                    <div class="department-stat-value">${formatCurrency(totalSalary)}</div>
-                                    <div class="department-stat-label">Фонд оплаты</div>
-                                </div>
-                                <div class="department-stat">
-                                    <div class="department-stat-value">${overtimeHours}</div>
-                                    <div class="department-stat-label">Сверхурочные часы</div>
-                                </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">${formatCurrency(totalSalary)}</div>
+                                <div class="department-stat-label">${departmentStatsLabels[1]}</div>
+                            </div>
+                            <div class="department-stat">
+                                <div class="department-stat-value">${totalOvertimeHours}</div>
+                                <div class="department-stat-label">${departmentStatsLabels[2]}</div>
                             </div>
                         </div>
-                    `;
-                }).join('');
-                
-                updateStats(activeDepartments, employees);
-                showMessage(`Данные об отделах успешно загружены (${activeDepartments.length} отделов)`, 'success');
+                        ${totalOvertimeHours > 0 ? `
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                                <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                                    ${lang === 'en' ? 'Total overtime payment:' : 'Общая доплата за сверхурочные:'} <strong style="color: var(--warning);">${formatCurrency(overtimePayment)}</strong>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            updateStats(activeDepartments, employeesWithOvertime);
+            
+            if (lang === 'en') {
+                showMessage(`Department data loaded successfully (${activeDepartments.length} departments)`, 'success');
+            } else {
+                showMessage(`Данные об отделах загружены успешно (${activeDepartments.length} отделов)`, 'success');
+            }
+        } else {
+            if (lang === 'en') {
+                departmentsList.innerHTML = '<div style="text-align: center; padding: 2rem;">No department data available</div>';
             } else {
                 departmentsList.innerHTML = '<div style="text-align: center; padding: 2rem;">Нет данных об отделах</div>';
             }
         }
+    }
 
-        async function loadOvertime() {
-            const overtimeTable = document.getElementById('overtimeTable');
+    async function loadOvertime() {
+        const overtimeTable = document.getElementById('overtimeTable');
+        const lang = localStorage.getItem('language') || 'ru';
+        
+        if (lang === 'en') {
+            overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Loading overtime data...</div></td></tr>';
+        } else {
             overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Загрузка данных о сверхурочных...</div></td></tr>';
+        }
+        
+        const employees = await apiCall('/employees/all');
+        const departments = await apiCall('/departments');
+        
+        if (employees && employees.length > 0) {
+            const overtimePromises = employees.map(async emp => {
+                const monthlyData = await apiCall(`/monthly-data?employee_id=${emp.id}&month=12&year=2024`);
+                return {
+                    ...emp,
+                    overtime_hours: monthlyData && monthlyData.length > 0 ? monthlyData[0].overtime_hours : 0,
+                    worked_hours: monthlyData && monthlyData.length > 0 ? monthlyData[0].worked_hours : 160
+                };
+            });
             
-            const employees = await apiCall('/employees');
-            const departments = await apiCall('/departments');
+            const employeesWithData = await Promise.all(overtimePromises);
+            const overtimeEmployees = employeesWithData.filter(emp => emp.overtime_hours > 0);
             
-            if (employees && employees.length > 0) {
-                const overtimeEmployees = employees.filter(emp => emp.overtime_hours > 0);
+            if (overtimeEmployees.length > 0) {
+                overtimeTable.innerHTML = overtimeEmployees.map(emp => {
+                    const department = departments ? departments.find(dept => dept.id === emp.department_id) : null;
+                    const overtimePayment = calculateOvertimePayment(emp);
+                    
+                    let statusColor = '#10b981';
+                    let statusText = emp.status || 'unknown';
+                    
+                    if (lang === 'en') {
+                        statusText = emp.status === 'активен' ? 'active' : 'inactive';
+                        statusColor = emp.status === 'активен' ? '#10b981' : '#ef4444';
+                    }
+                    
+                    return `
+                        <tr>
+                            <td><strong>${emp.full_name}</strong></td>
+                            <td>${department ? department.name : (lang === 'en' ? 'Not assigned' : 'Не назначен')}</td>
+                            <td>${emp.position}</td>
+                            <td>${emp.overtime_hours} ${lang === 'en' ? 'hours' : 'часов'}</td>
+                            <td>${formatCurrency(overtimePayment)}</td>
+                            <td><span style="color: ${statusColor};">${statusText}</span></td>
+                        </tr>
+                    `;
+                }).join('');
                 
-                if (overtimeEmployees.length > 0) {
-                    overtimeTable.innerHTML = overtimeEmployees.map(emp => {
-                        const department = departments ? departments.find(dept => dept.id === emp.department_id) : null;
-                        const overtimePayment = calculateOvertimePayment(emp);
-                        
-                        return `
-                            <tr>
-                                <td><strong>${emp.full_name}</strong></td>
-                                <td>${department ? department.name : 'Не назначен'}</td>
-                                <td>${emp.position}</td>
-                                <td>${emp.overtime_hours} ч.</td>
-                                <td>${formatCurrency(overtimePayment)}</td>
-                                <td><span style="color: ${emp.status === 'активен' ? '#10b981' : '#ef4444'};">${emp.status || 'неизвестно'}</span></td>
-                            </tr>
-                        `;
-                    }).join('');
+                const totalOvertimeHours = overtimeEmployees.reduce((sum, emp) => sum + (emp.overtime_hours || 0), 0);
+                const totalOvertimePayment = overtimeEmployees.reduce((sum, emp) => sum + calculateOvertimePayment(emp), 0);
+                
+                overtimeTable.innerHTML += `
+                    <tr style="background: rgba(37, 99, 235, 0.1);">
+                        <td colspan="3" style="text-align: right; font-weight: bold;">
+                            ${lang === 'en' ? 'Total:' : 'Итого:'}
+                        </td>
+                        <td style="font-weight: bold; color: var(--warning);">
+                            ${totalOvertimeHours} ${lang === 'en' ? 'hours' : 'часов'}
+                        </td>
+                        <td style="font-weight: bold; color: var(--success);">
+                            ${formatCurrency(totalOvertimePayment)}
+                        </td>
+                        <td></td>
+                    </tr>
+                `;
+            } else {
+                if (lang === 'en') {
+                    overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">No employees with overtime hours for December 2024</td></tr>';
                 } else {
-                    overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Нет сотрудников со сверхурочными часами</td></tr>';
+                    overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Нет сотрудников со сверхурочными часами за Декабрь 2024</td></tr>';
                 }
-                
-                showMessage(`Данные о сверхурочных успешно загружены (${overtimeEmployees.length} сотрудников)`, 'success');
+            }
+            
+            if (lang === 'en') {
+                showMessage(`Overtime data loaded successfully (${overtimeEmployees.length} employees)`, 'success');
+            } else {
+                showMessage(`Данные о сверхурочных загружены успешно (${overtimeEmployees.length} сотрудников)`, 'success');
+            }
+        } else {
+            if (lang === 'en') {
+                overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">No employee data available</td></tr>';
             } else {
                 overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Нет данных о сотрудниках</td></tr>';
             }
         }
+    }
 
-        function updateStats(departments, employees) {
-            if (!departments || departments.length === 0) return;
-            
-            const totalBudget = departments.reduce((sum, dept) => {
-                if (dept.name === 'Производство') return sum;
-                return sum + parseFloat(dept.budget || 0);
-            }, 0);
-            
-            const totalOvertime = employees ? employees.reduce((sum, emp) => sum + (emp.overtime_hours || 0), 0) : 0;
-            
-            document.getElementById('totalDepartments').textContent = departments.length;
-            document.getElementById('totalEmployees').textContent = employees ? employees.length : '0';
-            document.getElementById('totalBudget').textContent = formatCurrency(totalBudget);
-            document.getElementById('totalOvertime').textContent = totalOvertime;
+    function updateStats(departments, employees) {
+        if (!departments || departments.length === 0 || !employees) return;
+        
+        const totalBudget = departments.reduce((sum, dept) => {
+            if (dept.name === 'Производство') return sum;
+            return sum + parseFloat(dept.budget || 0);
+        }, 0);
+        
+        const totalOvertimeHours = employees.reduce((sum, emp) => {
+            return sum + (emp.overtime_hours || 0);
+        }, 0);
+        
+        const totalOvertimePayment = employees.reduce((sum, emp) => {
+            return sum + calculateOvertimePayment(emp);
+        }, 0);
+        
+        document.getElementById('totalDepartments').textContent = departments.length;
+        document.getElementById('totalEmployees').textContent = employees ? employees.length : '0';
+        document.getElementById('totalBudget').textContent = formatCurrency(totalBudget);
+        document.getElementById('totalOvertime').textContent = totalOvertimeHours;
+        
+        const lang = localStorage.getItem('language') || 'ru';
+        if (totalOvertimeHours > 0) {
+            const message = lang === 'en' 
+                ? `Total overtime payment: ${formatCurrency(totalOvertimePayment)}`
+                : `Общая доплата за сверхурочные: ${formatCurrency(totalOvertimePayment)}`;
+            showMessage(message, 'success');
         }
+    }
 
-        function initTabs() {
-            const tabs = document.querySelectorAll('.tab');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabId = tab.getAttribute('data-tab');
-                    
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    
-                    tab.classList.add('active');
-                    document.getElementById(tabId).classList.add('active');
-                    
-                    if (tabId === 'overtime') {
-                        loadOvertime();
-                    } else if (tabId === 'departments') {
-                        loadDepartments();
-                    }
-                });
+    function initTabs() {
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+                
+                if (tabId === 'overtime') {
+                    loadOvertime();
+                } else if (tabId === 'departments') {
+                    loadDepartments();
+                }
             });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            loadDepartments();
-            initTabs();
-            
-            document.getElementById('refreshDepartmentsBtn').addEventListener('click', loadDepartments);
-            document.getElementById('refreshOvertimeBtn').addEventListener('click', loadOvertime);
         });
-    </script>
+    }
+
+    function applyTranslations(lang) {
+        document.getElementById('htmlLang').setAttribute('lang', lang);
+        
+        if (lang === 'en') {
+            document.querySelector('title').textContent = 'AccountantPro - Departments';
+            
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks[0].textContent = 'Home';
+            navLinks[1].textContent = 'Employees';
+            navLinks[2].textContent = 'Departments';
+            navLinks[3].textContent = 'Reports';
+            navLinks[4].textContent = 'Settings';
+            
+            document.querySelector('.hero h1').textContent = 'Company Department Management';
+            document.querySelector('.hero p').textContent = 'Complete information about organizational structure and resource allocation';
+            document.querySelector('.section-title h2').textContent = 'Organizational Structure Management';
+            document.querySelector('.section-title p').textContent = 'Control employee distribution, budgets and working hours';
+            document.querySelectorAll('.card-title')[0].innerHTML = '<i class="fas fa-sitemap"></i> Organizational Structure';
+            document.querySelectorAll('.card-description')[0].textContent = 'Company department management and working time analysis';
+            document.querySelectorAll('.tab')[0].textContent = 'Company Departments';
+            document.querySelectorAll('.tab')[1].textContent = 'Overtime Work';
+            document.querySelector('#refreshDepartmentsBtn').innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Data';
+            document.querySelector('#refreshOvertimeBtn').innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Data';
+            
+            const ths = document.querySelectorAll('th');
+            ths[0].textContent = 'Employee';
+            ths[1].textContent = 'Department';
+            ths[2].textContent = 'Position';
+            ths[3].textContent = 'Overtime Hours';
+            ths[4].textContent = 'Additional Payment';
+            ths[5].textContent = 'Status';
+            
+            document.querySelector('.footer p').textContent = 'Professional solution for accounting automation';
+            const footerLinks = document.querySelectorAll('.footer-links a');
+            footerLinks[0].textContent = 'About Company';
+            footerLinks[1].textContent = 'Contacts';
+            footerLinks[2].textContent = 'Support';
+            document.querySelector('.footer p:last-child').innerHTML = '&copy; 2025 AccountantPro. All rights reserved.';
+            
+            const stats = document.querySelectorAll('.stat-label');
+            stats[0].textContent = 'Departments';
+            stats[1].textContent = 'Employees';
+            stats[2].textContent = 'Total Budget';
+            stats[3].textContent = 'Overtime Hours';
+            
+        } else {
+            document.querySelector('title').textContent = 'БухгалтерПро - Отделы';
+            
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks[0].textContent = 'Главная';
+            navLinks[1].textContent = 'Сотрудники';
+            navLinks[2].textContent = 'Отделы';
+            navLinks[3].textContent = 'Отчеты';
+            navLinks[4].textContent = 'Настройки';
+            
+            document.querySelector('.hero h1').textContent = 'Управление отделами компании';
+            document.querySelector('.hero p').textContent = 'Полная информация об организационной структуре и распределении ресурсов';
+            document.querySelector('.section-title h2').textContent = 'Управление организационной структурой';
+            document.querySelector('.section-title p').textContent = 'Контролируйте распределение сотрудников, бюджеты и рабочее время';
+            document.querySelectorAll('.card-title')[0].innerHTML = '<i class="fas fa-sitemap"></i> Организационная структура';
+            document.querySelectorAll('.card-description')[0].textContent = 'Управление отделами компании и анализ рабочего времени';
+            document.querySelectorAll('.tab')[0].textContent = 'Отделы компании';
+            document.querySelectorAll('.tab')[1].textContent = 'Сверхурочные работы';
+            document.querySelector('#refreshDepartmentsBtn').innerHTML = '<i class="fas fa-sync-alt"></i> Обновить данные';
+            document.querySelector('#refreshOvertimeBtn').innerHTML = '<i class="fas fa-sync-alt"></i> Обновить данные';
+            
+            const ths = document.querySelectorAll('th');
+            ths[0].textContent = 'Сотрудник';
+            ths[1].textContent = 'Отдел';
+            ths[2].textContent = 'Должность';
+            ths[3].textContent = 'Сверхурочные часы';
+            ths[4].textContent = 'Доплата';
+            ths[5].textContent = 'Статус';
+            
+            document.querySelector('.footer p').textContent = 'Профессиональное решение для автоматизации бухгалтерского учета';
+            const footerLinks = document.querySelectorAll('.footer-links a');
+            footerLinks[0].textContent = 'О компании';
+            footerLinks[1].textContent = 'Контакты';
+            footerLinks[2].textContent = 'Поддержка';
+            document.querySelector('.footer p:last-child').innerHTML = '&copy; 2025 БухгалтерПро. Все права защищены.';
+            
+            const stats = document.querySelectorAll('.stat-label');
+            stats[0].textContent = 'Отделов';
+            stats[1].textContent = 'Сотрудников';
+            stats[2].textContent = 'Общий бюджет';
+            stats[3].textContent = 'Сверхурочные часы';
+        }
+        
+        loadDepartments();
+    }
+
+    function applyTheme(theme) {
+        document.body.classList.remove('light-theme');
+        if (theme === 'light') {
+            document.body.classList.add('light-theme');
+        }
+    }
+
+    function applyFontSize(size) {
+        document.body.classList.remove('small-font', 'large-font');
+        if (size === 'large') {
+            document.body.classList.add('large-font');
+        } else if (size === 'small') {
+            document.body.classList.add('small-font');
+        }
+    }
+
+    function applySettings() {
+        const appearance = JSON.parse(localStorage.getItem('appearanceSettings') || '{}');
+        
+        if (appearance.theme === 'light') {
+            document.body.classList.add('light-theme');
+        } else {
+            document.body.classList.remove('light-theme');
+        }
+        
+        if (appearance.fontSize === 'large') {
+            document.body.classList.add('large-font');
+            document.body.classList.remove('small-font');
+        } else if (appearance.fontSize === 'small') {
+            document.body.classList.add('small-font');
+            document.body.classList.remove('large-font');
+        } else {
+            document.body.classList.remove('small-font', 'large-font');
+        }
+        
+        applyTranslations(appearance.language || 'ru');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadDepartments();
+        initTabs();
+        
+        document.getElementById('refreshDepartmentsBtn').addEventListener('click', loadDepartments);
+        document.getElementById('refreshOvertimeBtn').addEventListener('click', loadOvertime);
+        
+        applySettings();
+    });
+</script>
 </body>
 </html>

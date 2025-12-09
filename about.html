@@ -728,7 +728,6 @@
                     <a href="about.html">О компании</a>
                     <a href="contacts.html">Контакты</a>
                     <a href="support.html">Поддержка</a>
-                    <a href="documentation.html">Документация</a>
                 </div>
                 <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
             </div>
@@ -736,36 +735,225 @@
     </footer>
 
     <script>
-        function animateOnScroll() {
-            const elements = document.querySelectorAll('.feature-card, .team-member, .stat-card, .timeline-item');
+    function animateOnScroll() {
+        const elements = document.querySelectorAll('.feature-card, .team-member, .stat-card, .timeline-item');
+        
+        elements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const elementVisible = 150;
             
-            elements.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const elementVisible = 150;
-                
-                if (elementTop < window.innerHeight - elementVisible) {
-                    element.style.opacity = "1";
-                    element.style.transform = "translateY(0)";
-                }
-            });
-        }
-
-        function initAnimations() {
-            const elements = document.querySelectorAll('.feature-card, .team-member, .stat-card, .timeline-item');
-            
-            elements.forEach(element => {
-                element.style.opacity = "0";
-                element.style.transform = "translateY(30px)";
-                element.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-            });
-            
-            window.addEventListener('scroll', animateOnScroll);
-            animateOnScroll();
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            initAnimations();
+            if (elementTop < window.innerHeight - elementVisible) {
+                element.style.opacity = "1";
+                element.style.transform = "translateY(0)";
+            }
         });
-    </script>
+    }
+
+    function initAnimations() {
+        const elements = document.querySelectorAll('.feature-card, .team-member, .stat-card, .timeline-item');
+        
+        elements.forEach(element => {
+            element.style.opacity = "0";
+            element.style.transform = "translateY(30px)";
+            element.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        });
+        
+        window.addEventListener('scroll', animateOnScroll);
+        animateOnScroll();
+    }
+
+    function applyTranslations(lang) {
+        document.documentElement.setAttribute('lang', lang);
+        localStorage.setItem('selectedLanguage', lang);
+        
+        if (lang === 'en') {
+            document.title = 'About Company - AccountantPro';
+            document.querySelector('.hero h1').textContent = 'About AccountantPro Company';
+            document.querySelector('.hero p').textContent = 'Learn more about our mission, values and team';
+            
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks[0].textContent = 'Home';
+            navLinks[1].textContent = 'Employees';
+            navLinks[2].textContent = 'Departments';
+            navLinks[3].textContent = 'Reports';
+            navLinks[4].textContent = 'Settings';
+            
+            document.querySelector('.section-title h2').textContent = 'About Our Company';
+            document.querySelector('.section-title p').textContent = 'We create innovative solutions for accounting automation';
+            
+            const aboutParagraphs = document.querySelectorAll('.about-text p');
+            aboutParagraphs[0].textContent = 'AccountantPro is a modern accounting automation system designed for businesses of any scale. Our platform combines ease of use with powerful functionality necessary for effective financial management of the company.';
+            aboutParagraphs[1].textContent = 'We understand how important accuracy and timeliness are in accounting, so we created a solution that minimizes routine operations and reduces the likelihood of errors. Our system is constantly evolving, adapting to changes in legislation and business needs.';
+            aboutParagraphs[2].textContent = 'Since 2025, we have been helping companies optimize financial processes, saving time and resources. More than 500 companies have already entrusted us with their accounting and have seen the effectiveness of our solution.';
+            
+            document.querySelector('.btn-primary').innerHTML = '<i class="fas fa-arrow-left"></i> Return to Home';
+            
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards[0].querySelector('h3').textContent = 'High Speed';
+            featureCards[0].querySelector('p').textContent = 'Fast data processing and quick generation of reports of any complexity';
+            featureCards[1].querySelector('h3').textContent = 'Security';
+            featureCards[1].querySelector('p').textContent = 'Multi-level data protection system and regular backups';
+            featureCards[2].querySelector('h3').textContent = 'Automation';
+            featureCards[2].querySelector('p').textContent = 'Automatic execution of routine operations and calculations';
+            featureCards[3].querySelector('h3').textContent = '24/7 Support';
+            featureCards[3].querySelector('p').textContent = 'Round-the-clock technical support and accounting consultations';
+            featureCards[4].querySelector('h3').textContent = 'Accessibility';
+            featureCards[4].querySelector('p').textContent = 'Work with the system from any device at any time';
+            featureCards[5].querySelector('h3').textContent = 'Analytics';
+            featureCards[5].querySelector('p').textContent = 'Powerful tools for analyzing company financial indicators';
+            
+            const sectionTitles = document.querySelectorAll('.section-title');
+            sectionTitles[1].querySelector('h2').textContent = 'Our Advantages';
+            sectionTitles[1].querySelector('p').textContent = 'Why companies choose AccountantPro';
+            sectionTitles[2].querySelector('h2').textContent = 'Our History';
+            sectionTitles[2].querySelector('p').textContent = 'The development path of AccountantPro company';
+            sectionTitles[3].querySelector('h2').textContent = 'Our Team';
+            sectionTitles[3].querySelector('p').textContent = 'Professionals creating the best solutions for you';
+            sectionTitles[4].querySelector('h2').textContent = 'Our Achievements';
+            sectionTitles[4].querySelector('p').textContent = 'Numbers that speak for themselves';
+            
+            const timelineItems = document.querySelectorAll('.timeline-content');
+            timelineItems[0].querySelector('h3').textContent = 'Company Foundation';
+            timelineItems[0].querySelector('p').textContent = 'Creation of the company and start of development of the first version of AccountantPro system';
+            timelineItems[1].querySelector('h3').textContent = 'First Version Launch';
+            timelineItems[1].querySelector('p').textContent = 'Release of the first version of the system and attraction of the first 50 clients';
+            timelineItems[2].querySelector('h3').textContent = 'Functionality Expansion';
+            timelineItems[2].querySelector('p').textContent = 'Addition of modules for payroll calculation and tax reporting';
+            timelineItems[3].querySelector('h3').textContent = '1C Integration';
+            timelineItems[3].querySelector('p').textContent = 'Implementation of integration with popular accounting systems, including 1C';
+            timelineItems[4].querySelector('h3').textContent = 'Mobile Application';
+            timelineItems[4].querySelector('p').textContent = 'Launch of mobile application for iOS and Android';
+            timelineItems[5].querySelector('h3').textContent = 'Artificial Intelligence';
+            timelineItems[5].querySelector('p').textContent = 'Implementation of AI algorithms for forecasting and analyzing financial data';
+            timelineItems[6].querySelector('h3').textContent = 'Cloud Platform';
+            timelineItems[6].querySelector('p').textContent = 'Launch of cloud version of the system with extended capabilities for corporate clients';
+            
+            const teamMembers = document.querySelectorAll('.team-member');
+            teamMembers[0].querySelector('.position').textContent = 'CEO';
+            teamMembers[0].querySelector('p').textContent = 'Company founder with 1 year of experience in financial consulting';
+            teamMembers[1].querySelector('.position').textContent = 'Technical Director';
+            teamMembers[1].querySelector('p').textContent = 'Expert in software development and system architecture';
+            teamMembers[2].querySelector('.position').textContent = 'Chief Accountant';
+            teamMembers[2].querySelector('p').textContent = 'Certified professional accountant with over 12 years of experience';
+            teamMembers[3].querySelector('.position').textContent = 'Development Team Lead';
+            teamMembers[3].querySelector('p').textContent = 'Specialist in creating scalable and reliable IT solutions';
+            
+            const statLabels = document.querySelectorAll('.stat-label');
+            statLabels[0].textContent = 'Satisfied Clients';
+            statLabels[1].textContent = 'System Reliability';
+            statLabels[2].textContent = 'Technical Support';
+            statLabels[3].textContent = 'System Integrations';
+            
+            document.querySelector('.footer-logo div:last-child').textContent = 'AccountantPro';
+            document.querySelector('.footer p').textContent = 'Professional solution for accounting automation';
+            const footerLinks = document.querySelectorAll('.footer-links a');
+            footerLinks[0].textContent = 'About Company';
+            footerLinks[1].textContent = 'Contacts';
+            footerLinks[2].textContent = 'Support';
+            document.querySelector('.footer p:last-child').innerHTML = '&copy; 2025 AccountantPro. All rights reserved.';
+            
+        } else {
+            document.title = 'О компании - БухгалтерПро';
+            document.querySelector('.hero h1').textContent = 'О компании БухгалтерПро';
+            document.querySelector('.hero p').textContent = 'Узнайте больше о нашей миссии, ценностях и команде';
+            
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks[0].textContent = 'Главная';
+            navLinks[1].textContent = 'Сотрудники';
+            navLinks[2].textContent = 'Отделы';
+            navLinks[3].textContent = 'Отчеты';
+            navLinks[4].textContent = 'Настройки';
+            
+            document.querySelector('.section-title h2').textContent = 'О нашей компании';
+            document.querySelector('.section-title p').textContent = 'Мы создаем инновационные решения для автоматизации бухгалтерского учета';
+            
+            const aboutParagraphs = document.querySelectorAll('.about-text p');
+            aboutParagraphs[0].textContent = 'БухгалтерПро - это современная система автоматизации бухгалтерского учета, разработанная для предприятий любого масштаба. Наша платформа объединяет в себе простоту использования и мощный функционал, необходимый для эффективного управления финансами компании.';
+            aboutParagraphs[1].textContent = 'Мы понимаем, насколько важна точность и своевременность в бухгалтерском учете, поэтому создали решение, которое минимизирует рутинные операции и снижает вероятность ошибок. Наша система постоянно развивается, адаптируясь к изменениям в законодательстве и потребностям бизнеса.';
+            aboutParagraphs[2].textContent = 'С 2025 года мы помогаем компаниям оптимизировать финансовые процессы, экономя время и ресурсы. Более 500 компаний уже доверили нам свой бухгалтерский учет и убедились в эффективности нашего решения.';
+            
+            document.querySelector('.btn-primary').innerHTML = '<i class="fas fa-arrow-left"></i> Вернуться на главную';
+            
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards[0].querySelector('h3').textContent = 'Высокая скорость';
+            featureCards[0].querySelector('p').textContent = 'Оперативная обработка данных и быстрое формирование отчетов любой сложности';
+            featureCards[1].querySelector('h3').textContent = 'Безопасность';
+            featureCards[1].querySelector('p').textContent = 'Многоуровневая система защиты данных и регулярное резервное копирование';
+            featureCards[2].querySelector('h3').textContent = 'Автоматизация';
+            featureCards[2].querySelector('p').textContent = 'Автоматическое выполнение рутинных операций и расчетов';
+            featureCards[3].querySelector('h3').textContent = 'Поддержка 24/7';
+            featureCards[3].querySelector('p').textContent = 'Круглосуточная техническая поддержка и консультации по вопросам учета';
+            featureCards[4].querySelector('h3').textContent = 'Доступность';
+            featureCards[4].querySelector('p').textContent = 'Работайте с системой с любого устройства в любое время';
+            featureCards[5].querySelector('h3').textContent = 'Аналитика';
+            featureCards[5].querySelector('p').textContent = 'Мощные инструменты для анализа финансовых показателей компании';
+            
+            const sectionTitles = document.querySelectorAll('.section-title');
+            sectionTitles[1].querySelector('h2').textContent = 'Наши преимущества';
+            sectionTitles[1].querySelector('p').textContent = 'Почему компании выбирают БухгалтерПро';
+            sectionTitles[2].querySelector('h2').textContent = 'Наша история';
+            sectionTitles[2].querySelector('p').textContent = 'Путь развития компании БухгалтерПро';
+            sectionTitles[3].querySelector('h2').textContent = 'Наша команда';
+            sectionTitles[3].querySelector('p').textContent = 'Профессионалы, создающие лучшие решения для вас';
+            sectionTitles[4].querySelector('h2').textContent = 'Наши достижения';
+            sectionTitles[4].querySelector('p').textContent = 'Цифры, которые говорят сами за себя';
+            
+            const timelineItems = document.querySelectorAll('.timeline-content');
+            timelineItems[0].querySelector('h3').textContent = 'Основание компании';
+            timelineItems[0].querySelector('p').textContent = 'Создание компании и начало разработки первой версии системы БухгалтерПро';
+            timelineItems[1].querySelector('h3').textContent = 'Запуск первой версии';
+            timelineItems[1].querySelector('p').textContent = 'Выпуск первой версии системы и привлечение первых 50 клиентов';
+            timelineItems[2].querySelector('h3').textContent = 'Расширение функционала';
+            timelineItems[2].querySelector('p').textContent = 'Добавление модулей для расчета заработной платы и налоговой отчетности';
+            timelineItems[3].querySelector('h3').textContent = 'Интеграция с 1С';
+            timelineItems[3].querySelector('p').textContent = 'Реализация интеграции с популярными системами учета, включая 1С';
+            timelineItems[4].querySelector('h3').textContent = 'Мобильное приложение';
+            timelineItems[4].querySelector('p').textContent = 'Запуск мобильного приложения для iOS и Android';
+            timelineItems[5].querySelector('h3').textContent = 'Искусственный интеллект';
+            timelineItems[5].querySelector('p').textContent = 'Внедрение AI-алгоритмов для прогнозирования и анализа финансовых данных';
+            timelineItems[6].querySelector('h3').textContent = 'Облачная платформа';
+            timelineItems[6].querySelector('p').textContent = 'Запуск облачной версии системы с расширенными возможностями для корпоративных клиентов';
+            
+            const teamMembers = document.querySelectorAll('.team-member');
+            teamMembers[0].querySelector('.position').textContent = 'Генеральный директор';
+            teamMembers[0].querySelector('p').textContent = 'Основатель компании с 1-летним опытом в области финансового консалтинга';
+            teamMembers[1].querySelector('.position').textContent = 'Технический директор';
+            teamMembers[1].querySelector('p').textContent = 'Эксперт в области разработки программного обеспечения и архитектуры систем';
+            teamMembers[2].querySelector('.position').textContent = 'Главный бухгалтер';
+            teamMembers[2].querySelector('p').textContent = 'Сертифицированный профессиональный бухгалтер с опытом работы более 12 лет';
+            teamMembers[3].querySelector('.position').textContent = 'Руководитель отдела разработки';
+            teamMembers[3].querySelector('p').textContent = 'Специалист по созданию масштабируемых и надежных IT-решений';
+            
+            const statLabels = document.querySelectorAll('.stat-label');
+            statLabels[0].textContent = 'Довольных клиентов';
+            statLabels[1].textContent = 'Надежность системы';
+            statLabels[2].textContent = 'Техническая поддержка';
+            statLabels[3].textContent = 'Интеграций с другими системами';
+            
+            document.querySelector('.footer-logo div:last-child').textContent = 'БухгалтерПро';
+            document.querySelector('.footer p').textContent = 'Профессиональное решение для автоматизации бухгалтерского учета';
+            const footerLinks = document.querySelectorAll('.footer-links a');
+            footerLinks[0].textContent = 'О компании';
+            footerLinks[1].textContent = 'Контакты';
+            footerLinks[2].textContent = 'Поддержка';
+            document.querySelector('.footer p:last-child').innerHTML = '&copy; 2025 БухгалтерПро. Все права защищены.';
+        }
+    }
+
+    function loadLanguageSettings() {
+        const savedAppearance = localStorage.getItem('appearanceSettings');
+        if (savedAppearance) {
+            const appearance = JSON.parse(savedAppearance);
+            if (appearance.language === 'en') {
+                applyTranslations('en');
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initAnimations();
+        loadLanguageSettings();
+    });
+</script>
 </body>
 </html>

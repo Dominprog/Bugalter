@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" id="htmlLang">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>БухгалтерПро - Отчеты</title>
+    <title data-i18n="reports.title">БухгалтерПро - Отчеты</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -43,6 +44,65 @@
             color: var(--light);
             line-height: 1.6;
             min-height: 100vh;
+        }
+
+        body.light-theme {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #0f172a;
+        }
+
+        body.light-theme .header {
+            background: rgba(248, 250, 252, 0.95);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .nav-links a {
+            color: #475569;
+        }
+
+        body.light-theme .nav-links a:hover,
+        body.light-theme .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        body.light-theme .dashboard-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .card-header {
+            background: rgba(241, 245, 249, 0.9);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .card-title,
+        body.light-theme .form-label,
+        body.light-theme .data-table th {
+            color: #0f172a;
+        }
+
+        body.light-theme .card-description {
+            color: #475569;
+        }
+
+        body.light-theme .form-control {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+
+        body.light-theme .footer {
+            background: rgba(248, 250, 252, 0.95);
+            color: #0f172a;
+        }
+
+        body.light-theme .footer-links a {
+            color: #64748b;
+        }
+
+        body.light-theme .footer-links a:hover {
+            color: #0f172a;
         }
 
         .container {
@@ -434,11 +494,11 @@
                     <div>БухгалтерПро</div>
                 </a>
                 <ul class="nav-links">
-                    <li><a href="index.html">Главная</a></li>
-                    <li><a href="employees.html">Сотрудники</a></li>
-                    <li><a href="overtime.html">Отделы</a></li>
-                    <li><a href="reports.html" class="active">Отчеты</a></li>
-                    <li><a href="settings.html">Настройки</a></li>
+                    <li><a href="index.html" data-i18n="nav.home">Главная</a></li>
+                    <li><a href="employees.html" data-i18n="nav.employees">Сотрудники</a></li>
+                    <li><a href="overtime.html" data-i18n="nav.departments">Отделы</a></li>
+                    <li><a href="reports.html" class="active" data-i18n="nav.reports">Отчеты</a></li>
+                    <li><a href="settings.html" data-i18n="nav.settings">Настройки</a></li>
                 </ul>
             </nav>
         </div>
@@ -446,15 +506,64 @@
 
     <section class="hero">
         <div class="container">
-            <h1>Отчеты по заработной плате</h1>
-            <p>Аналитика, расчеты и управление оплатой труда сотрудников</p>
+            <h1 data-i18n="reports.title">Отчеты по заработной плате</h1>
+            <p data-i18n="reports.subtitle">Аналитика, расчеты и управление оплатой труда сотрудников</p>
         </div>
     </section>
 
+    <div class="container">
+        <div class="dashboard-card" style="margin-top: -30px;">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span data-i18n="reports.select_period">Выбор периода для отчетов</span>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="reports.month">Месяц</label>
+                        <select id="reportMonth" class="form-control">
+                            <option value="1">Январь</option>
+                            <option value="2">Февраль</option>
+                            <option value="3">Март</option>
+                            <option value="4">Апрель</option>
+                            <option value="5">Май</option>
+                            <option value="6">Июнь</option>
+                            <option value="7">Июль</option>
+                            <option value="8">Август</option>
+                            <option value="9">Сентябрь</option>
+                            <option value="10">Октябрь</option>
+                            <option value="11">Ноябрь</option>
+                            <option value="12">Декабрь</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="reports.year">Год</label>
+                        <select id="reportYear" class="form-control">
+                            <option value="2023">2023</option>
+                            <option value="2024" selected>2024</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="align-self: flex-end;">
+                        <button id="applyPeriodBtn" class="btn btn-primary">
+                            <i class="fas fa-filter"></i>
+                            <span data-i18n="reports.apply_period">Применить период</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="periodInfo" style="margin-top: 15px; color: var(--primary-light); font-weight: 500;">
+                    Текущий период: Декабрь 2024
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container main-content">
         <div class="section-title">
-            <h2>Финансовая аналитика</h2>
-            <p>Полные отчеты по заработной плате и производительности</p>
+            <h2 data-i18n="reports.financial_analytics">Финансовая аналитика</h2>
+            <p data-i18n="reports.financial_desc">Полные отчеты по заработной плате и производительности</p>
         </div>
 
         <div id="messageContainer"></div>
@@ -463,33 +572,33 @@
             <div class="card-header">
                 <div class="card-title">
                     <i class="fas fa-clock"></i>
-                    Ввод отработанных часов
+                    <span data-i18n="reports.hours_input">Ввод отработанных часов</span>
                 </div>
-                <div class="card-description">
+                <div class="card-description" id="hoursDescription" data-i18n="reports.hours_desc">
                     Обновите данные по отработанным часам сотрудников за текущий месяц
                 </div>
             </div>
             <div class="card-content">
                 <form id="hoursForm">
                     <div class="form-group">
-                        <label class="form-label">Сотрудник</label>
+                        <label class="form-label" data-i18n="reports.employee">Сотрудник</label>
                         <select id="employeeSelect" class="form-control" required>
-                            <option value="">Выберите сотрудника</option>
+                            <option value="" data-i18n="reports.select_employee">Выберите сотрудника</option>
                         </select>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">Отработанные часы</label>
+                            <label class="form-label" data-i18n="reports.worked_hours">Отработанные часы</label>
                             <input type="number" id="workedHours" class="form-control" min="0" max="300" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Сверхурочные часы</label>
+                            <label class="form-label" data-i18n="reports.overtime_hours">Сверхурочные часы</label>
                             <input type="number" id="overtimeHours" class="form-control" min="0" max="100" required>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i>
-                        Сохранить данные
+                        <span data-i18n="reports.save_data">Сохранить данные</span>
                     </button>
                 </form>
             </div>
@@ -499,9 +608,9 @@
             <div class="card-header">
                 <div class="card-title">
                     <i class="fas fa-user-clock"></i>
-                    Сотрудники со сверхурочными часами
+                    <span data-i18n="reports.overtime_employees">Сотрудники со сверхурочными часами</span>
                 </div>
-                <div class="card-description">
+                <div class="card-description" id="overtimeDescription" data-i18n="reports.overtime_desc">
                     Список сотрудников, отработавших сверхурочные часы в текущем месяце
                 </div>
             </div>
@@ -509,32 +618,32 @@
                 <div class="export-buttons">
                     <button id="loadOvertimeBtn" class="btn btn-secondary">
                         <i class="fas fa-sync-alt"></i>
-                        Загрузить данные
+                        <span data-i18n="reports.load_data">Загрузить данные</span>
                     </button>
                     <button id="exportOvertimeTxt" class="btn btn-success">
                         <i class="fas fa-file-alt"></i>
-                        Экспорт в TXT
+                        <span data-i18n="reports.export_txt">Экспорт в TXT</span>
                     </button>
                     <button id="exportOvertimeDocx" class="btn btn-primary">
                         <i class="fas fa-file-word"></i>
-                        Экспорт в DOCX
+                        <span data-i18n="reports.export_docx">Экспорт в DOCX</span>
                     </button>
                 </div>
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>ФИО</th>
-                            <th>Должность</th>
-                            <th>Отработано часов</th>
-                            <th>Сверхурочные</th>
-                            <th>Ставка сверхурочных</th>
-                            <th>Доплата за сверхурочные</th>
+                            <th data-i18n="reports.full_name">ФИО</th>
+                            <th data-i18n="reports.position">Должность</th>
+                            <th data-i18n="reports.hours_worked">Отработано часов</th>
+                            <th data-i18n="reports.overtime">Сверхурочные</th>
+                            <th data-i18n="reports.overtime_rate">Ставка сверхурочных</th>
+                            <th data-i18n="reports.overtime_payment">Доплата за сверхурочные</th>
                         </tr>
                     </thead>
                     <tbody id="overtimeTable">
                         <tr>
                             <td colspan="6" style="text-align: center; padding: 2rem;">
-                                <div>Нажмите "Загрузить данные" для отображения информации</div>
+                                <div data-i18n="reports.load_overtime_prompt">Нажмите "Загрузить данные" для отображения информации</div>
                             </td>
                         </tr>
                     </tbody>
@@ -546,42 +655,42 @@
             <div class="card-header">
                 <div class="card-title">
                     <i class="fas fa-file-invoice-dollar"></i>
-                    Зарплата за вычетом налога
+                    <span data-i18n="reports.salary_tax">Зарплата за вычетом налога</span>
                 </div>
-                <div class="card-description">
-                    Расчет заработной платы сотрудников после вычета подоходного налога (12%)
+                <div class="card-description" id="salaryDescription" data-i18n="reports.salary_desc">
+                    Расчет заработной платы сотрудников после вычета подоходного налога (12%) за текущий месяц
                 </div>
             </div>
             <div class="card-content">
                 <div class="export-buttons">
                     <button id="loadSalaryTaxBtn" class="btn btn-primary">
                         <i class="fas fa-calculator"></i>
-                        Рассчитать зарплаты
+                        <span data-i18n="reports.calculate_salaries">Рассчитать зарплаты</span>
                     </button>
                     <button id="exportSalaryTxt" class="btn btn-success">
                         <i class="fas fa-file-alt"></i>
-                        Экспорт в TXT
+                        <span data-i18n="reports.export_txt">Экспорт в TXT</span>
                     </button>
                     <button id="exportSalaryDocx" class="btn btn-primary">
                         <i class="fas fa-file-word"></i>
-                        Экспорт в DOCX
+                        <span data-i18n="reports.export_docx">Экспорт в DOCX</span>
                     </button>
                 </div>
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>ФИО</th>
-                            <th>Должность</th>
-                            <th>Тип оплаты</th>
-                            <th>Общая зарплата</th>
-                            <th>Налог (12%)</th>
-                            <th>Зарплата на руки</th>
+                            <th data-i18n="reports.full_name">ФИО</th>
+                            <th data-i18n="reports.position">Должность</th>
+                            <th data-i18n="reports.payment_type">Тип оплаты</th>
+                            <th data-i18n="reports.total_salary">Общая зарплата</th>
+                            <th data-i18n="reports.tax">Налог (12%)</th>
+                            <th data-i18n="reports.net_salary">Зарплата на руки</th>
                         </tr>
                     </thead>
                     <tbody id="salaryTaxTable">
                         <tr>
                             <td colspan="6" style="text-align: center; padding: 2rem;">
-                                <div>Нажмите "Рассчитать зарплаты" для отображения информации</div>
+                                <div data-i18n="reports.calculate_prompt">Нажмите "Рассчитать зарплаты" для отображения информации</div>
                             </td>
                         </tr>
                     </tbody>
@@ -593,45 +702,45 @@
             <div class="card-header">
                 <div class="card-title">
                     <i class="fas fa-search-dollar"></i>
-                    Поиск сотрудников с низкой зарплатой
+                    <span data-i18n="reports.low_salary_search">Поиск сотрудников с низкой зарплатой</span>
                 </div>
-                <div class="card-description">
-                    Фильтрация сотрудников по уровню заработной платы
+                <div class="card-description" id="lowSalaryDescription" data-i18n="reports.low_salary_desc">
+                    Фильтрация сотрудников по уровню заработной платы за текущий месяц
                 </div>
             </div>
             <div class="card-content">
                 <div class="form-group">
-                    <label class="form-label">Порог зарплаты (BYN)</label>
+                    <label class="form-label" data-i18n="reports.salary_threshold">Порог зарплаты (BYN)</label>
                     <input type="number" id="salaryThreshold" class="form-control" min="0" value="2500" step="100">
                 </div>
                 <div class="export-buttons">
                     <button id="loadLowSalaryBtn" class="btn btn-secondary">
                         <i class="fas fa-filter"></i>
-                        Найти сотрудников
+                        <span data-i18n="reports.find_employees">Найти сотрудников</span>
                     </button>
                     <button id="exportLowSalaryTxt" class="btn btn-success">
                         <i class="fas fa-file-alt"></i>
-                        Экспорт в TXT
+                        <span data-i18n="reports.export_txt">Экспорт в TXT</span>
                     </button>
                     <button id="exportLowSalaryDocx" class="btn btn-primary">
                         <i class="fas fa-file-word"></i>
-                        Экспорт в DOCX
+                        <span data-i18n="reports.export_docx">Экспорт в DOCX</span>
                     </button>
                 </div>
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>ФИО</th>
-                            <th>Должность</th>
-                            <th>Тип оплаты</th>
-                            <th>Зарплата</th>
-                            <th>Статус</th>
+                            <th data-i18n="reports.full_name">ФИО</th>
+                            <th data-i18n="reports.position">Должность</th>
+                            <th data-i18n="reports.payment_type">Тип оплаты</th>
+                            <th data-i18n="reports.salary">Зарплата</th>
+                            <th data-i18n="reports.status">Статус</th>
                         </tr>
                     </thead>
                     <tbody id="lowSalaryTable">
                         <tr>
                             <td colspan="5" style="text-align: center; padding: 2rem;">
-                                <div>Установите порог и нажмите "Найти сотрудников"</div>
+                                <div data-i18n="reports.find_prompt">Установите порог и нажмите "Найти сотрудников"</div>
                             </td>
                         </tr>
                     </tbody>
@@ -647,14 +756,13 @@
                     <div class="logo-icon" style="width: 32px; height: 32px; font-size: 0.8rem;">БП</div>
                     <div>БухгалтерПро</div>
                 </div>
-                <p>Профессиональное решение для автоматизации бухгалтерского учета</p>
+                <p data-i18n="footer.description">Профессиональное решение для автоматизации бухгалтерского учета</p>
                 <div class="footer-links">
-                    <a href="about.html">О компании</a>
-                    <a href="contacts.html">Контакты</a>
-                    <a href="support.html">Поддержка</a>
-                    <a href="documentation.html">Документация</a>
+                    <a href="about.html" data-i18n="footer.about">О компании</a>
+                    <a href="contacts.html" data-i18n="footer.contacts">Контакты</a>
+                    <a href="support.html" data-i18n="footer.support">Поддержка</a>
                 </div>
-                <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
+                <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. <span data-i18n="footer.rights">Все права защищены.</span></p>
             </div>
         </div>
     </footer>
@@ -664,6 +772,20 @@
         let currentOvertimeData = [];
         let currentSalaryData = [];
         let currentLowSalaryData = [];
+        let currentMonth = 12;
+        let currentYear = 2024;
+
+        const monthNames = {
+            1: 'Январь', 2: 'Февраль', 3: 'Март', 4: 'Апрель',
+            5: 'Май', 6: 'Июнь', 7: 'Июль', 8: 'Август',
+            9: 'Сентябрь', 10: 'Октябрь', 11: 'Ноябрь', 12: 'Декабрь'
+        };
+
+        const monthNamesEN = {
+            1: 'January', 2: 'February', 3: 'March', 4: 'April',
+            5: 'May', 6: 'June', 7: 'July', 8: 'August',
+            9: 'September', 10: 'October', 11: 'November', 12: 'December'
+        };
 
         async function apiCall(endpoint, options = {}) {
             try {
@@ -673,12 +795,11 @@
                 }
                 return await response.json();
             } catch (error) {
-                console.error('Ошибка API:', error);
-                showMessage(`Ошибка при загрузке данных: ${error.message}`, 'error');
+                showMessage(`Data loading error: ${error.message}`, 'error');
                 return null;
             }
         }
-        
+
         function showMessage(message, type = 'info') {
             const messageContainer = document.getElementById('messageContainer');
             const messageEl = document.createElement('div');
@@ -699,16 +820,44 @@
             }) + ' BYN';
         }
 
+        function updatePeriodInfo() {
+            const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+            const monthName = isEnglish ? monthNamesEN[currentMonth] : monthNames[currentMonth];
+            document.getElementById('periodInfo').textContent = isEnglish ? 
+                `Current period: ${monthName} ${currentYear}` : 
+                `Текущий период: ${monthName} ${currentYear}`;
+            
+            const hoursDesc = document.getElementById('hoursDescription');
+            const overtimeDesc = document.getElementById('overtimeDescription');
+            const salaryDesc = document.getElementById('salaryDescription');
+            const lowSalaryDesc = document.getElementById('lowSalaryDescription');
+            
+            if (isEnglish) {
+                hoursDesc.textContent = `Update employee working hours data for ${monthName} ${currentYear}`;
+                overtimeDesc.textContent = `List of employees who worked overtime in ${monthName} ${currentYear}`;
+                salaryDesc.textContent = `Calculation of employee salaries after income tax deduction (12%) for ${monthName} ${currentYear}`;
+                lowSalaryDesc.textContent = `Filtering employees by salary level for ${monthName} ${currentYear}`;
+            } else {
+                hoursDesc.textContent = `Обновите данные по отработанным часам сотрудников за ${monthName} ${currentYear}`;
+                overtimeDesc.textContent = `Список сотрудников, отработавших сверхурочные часы за ${monthName} ${currentYear}`;
+                salaryDesc.textContent = `Расчет заработной платы сотрудников после вычета подоходного налога (12%) за ${monthName} ${currentYear}`;
+                lowSalaryDesc.textContent = `Фильтрация сотрудников по уровню заработной платы за ${monthName} ${currentYear}`;
+            }
+        }
+
         async function loadEmployees() {
-            const data = await apiCall('/employees');
+            const data = await apiCall(`/employees?month=${currentMonth}&year=${currentYear}`);
             if (data && data.length > 0) {
                 const select = document.getElementById('employeeSelect');
-                select.innerHTML = '<option value="">Выберите сотрудника</option>';
+                const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+                select.innerHTML = '<option value="">' + (isEnglish ? 'Select employee' : 'Выберите сотрудника') + '</option>';
                 
                 data.forEach(emp => {
                     const option = document.createElement('option');
                     option.value = emp.id;
                     option.textContent = `${emp.full_name} - ${emp.position}`;
+                    option.dataset.hours = emp.worked_hours || 160;
+                    option.dataset.overtime = emp.overtime_hours || 0;
                     select.appendChild(option);
                 });
             }
@@ -716,49 +865,54 @@
 
         async function loadOvertimeEmployees() {
             const overtimeTable = document.getElementById('overtimeTable');
-            overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Загрузка данных...</div></td></tr>';
+            const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
             
-            const data = await apiCall('/employees');
+            overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">' + (isEnglish ? 'Loading data...' : 'Загрузка данных...') + '</div></td></tr>';
+            
+            const data = await apiCall(`/employees?month=${currentMonth}&year=${currentYear}`);
             
             if (data && data.length > 0) {
-                currentOvertimeData = data.filter(emp => emp.overtime_hours > 0);
+                currentOvertimeData = data.filter(emp => (emp.overtime_hours || 0) > 0);
                 
                 if (currentOvertimeData.length > 0) {
                     overtimeTable.innerHTML = currentOvertimeData.map(emp => {
                         let overtimePay = 0;
                         if (emp.salary_type === 'оклад') {
                             const hourlyRate = emp.salary / 160;
-                            overtimePay = emp.overtime_hours * hourlyRate * emp.overtime_rate;
+                            overtimePay = (emp.overtime_hours || 0) * hourlyRate * emp.overtime_rate;
                         } else {
-                            overtimePay = emp.overtime_hours * emp.hourly_rate * emp.overtime_rate;
+                            overtimePay = (emp.overtime_hours || 0) * emp.hourly_rate * emp.overtime_rate;
                         }
                         
                         return `
                             <tr>
                                 <td>${emp.full_name}</td>
                                 <td>${emp.position}</td>
-                                <td>${emp.worked_hours} ч.</td>
-                                <td><span class="badge badge-warning">${emp.overtime_hours} ч.</span></td>
+                                <td>${emp.worked_hours || 160} ч.</td>
+                                <td><span class="badge badge-warning">${emp.overtime_hours || 0} ч.</span></td>
                                 <td>${emp.overtime_rate}x</td>
                                 <td>${formatCurrency(overtimePay)}</td>
                             </tr>
                         `;
                     }).join('');
                 } else {
-                    overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Нет сотрудников со сверхурочными часами</td></tr>';
+                    overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">' + (isEnglish ? 'No employees with overtime hours for selected period' : 'Нет сотрудников со сверхурочными часами за выбранный период') + '</td></tr>';
                 }
                 
-                showMessage(`Найдено ${currentOvertimeData.length} сотрудников со сверхурочными часами`, 'success');
+                const monthName = isEnglish ? monthNamesEN[currentMonth] : monthNames[currentMonth];
+                showMessage((isEnglish ? 'Found ' : 'Найдено ') + currentOvertimeData.length + (isEnglish ? ' employees with overtime hours for ' : ' сотрудников со сверхурочными часами за ') + monthName + ' ' + currentYear, 'success');
             } else {
-                overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Ошибка загрузки данных</td></tr>';
+                overtimeTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">' + (isEnglish ? 'Data loading error' : 'Ошибка загрузки данных') + '</td></tr>';
             }
         }
 
         async function loadSalaryWithTax() {
             const salaryTaxTable = document.getElementById('salaryTaxTable');
-            salaryTaxTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Расчет зарплат...</div></td></tr>';
+            const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
             
-            const data = await apiCall('/employees');
+            salaryTaxTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">' + (isEnglish ? 'Calculating salaries...' : 'Расчет зарплат...') + '</div></td></tr>';
+            
+            const data = await apiCall(`/employees?month=${currentMonth}&year=${currentYear}`);
             
             if (data && data.length > 0) {
                 currentSalaryData = data.map(emp => {
@@ -767,11 +921,11 @@
                     if (emp.salary_type === 'оклад') {
                         const baseSalary = parseFloat(emp.salary || 0);
                         const hourlyRate = baseSalary / 160;
-                        const overtimePay = emp.overtime_hours * hourlyRate * emp.overtime_rate;
+                        const overtimePay = (emp.overtime_hours || 0) * hourlyRate * emp.overtime_rate;
                         totalSalary = baseSalary + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
                     } else {
-                        const regularPay = emp.worked_hours * emp.hourly_rate;
-                        const overtimePay = emp.overtime_hours * emp.hourly_rate * emp.overtime_rate;
+                        const regularPay = (emp.worked_hours || 160) * emp.hourly_rate;
+                        const overtimePay = (emp.overtime_hours || 0) * emp.hourly_rate * emp.overtime_rate;
                         totalSalary = regularPay + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
                     }
                     
@@ -797,27 +951,35 @@
                     </tr>
                 `).join('');
                 
-                showMessage(`Рассчитаны зарплаты для ${currentSalaryData.length} сотрудников`, 'success');
+                const monthName = isEnglish ? monthNamesEN[currentMonth] : monthNames[currentMonth];
+                showMessage((isEnglish ? 'Salaries calculated for ' : 'Рассчитаны зарплаты для ') + currentSalaryData.length + (isEnglish ? ' employees for ' : ' сотрудников за ') + monthName + ' ' + currentYear, 'success');
             } else {
-                salaryTaxTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Ошибка загрузки данных</td></tr>';
+                salaryTaxTable.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">' + (isEnglish ? 'Data loading error' : 'Ошибка загрузки данных') + '</td></tr>';
             }
         }
 
         async function loadLowSalaryEmployees() {
             const threshold = parseFloat(document.getElementById('salaryThreshold').value) || 0;
             const lowSalaryTable = document.getElementById('lowSalaryTable');
-            lowSalaryTable.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Поиск сотрудников...</div></td></tr>';
+            const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
             
-            const data = await apiCall('/employees');
+            lowSalaryTable.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">' + (isEnglish ? 'Searching employees...' : 'Поиск сотрудников...') + '</div></td></tr>';
+            
+            const data = await apiCall(`/employees?month=${currentMonth}&year=${currentYear}`);
             
             if (data && data.length > 0) {
                 currentLowSalaryData = data.filter(emp => {
                     let salary = 0;
                     
                     if (emp.salary_type === 'оклад') {
-                        salary = parseFloat(emp.salary || 0);
+                        const baseSalary = parseFloat(emp.salary || 0);
+                        const hourlyRate = baseSalary / 160;
+                        const overtimePay = (emp.overtime_hours || 0) * hourlyRate * emp.overtime_rate;
+                        salary = baseSalary + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
                     } else {
-                        salary = emp.worked_hours * emp.hourly_rate;
+                        const regularPay = (emp.worked_hours || 160) * emp.hourly_rate;
+                        const overtimePay = (emp.overtime_hours || 0) * emp.hourly_rate * emp.overtime_rate;
+                        salary = regularPay + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
                     }
                     
                     return salary < threshold;
@@ -829,17 +991,22 @@
                         let salaryType = '';
                         
                         if (emp.salary_type === 'оклад') {
-                            salary = parseFloat(emp.salary || 0);
-                            salaryType = 'Оклад';
+                            const baseSalary = parseFloat(emp.salary || 0);
+                            const hourlyRate = baseSalary / 160;
+                            const overtimePay = (emp.overtime_hours || 0) * hourlyRate * emp.overtime_rate;
+                            salary = baseSalary + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
+                            salaryType = isEnglish ? 'Salary' : 'Оклад';
                         } else {
-                            salary = emp.worked_hours * emp.hourly_rate;
-                            salaryType = 'Почасовая';
+                            const regularPay = (emp.worked_hours || 160) * emp.hourly_rate;
+                            const overtimePay = (emp.overtime_hours || 0) * emp.hourly_rate * emp.overtime_rate;
+                            salary = regularPay + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
+                            salaryType = isEnglish ? 'Hourly' : 'Почасовая';
                         }
                         
                         const status = salary < threshold * 0.7 ? 'badge badge-danger' : 
                                       salary < threshold * 0.9 ? 'badge badge-warning' : 'badge badge-success';
-                        const statusText = salary < threshold * 0.7 ? 'Низкая' : 
-                                         salary < threshold * 0.9 ? 'Средняя' : 'Приемлемая';
+                        const statusText = salary < threshold * 0.7 ? (isEnglish ? 'Low' : 'Низкая') : 
+                                         salary < threshold * 0.9 ? (isEnglish ? 'Medium' : 'Средняя') : (isEnglish ? 'Acceptable' : 'Приемлемая');
                         
                         return `
                             <tr>
@@ -852,12 +1019,14 @@
                         `;
                     }).join('');
                 } else {
-                    lowSalaryTable.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem;">Нет сотрудников с зарплатой ниже ${formatCurrency(threshold)}</td></tr>`;
+                    const monthName = isEnglish ? monthNamesEN[currentMonth] : monthNames[currentMonth];
+                    lowSalaryTable.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem;">` + (isEnglish ? 'No employees with salary below ' : 'Нет сотрудников с зарплатой ниже ') + formatCurrency(threshold) + (isEnglish ? ' for ' : ' за ') + monthName + ' ' + currentYear + `</td></tr>`;
                 }
                 
-                showMessage(`Найдено ${currentLowSalaryData.length} сотрудников с зарплатой ниже ${formatCurrency(threshold)}`, 'success');
+                const monthName = isEnglish ? monthNamesEN[currentMonth] : monthNames[currentMonth];
+                showMessage((isEnglish ? 'Found ' : 'Найдено ') + currentLowSalaryData.length + (isEnglish ? ' employees with salary below ' : ' сотрудников с зарплатой ниже ') + formatCurrency(threshold) + (isEnglish ? ' for ' : ' за ') + monthName + ' ' + currentYear, 'success');
             } else {
-                lowSalaryTable.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">Ошибка загрузки данных</td></tr>';
+                lowSalaryTable.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">' + (isEnglish ? 'Data loading error' : 'Ошибка загрузки данных') + '</td></tr>';
             }
         }
 
@@ -867,291 +1036,650 @@
             const employeeId = document.getElementById('employeeSelect').value;
             const workedHours = document.getElementById('workedHours').value;
             const overtimeHours = document.getElementById('overtimeHours').value;
+            const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
             
             if (!employeeId) {
-                showMessage('Выберите сотрудника', 'error');
+                showMessage(isEnglish ? 'Select employee' : 'Выберите сотрудника', 'error');
                 return;
             }
             
             try {
-                const response = await apiCall(`/employees/${employeeId}`, {
-                    method: 'PUT',
+                const response = await apiCall('/monthly-data', {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
+                        employee_id: parseInt(employeeId),
+                        month: currentMonth,
+                        year: currentYear,
                         worked_hours: parseInt(workedHours),
                         overtime_hours: parseInt(overtimeHours)
                     })
                 });
                 
                 if (response) {
-                    showMessage('Данные успешно обновлены', 'success');
+                    showMessage(isEnglish ? 'Data saved successfully' : 'Данные успешно сохранены', 'success');
                     document.getElementById('hoursForm').reset();
+                    
+                    loadOvertimeEmployees();
+                    loadSalaryWithTax();
                 }
             } catch (error) {
-                showMessage('Ошибка при обновлении данных', 'error');
+                showMessage(isEnglish ? 'Error saving data' : 'Ошибка при сохранении данных', 'error');
             }
         }
 
-        function exportToTxt(data, filename, headers, rowFormatter) {
-            let content = headers.join('\t') + '\n';
+        function applyPeriod() {
+            currentMonth = parseInt(document.getElementById('reportMonth').value);
+            currentYear = parseInt(document.getElementById('reportYear').value);
+            updatePeriodInfo();
             
-            data.forEach(item => {
-                const row = rowFormatter(item);
-                content += row.join('\t') + '\n';
-            });
+            const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+            const monthName = isEnglish ? monthNamesEN[currentMonth] : monthNames[currentMonth];
+            showMessage((isEnglish ? 'Period changed to ' : 'Период изменен на ') + monthName + ' ' + currentYear, 'success');
             
-            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-            saveAs(blob, `${filename}.txt`);
+            loadEmployees();
+            
+            const overtimeMsg = isEnglish ? 'Click "Load data" to display information' : 'Нажмите "Загрузить данные" для отображения информации';
+            const salaryMsg = isEnglish ? 'Click "Calculate salaries" to display information' : 'Нажмите "Рассчитать зарплаты" для отображения информации';
+            const lowSalaryMsg = isEnglish ? 'Set threshold and click "Find employees"' : 'Установите порог и нажмите "Найти сотрудников"';
+            
+            document.getElementById('overtimeTable').innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;"><div>' + overtimeMsg + '</div></td></tr>';
+            document.getElementById('salaryTaxTable').innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;"><div>' + salaryMsg + '</div></td></tr>';
+            document.getElementById('lowSalaryTable').innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;"><div>' + lowSalaryMsg + '</div></td></tr>';
+            
+            currentOvertimeData = [];
+            currentSalaryData = [];
+            currentLowSalaryData = [];
         }
 
-        function exportToDocx(data, filename, headers, rowFormatter, title) {
-            const { Document, Paragraph, Table, TableCell, TableRow, TextRun, HeadingLevel, AlignmentType } = docx;
+        function exportToTxt(data, type) {
+            const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+            const monthName = isEnglish ? monthNamesEN[currentMonth] : monthNames[currentMonth];
             
-            const tableRows = [
-                new TableRow({
-                    children: headers.map(header => 
-                        new TableCell({
-                            children: [new Paragraph({
-                                children: [new TextRun({ text: header, bold: true })],
-                                alignment: AlignmentType.CENTER
-                            })]
-                        })
-                    ),
-                    tableHeader: true
-                }),
-                ...data.map(item => {
-                    const rowData = rowFormatter(item);
-                    return new TableRow({
-                        children: rowData.map(cell => 
-                            new TableCell({
-                                children: [new Paragraph({ text: cell })]
-                            })
-                        )
-                    });
-                })
-            ];
+            let content = '';
             
-            const table = new Table({
-                rows: tableRows,
-                width: {
-                    size: 100,
-                    type: docx.WidthType.PERCENTAGE,
-                },
-            });
+            if (type === 'overtime') {
+                content = isEnglish ? 
+                    `=== Overtime Employees Report ===\n` +
+                    `Period: ${monthName} ${currentYear}\n` +
+                    `Generated: ${new Date().toLocaleDateString()}\n` +
+                    `Total employees with overtime: ${data.length}\n\n` +
+                    data.map(emp => {
+                        let overtimePay = 0;
+                        if (emp.salary_type === 'оклад') {
+                            const hourlyRate = emp.salary / 160;
+                            overtimePay = (emp.overtime_hours || 0) * hourlyRate * emp.overtime_rate;
+                        } else {
+                            overtimePay = (emp.overtime_hours || 0) * emp.hourly_rate * emp.overtime_rate;
+                        }
+                        
+                        return `Name: ${emp.full_name}\n` +
+                               `Position: ${emp.position}\n` +
+                               `Worked hours: ${emp.worked_hours || 160}\n` +
+                               `Overtime hours: ${emp.overtime_hours || 0}\n` +
+                               `Overtime rate: ${emp.overtime_rate}x\n` +
+                               `Overtime payment: ${formatCurrency(overtimePay)}\n` +
+                               `----------------------------------------\n`;
+                    }).join('\n') :
+                    
+                    `=== Отчет по сотрудникам со сверхурочными ===\n` +
+                    `Период: ${monthName} ${currentYear}\n` +
+                    `Сформирован: ${new Date().toLocaleDateString()}\n` +
+                    `Всего сотрудников со сверхурочными: ${data.length}\n\n` +
+                    data.map(emp => {
+                        let overtimePay = 0;
+                        if (emp.salary_type === 'оклад') {
+                            const hourlyRate = emp.salary / 160;
+                            overtimePay = (emp.overtime_hours || 0) * hourlyRate * emp.overtime_rate;
+                        } else {
+                            overtimePay = (emp.overtime_hours || 0) * emp.hourly_rate * emp.overtime_rate;
+                        }
+                        
+                        return `ФИО: ${emp.full_name}\n` +
+                               `Должность: ${emp.position}\n` +
+                               `Отработано часов: ${emp.worked_hours || 160}\n` +
+                               `Сверхурочные часы: ${emp.overtime_hours || 0}\n` +
+                               `Ставка сверхурочных: ${emp.overtime_rate}x\n` +
+                               `Доплата за сверхурочные: ${formatCurrency(overtimePay)}\n` +
+                               `----------------------------------------\n`;
+                    }).join('\n');
+                    
+            } else if (type === 'salary') {
+                content = isEnglish ?
+                    `=== Salary Report with Tax ===\n` +
+                    `Period: ${monthName} ${currentYear}\n` +
+                    `Generated: ${new Date().toLocaleDateString()}\n` +
+                    `Total employees: ${data.length}\n\n` +
+                    data.map(emp => {
+                        return `Name: ${emp.full_name}\n` +
+                               `Position: ${emp.position}\n` +
+                               `Payment type: ${emp.salary_type}\n` +
+                               `Total salary: ${formatCurrency(emp.totalSalary)}\n` +
+                               `Tax (12%): ${formatCurrency(emp.tax)}\n` +
+                               `Net salary: ${formatCurrency(emp.netSalary)}\n` +
+                               `----------------------------------------\n`;
+                    }).join('\n') :
+                    
+                    `=== Отчет по зарплате с налогом ===\n` +
+                    `Период: ${monthName} ${currentYear}\n` +
+                    `Сформирован: ${new Date().toLocaleDateString()}\n` +
+                    `Всего сотрудников: ${data.length}\n\n` +
+                    data.map(emp => {
+                        return `ФИО: ${emp.full_name}\n` +
+                               `Должность: ${emp.position}\n` +
+                               `Тип оплаты: ${emp.salary_type}\n` +
+                               `Общая зарплата: ${formatCurrency(emp.totalSalary)}\n` +
+                               `Налог (12%): ${formatCurrency(emp.tax)}\n` +
+                               `Зарплата на руки: ${formatCurrency(emp.netSalary)}\n` +
+                               `----------------------------------------\n`;
+                    }).join('\n');
+                    
+            } else if (type === 'lowSalary') {
+                const threshold = document.getElementById('salaryThreshold').value;
+                content = isEnglish ?
+                    `=== Low Salary Employees Report ===\n` +
+                    `Period: ${monthName} ${currentYear}\n` +
+                    `Salary threshold: ${formatCurrency(threshold)}\n` +
+                    `Generated: ${new Date().toLocaleDateString()}\n` +
+                    `Total employees below threshold: ${data.length}\n\n` +
+                    data.map(emp => {
+                        let salary = 0;
+                        let salaryType = '';
+                        
+                        if (emp.salary_type === 'оклад') {
+                            const baseSalary = parseFloat(emp.salary || 0);
+                            const hourlyRate = baseSalary / 160;
+                            const overtimePay = (emp.overtime_hours || 0) * hourlyRate * emp.overtime_rate;
+                            salary = baseSalary + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
+                            salaryType = 'Salary';
+                        } else {
+                            const regularPay = (emp.worked_hours || 160) * emp.hourly_rate;
+                            const overtimePay = (emp.overtime_hours || 0) * emp.hourly_rate * emp.overtime_rate;
+                            salary = regularPay + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
+                            salaryType = 'Hourly';
+                        }
+                        
+                        const status = salary < threshold * 0.7 ? 'Low' : 
+                                      salary < threshold * 0.9 ? 'Medium' : 'Acceptable';
+                        
+                        return `Name: ${emp.full_name}\n` +
+                               `Position: ${emp.position}\n` +
+                               `Payment type: ${salaryType}\n` +
+                               `Salary: ${formatCurrency(salary)}\n` +
+                               `Status: ${status}\n` +
+                               `----------------------------------------\n`;
+                    }).join('\n') :
+                    
+                    `=== Отчет по сотрудникам с низкой зарплатой ===\n` +
+                    `Период: ${monthName} ${currentYear}\n` +
+                    `Порог зарплаты: ${formatCurrency(threshold)}\n` +
+                    `Сформирован: ${new Date().toLocaleDateString()}\n` +
+                    `Всего сотрудников ниже порога: ${data.length}\n\n` +
+                    data.map(emp => {
+                        let salary = 0;
+                        let salaryType = '';
+                        
+                        if (emp.salary_type === 'оклад') {
+                            const baseSalary = parseFloat(emp.salary || 0);
+                            const hourlyRate = baseSalary / 160;
+                            const overtimePay = (emp.overtime_hours || 0) * hourlyRate * emp.overtime_rate;
+                            salary = baseSalary + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
+                            salaryType = 'Оклад';
+                        } else {
+                            const regularPay = (emp.worked_hours || 160) * emp.hourly_rate;
+                            const overtimePay = (emp.overtime_hours || 0) * emp.hourly_rate * emp.overtime_rate;
+                            salary = regularPay + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
+                            salaryType = 'Почасовая';
+                        }
+                        
+                        const status = salary < threshold * 0.7 ? 'Низкая' : 
+                                      salary < threshold * 0.9 ? 'Средняя' : 'Приемлемая';
+                        
+                        return `ФИО: ${emp.full_name}\n` +
+                               `Должность: ${emp.position}\n` +
+                               `Тип оплаты: ${salaryType}\n` +
+                               `Зарплата: ${formatCurrency(salary)}\n` +
+                               `Статус: ${status}\n` +
+                               `----------------------------------------\n`;
+                    }).join('\n');
+            }
+            
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const filename = isEnglish ? 
+                `${type}_report_${monthName}_${currentYear}.txt` : 
+                `${type}_отчет_${monthName}_${currentYear}.txt`;
+            
+            saveAs(blob, filename);
+            showMessage(isEnglish ? 'Report exported to TXT' : 'Отчет экспортирован в TXT', 'success');
+        }
+
+        async function exportToDocx(data, type) {
+            const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+            const monthName = isEnglish ? monthNamesEN[currentMonth] : monthNames[currentMonth];
+            
+            const { Document, Paragraph, TextRun, Table, TableRow, TableCell, AlignmentType, HeadingLevel } = docx;
             
             const doc = new Document({
                 sections: [{
                     properties: {},
                     children: [
                         new Paragraph({
-                            text: title,
-                            heading: HeadingLevel.HEADING_1,
+                            text: isEnglish ? 'AccountantPro Report' : 'Отчет БухгалтерПро',
+                            heading: HeadingLevel.TITLE,
                             alignment: AlignmentType.CENTER
                         }),
-                        new Paragraph({ text: "" }),
+                        
                         new Paragraph({
-                            text: `Дата формирования: ${new Date().toLocaleDateString('ru-RU')}`,
-                            alignment: AlignmentType.LEFT
+                            children: [
+                                new TextRun({
+                                    text: isEnglish ? `Report type: ${type === 'overtime' ? 'Overtime Employees' : type === 'salary' ? 'Salary with Tax' : 'Low Salary Employees'}` : 
+                                                    `Тип отчета: ${type === 'overtime' ? 'Сотрудники со сверхурочными' : type === 'salary' ? 'Зарплата с налогом' : 'Сотрудники с низкой зарплатой'}`,
+                                    bold: true
+                                })
+                            ],
+                            spacing: { after: 200 }
                         }),
-                        new Paragraph({ text: "" }),
-                        table
+                        
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: isEnglish ? `Period: ${monthName} ${currentYear}` : `Период: ${monthName} ${currentYear}`
+                                })
+                            ]
+                        }),
+                        
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: isEnglish ? `Generated: ${new Date().toLocaleDateString()}` : `Сформирован: ${new Date().toLocaleDateString()}`
+                                })
+                            ],
+                            spacing: { after: 400 }
+                        })
                     ]
                 }]
             });
             
-            docx.Packer.toBlob(doc).then(blob => {
-                saveAs(blob, `${filename}.docx`);
-            });
-        }
-
-        function exportOvertimeToTxt() {
-            if (currentOvertimeData.length === 0) {
-                showMessage('Нет данных для экспорта', 'error');
-                return;
+            if (type === 'overtime') {
+                const table = new Table({
+                    rows: [
+                        new TableRow({
+                            children: [
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Name' : 'ФИО')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Position' : 'Должность')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Hours' : 'Часы')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Overtime' : 'Сверхурочные')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Rate' : 'Ставка')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Payment' : 'Доплата')] })
+                            ]
+                        }),
+                        ...data.map(emp => {
+                            let overtimePay = 0;
+                            if (emp.salary_type === 'оклад') {
+                                const hourlyRate = emp.salary / 160;
+                                overtimePay = (emp.overtime_hours || 0) * hourlyRate * emp.overtime_rate;
+                            } else {
+                                overtimePay = (emp.overtime_hours || 0) * emp.hourly_rate * emp.overtime_rate;
+                            }
+                            
+                            return new TableRow({
+                                children: [
+                                    new TableCell({ children: [new Paragraph(emp.full_name)] }),
+                                    new TableCell({ children: [new Paragraph(emp.position)] }),
+                                    new TableCell({ children: [new Paragraph((emp.worked_hours || 160) + ' ' + (isEnglish ? 'h' : 'ч.'))] }),
+                                    new TableCell({ children: [new Paragraph((emp.overtime_hours || 0) + ' ' + (isEnglish ? 'h' : 'ч.'))] }),
+                                    new TableCell({ children: [new Paragraph(emp.overtime_rate + 'x')] }),
+                                    new TableCell({ children: [new Paragraph(formatCurrency(overtimePay))] })
+                                ]
+                            });
+                        })
+                    ]
+                });
+                
+                doc.addSection({
+                    children: [table]
+                });
+                
+            } else if (type === 'salary') {
+                const table = new Table({
+                    rows: [
+                        new TableRow({
+                            children: [
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Name' : 'ФИО')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Position' : 'Должность')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Type' : 'Тип')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Total' : 'Всего')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Tax' : 'Налог')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Net' : 'На руки')] })
+                            ]
+                        }),
+                        ...data.map(emp => {
+                            return new TableRow({
+                                children: [
+                                    new TableCell({ children: [new Paragraph(emp.full_name)] }),
+                                    new TableCell({ children: [new Paragraph(emp.position)] }),
+                                    new TableCell({ children: [new Paragraph(emp.salary_type)] }),
+                                    new TableCell({ children: [new Paragraph(formatCurrency(emp.totalSalary))] }),
+                                    new TableCell({ children: [new Paragraph(formatCurrency(emp.tax))] }),
+                                    new TableCell({ children: [new Paragraph(formatCurrency(emp.netSalary))] })
+                                ]
+                            });
+                        })
+                    ]
+                });
+                
+                doc.addSection({
+                    children: [table]
+                });
+                
+            } else if (type === 'lowSalary') {
+                const threshold = document.getElementById('salaryThreshold').value;
+                
+                const table = new Table({
+                    rows: [
+                        new TableRow({
+                            children: [
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Name' : 'ФИО')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Position' : 'Должность')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Type' : 'Тип')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Salary' : 'Зарплата')] }),
+                                new TableCell({ children: [new Paragraph(isEnglish ? 'Status' : 'Статус')] })
+                            ]
+                        }),
+                        ...data.map(emp => {
+                            let salary = 0;
+                            let salaryType = '';
+                            
+                            if (emp.salary_type === 'оклад') {
+                                const baseSalary = parseFloat(emp.salary || 0);
+                                const hourlyRate = baseSalary / 160;
+                                const overtimePay = (emp.overtime_hours || 0) * hourlyRate * emp.overtime_rate;
+                                salary = baseSalary + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
+                                salaryType = isEnglish ? 'Salary' : 'Оклад';
+                            } else {
+                                const regularPay = (emp.worked_hours || 160) * emp.hourly_rate;
+                                const overtimePay = (emp.overtime_hours || 0) * emp.hourly_rate * emp.overtime_rate;
+                                salary = regularPay + overtimePay + parseFloat(emp.bonus || 0) + parseFloat(emp.one_time_payment || 0);
+                                salaryType = isEnglish ? 'Hourly' : 'Почасовая';
+                            }
+                            
+                            const status = salary < threshold * 0.7 ? (isEnglish ? 'Low' : 'Низкая') : 
+                                          salary < threshold * 0.9 ? (isEnglish ? 'Medium' : 'Средняя') : (isEnglish ? 'Acceptable' : 'Приемлемая');
+                            
+                            return new TableRow({
+                                children: [
+                                    new TableCell({ children: [new Paragraph(emp.full_name)] }),
+                                    new TableCell({ children: [new Paragraph(emp.position)] }),
+                                    new TableCell({ children: [new Paragraph(salaryType)] }),
+                                    new TableCell({ children: [new Paragraph(formatCurrency(salary))] }),
+                                    new TableCell({ children: [new Paragraph(status)] })
+                                ]
+                            });
+                        })
+                    ]
+                });
+                
+                doc.addSection({
+                    children: [table]
+                });
             }
             
-            const headers = ['ФИО', 'Должность', 'Отработано часов', 'Сверхурочные', 'Ставка', 'Доплата'];
-            
-            exportToTxt(currentOvertimeData, 'сверхурочные_отчет', headers, (emp) => {
-                let overtimePay = 0;
-                if (emp.salary_type === 'оклад') {
-                    const hourlyRate = emp.salary / 160;
-                    overtimePay = emp.overtime_hours * hourlyRate * emp.overtime_rate;
-                } else {
-                    overtimePay = emp.overtime_hours * emp.hourly_rate * emp.overtime_rate;
-                }
-                
-                return [
-                    emp.full_name,
-                    emp.position,
-                    `${emp.worked_hours} ч.`,
-                    `${emp.overtime_hours} ч.`,
-                    `${emp.overtime_rate}x`,
-                    formatCurrency(overtimePay)
-                ];
-            });
-            
-            showMessage('Отчет по сверхурочным экспортирован в TXT', 'success');
-        }
-
-        function exportOvertimeToDocx() {
-            if (currentOvertimeData.length === 0) {
-                showMessage('Нет данных для экспорта', 'error');
-                return;
-            }
-            
-            const headers = ['ФИО', 'Должность', 'Отработано часов', 'Сверхурочные', 'Ставка', 'Доплата'];
-            
-            exportToDocx(currentOvertimeData, 'сверхурочные_отчет', headers, (emp) => {
-                let overtimePay = 0;
-                if (emp.salary_type === 'оклад') {
-                    const hourlyRate = emp.salary / 160;
-                    overtimePay = emp.overtime_hours * hourlyRate * emp.overtime_rate;
-                } else {
-                    overtimePay = emp.overtime_hours * emp.hourly_rate * emp.overtime_rate;
-                }
-                
-                return [
-                    emp.full_name,
-                    emp.position,
-                    `${emp.worked_hours} ч.`,
-                    `${emp.overtime_hours} ч.`,
-                    `${emp.overtime_rate}x`,
-                    formatCurrency(overtimePay)
-                ];
-            }, 'Отчет по сверхурочным работам');
-            
-            showMessage('Отчет по сверхурочным экспортирован в DOCX', 'success');
-        }
-
-        function exportSalaryToTxt() {
-            if (currentSalaryData.length === 0) {
-                showMessage('Нет данных для экспорта', 'error');
-                return;
-            }
-            
-            const headers = ['ФИО', 'Должность', 'Тип оплаты', 'Общая зарплата', 'Налог (12%)', 'Зарплата на руки'];
-            
-            exportToTxt(currentSalaryData, 'зарплата_отчет', headers, (emp) => [
-                emp.full_name,
-                emp.position,
-                emp.salary_type,
-                formatCurrency(emp.totalSalary),
-                formatCurrency(emp.tax),
-                formatCurrency(emp.netSalary)
-            ]);
-            
-            showMessage('Отчет по зарплатам экспортирован в TXT', 'success');
-        }
-
-        function exportSalaryToDocx() {
-            if (currentSalaryData.length === 0) {
-                showMessage('Нет данных для экспорта', 'error');
-                return;
-            }
-            
-            const headers = ['ФИО', 'Должность', 'Тип оплаты', 'Общая зарплата', 'Налог (12%)', 'Зарплата на руки'];
-            
-            exportToDocx(currentSalaryData, 'зарплата_отчет', headers, (emp) => [
-                emp.full_name,
-                emp.position,
-                emp.salary_type,
-                formatCurrency(emp.totalSalary),
-                formatCurrency(emp.tax),
-                formatCurrency(emp.netSalary)
-            ], 'Отчет по заработной плате с учетом налогов');
-            
-            showMessage('Отчет по зарплатам экспортирован в DOCX', 'success');
-        }
-
-        function exportLowSalaryToTxt() {
-            if (currentLowSalaryData.length === 0) {
-                showMessage('Нет данных для экспорта', 'error');
-                return;
-            }
-            
-            const threshold = parseFloat(document.getElementById('salaryThreshold').value) || 0;
-            const headers = ['ФИО', 'Должность', 'Тип оплаты', 'Зарплата', 'Статус'];
-            
-            exportToTxt(currentLowSalaryData, 'низкая_зарплата_отчет', headers, (emp) => {
-                let salary = 0;
-                let salaryType = '';
-                
-                if (emp.salary_type === 'оклад') {
-                    salary = parseFloat(emp.salary || 0);
-                    salaryType = 'Оклад';
-                } else {
-                    salary = emp.worked_hours * emp.hourly_rate;
-                    salaryType = 'Почасовая';
-                }
-                
-                const status = salary < threshold * 0.7 ? 'Низкая' : 
-                              salary < threshold * 0.9 ? 'Средняя' : 'Приемлемая';
-                
-                return [
-                    emp.full_name,
-                    emp.position,
-                    salaryType,
-                    formatCurrency(salary),
-                    status
-                ];
+            const summary = new Paragraph({
+                text: isEnglish ? 
+                    `Total records: ${data.length}` : 
+                    `Всего записей: ${data.length}`,
+                alignment: AlignmentType.RIGHT,
+                spacing: { before: 400 }
             });
             
-            showMessage('Отчет по низким зарплатам экспортирован в TXT', 'success');
+            doc.addSection({
+                children: [summary]
+            });
+            
+            const blob = await docx.Packer.toBlob(doc);
+            const filename = isEnglish ? 
+                `${type}_report_${monthName}_${currentYear}.docx` : 
+                `${type}_отчет_${monthName}_${currentYear}.docx`;
+            
+            saveAs(blob, filename);
+            showMessage(isEnglish ? 'Report exported to DOCX' : 'Отчет экспортирован в DOCX', 'success');
         }
 
-        function exportLowSalaryToDocx() {
-            if (currentLowSalaryData.length === 0) {
-                showMessage('Нет данных для экспорта', 'error');
-                return;
+        function applyTranslations(lang) {
+            document.getElementById('htmlLang').setAttribute('lang', lang);
+            localStorage.setItem('selectedLanguage', lang);
+            
+            if (lang === 'en') {
+                document.querySelector('title').textContent = 'AccountantPro - Reports';
+                document.querySelector('.hero h1').textContent = 'Payroll Reports';
+                document.querySelector('.hero p').textContent = 'Analytics, calculations and employee payment management';
+                
+                const navLinks = document.querySelectorAll('.nav-links a');
+                navLinks[0].textContent = 'Home';
+                navLinks[1].textContent = 'Employees';
+                navLinks[2].textContent = 'Departments';
+                navLinks[3].textContent = 'Reports';
+                navLinks[4].textContent = 'Settings';
+                
+                document.querySelector('.section-title h2').textContent = 'Financial Analytics';
+                document.querySelector('.section-title p').textContent = 'Complete payroll and performance reports';
+                
+                const cardTitles = document.querySelectorAll('.card-title span');
+                cardTitles[0].textContent = 'Select period for reports';
+                cardTitles[1].textContent = 'Worked hours input';
+                cardTitles[2].textContent = 'Employees with overtime hours';
+                cardTitles[3].textContent = 'Salary after tax';
+                cardTitles[4].textContent = 'Low salary employee search';
+                
+                const formLabels = document.querySelectorAll('.form-label');
+                formLabels[0].textContent = 'Month';
+                formLabels[1].textContent = 'Year';
+                formLabels[2].textContent = 'Employee';
+                formLabels[3].textContent = 'Worked hours';
+                formLabels[4].textContent = 'Overtime hours';
+                formLabels[5].textContent = 'Salary threshold (BYN)';
+                
+                const buttons = document.querySelectorAll('.btn span');
+                buttons[0].textContent = 'Apply period';
+                buttons[1].textContent = 'Save data';
+                buttons[2].textContent = 'Load data';
+                buttons[3].textContent = 'Export to TXT';
+                buttons[4].textContent = 'Export to DOCX';
+                buttons[5].textContent = 'Calculate salaries';
+                buttons[6].textContent = 'Find employees';
+                
+                const tableHeaders = document.querySelectorAll('thead th');
+                tableHeaders[0].textContent = 'Full Name';
+                tableHeaders[1].textContent = 'Position';
+                tableHeaders[2].textContent = 'Hours worked';
+                tableHeaders[3].textContent = 'Overtime';
+                tableHeaders[4].textContent = 'Overtime rate';
+                tableHeaders[5].textContent = 'Overtime payment';
+                tableHeaders[6].textContent = 'Payment type';
+                tableHeaders[7].textContent = 'Total salary';
+                tableHeaders[8].textContent = 'Tax (12%)';
+                tableHeaders[9].textContent = 'Net salary';
+                tableHeaders[10].textContent = 'Status';
+                
+                const tablePrompts = document.querySelectorAll('tbody div');
+                tablePrompts[0].textContent = 'Click "Load data" to display information';
+                tablePrompts[1].textContent = 'Click "Calculate salaries" to display information';
+                tablePrompts[2].textContent = 'Set threshold and click "Find employees"';
+                
+                document.querySelector('.footer p').textContent = 'Professional solution for accounting automation';
+                const footerLinks = document.querySelectorAll('.footer-links a');
+                footerLinks[0].textContent = 'About Company';
+                footerLinks[1].textContent = 'Contacts';
+                footerLinks[2].textContent = 'Support';
+                footerLinks[3].textContent = 'Documentation';
+                
+                document.querySelector('.footer p:last-child').innerHTML = '&copy; 2025 AccountantPro. All rights reserved.';
+                
+            } else {
+                document.querySelector('title').textContent = 'БухгалтерПро - Отчеты';
+                document.querySelector('.hero h1').textContent = 'Отчеты по заработной плате';
+                document.querySelector('.hero p').textContent = 'Аналитика, расчеты и управление оплатой труда сотрудников';
+                
+                const navLinks = document.querySelectorAll('.nav-links a');
+                navLinks[0].textContent = 'Главная';
+                navLinks[1].textContent = 'Сотрудники';
+                navLinks[2].textContent = 'Отделы';
+                navLinks[3].textContent = 'Отчеты';
+                navLinks[4].textContent = 'Настройки';
+                
+                document.querySelector('.section-title h2').textContent = 'Финансовая аналитика';
+                document.querySelector('.section-title p').textContent = 'Полные отчеты по заработной плате и производительности';
+                
+                const cardTitles = document.querySelectorAll('.card-title span');
+                cardTitles[0].textContent = 'Выбор периода для отчетов';
+                cardTitles[1].textContent = 'Ввод отработанных часов';
+                cardTitles[2].textContent = 'Сотрудники со сверхурочными часами';
+                cardTitles[3].textContent = 'Зарплата за вычетом налога';
+                cardTitles[4].textContent = 'Поиск сотрудников с низкой зарплатой';
+                
+                const formLabels = document.querySelectorAll('.form-label');
+                formLabels[0].textContent = 'Месяц';
+                formLabels[1].textContent = 'Год';
+                formLabels[2].textContent = 'Сотрудник';
+                formLabels[3].textContent = 'Отработанные часы';
+                formLabels[4].textContent = 'Сверхурочные часы';
+                formLabels[5].textContent = 'Порог зарплаты (BYN)';
+                
+                const buttons = document.querySelectorAll('.btn span');
+                buttons[0].textContent = 'Применить период';
+                buttons[1].textContent = 'Сохранить данные';
+                buttons[2].textContent = 'Загрузить данные';
+                buttons[3].textContent = 'Экспорт в TXT';
+                buttons[4].textContent = 'Экспорт в DOCX';
+                buttons[5].textContent = 'Рассчитать зарплаты';
+                buttons[6].textContent = 'Найти сотрудников';
+                
+                const tableHeaders = document.querySelectorAll('thead th');
+                tableHeaders[0].textContent = 'ФИО';
+                tableHeaders[1].textContent = 'Должность';
+                tableHeaders[2].textContent = 'Отработано часов';
+                tableHeaders[3].textContent = 'Сверхурочные';
+                tableHeaders[4].textContent = 'Ставка сверхурочных';
+                tableHeaders[5].textContent = 'Доплата за сверхурочные';
+                tableHeaders[6].textContent = 'Тип оплаты';
+                tableHeaders[7].textContent = 'Общая зарплата';
+                tableHeaders[8].textContent = 'Налог (12%)';
+                tableHeaders[9].textContent = 'Зарплата на руки';
+                tableHeaders[10].textContent = 'Статус';
+                
+                const tablePrompts = document.querySelectorAll('tbody div');
+                tablePrompts[0].textContent = 'Нажмите "Загрузить данные" для отображения информации';
+                tablePrompts[1].textContent = 'Нажмите "Рассчитать зарплаты" для отображения информации';
+                tablePrompts[2].textContent = 'Установите порог и нажмите "Найти сотрудников"';
+                
+                document.querySelector('.footer p').textContent = 'Профессиональное решение для автоматизации бухгалтерского учета';
+                const footerLinks = document.querySelectorAll('.footer-links a');
+                footerLinks[0].textContent = 'О компании';
+                footerLinks[1].textContent = 'Контакты';
+                footerLinks[2].textContent = 'Поддержка';
+                footerLinks[3].textContent = 'Документация';
+                
+                document.querySelector('.footer p:last-child').innerHTML = '&copy; 2025 БухгалтерПро. Все права защищены.';
             }
             
-            const threshold = parseFloat(document.getElementById('salaryThreshold').value) || 0;
-            const headers = ['ФИО', 'Должность', 'Тип оплаты', 'Зарплата', 'Статус'];
-            
-            exportToDocx(currentLowSalaryData, 'низкая_зарплата_отчет', headers, (emp) => {
-                let salary = 0;
-                let salaryType = '';
-                
-                if (emp.salary_type === 'оклад') {
-                    salary = parseFloat(emp.salary || 0);
-                    salaryType = 'Оклад';
-                } else {
-                    salary = emp.worked_hours * emp.hourly_rate;
-                    salaryType = 'Почасовая';
-                }
-                
-                const status = salary < threshold * 0.7 ? 'Низкая' : 
-                              salary < threshold * 0.9 ? 'Средняя' : 'Приемлемая';
-                
-                return [
-                    emp.full_name,
-                    emp.position,
-                    salaryType,
-                    formatCurrency(salary),
-                    status
-                ];
-            }, `Отчет по сотрудникам с зарплатой ниже ${formatCurrency(threshold)}`);
-            
-            showMessage('Отчет по низким зарплатам экспортирован в DOCX', 'success');
+            updatePeriodInfo();
+        }
+
+        function applyTheme(theme) {
+            document.body.classList.remove('light-theme');
+            if (theme === 'light') {
+                document.body.classList.add('light-theme');
+            }
+        }
+
+        function loadSettings() {
+            const savedAppearance = localStorage.getItem('appearanceSettings');
+            if (savedAppearance) {
+                const appearance = JSON.parse(savedAppearance);
+                applyTheme(appearance.theme || 'dark');
+                applyTranslations(appearance.language || 'ru');
+            } else {
+                applyTranslations('ru');
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('reportMonth').value = currentMonth;
+            document.getElementById('reportYear').value = currentYear;
+            
+            loadSettings();
+            updatePeriodInfo();
             loadEmployees();
             
             document.getElementById('loadOvertimeBtn').addEventListener('click', loadOvertimeEmployees);
             document.getElementById('loadSalaryTaxBtn').addEventListener('click', loadSalaryWithTax);
             document.getElementById('loadLowSalaryBtn').addEventListener('click', loadLowSalaryEmployees);
             document.getElementById('hoursForm').addEventListener('submit', updateEmployeeHours);
+            document.getElementById('applyPeriodBtn').addEventListener('click', applyPeriod);
             
-            document.getElementById('exportOvertimeTxt').addEventListener('click', exportOvertimeToTxt);
-            document.getElementById('exportOvertimeDocx').addEventListener('click', exportOvertimeToDocx);
-            document.getElementById('exportSalaryTxt').addEventListener('click', exportSalaryToTxt);
-            document.getElementById('exportSalaryDocx').addEventListener('click', exportSalaryToDocx);
-            document.getElementById('exportLowSalaryTxt').addEventListener('click', exportLowSalaryToTxt);
-            document.getElementById('exportLowSalaryDocx').addEventListener('click', exportLowSalaryToDocx);
+            document.getElementById('employeeSelect').addEventListener('change', function() {
+                if (this.value) {
+                    const selectedOption = this.options[this.selectedIndex];
+                    document.getElementById('workedHours').value = selectedOption.dataset.hours || 160;
+                    document.getElementById('overtimeHours').value = selectedOption.dataset.overtime || 0;
+                }
+            });
+            
+            document.getElementById('exportOvertimeTxt').addEventListener('click', () => {
+                if (currentOvertimeData.length === 0) {
+                    const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+                    showMessage(isEnglish ? 'No data to export. Load data first.' : 'Нет данных для экспорта. Сначала загрузите данные.', 'error');
+                    return;
+                }
+                exportToTxt(currentOvertimeData, 'overtime');
+            });
+            
+            document.getElementById('exportOvertimeDocx').addEventListener('click', () => {
+                if (currentOvertimeData.length === 0) {
+                    const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+                    showMessage(isEnglish ? 'No data to export. Load data first.' : 'Нет данных для экспорта. Сначала загрузите данные.', 'error');
+                    return;
+                }
+                exportToDocx(currentOvertimeData, 'overtime');
+            });
+            
+            document.getElementById('exportSalaryTxt').addEventListener('click', () => {
+                if (currentSalaryData.length === 0) {
+                    const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+                    showMessage(isEnglish ? 'No data to export. Calculate salaries first.' : 'Нет данных для экспорта. Сначала рассчитайте зарплаты.', 'error');
+                    return;
+                }
+                exportToTxt(currentSalaryData, 'salary');
+            });
+            
+            document.getElementById('exportSalaryDocx').addEventListener('click', () => {
+                if (currentSalaryData.length === 0) {
+                    const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+                    showMessage(isEnglish ? 'No data to export. Calculate salaries first.' : 'Нет данных для экспорта. Сначала рассчитайте зарплаты.', 'error');
+                    return;
+                }
+                exportToDocx(currentSalaryData, 'salary');
+            });
+            
+            document.getElementById('exportLowSalaryTxt').addEventListener('click', () => {
+                if (currentLowSalaryData.length === 0) {
+                    const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+                    showMessage(isEnglish ? 'No data to export. Find employees first.' : 'Нет данных для экспорта. Сначала найдите сотрудников.', 'error');
+                    return;
+                }
+                exportToTxt(currentLowSalaryData, 'lowSalary');
+            });
+            
+            document.getElementById('exportLowSalaryDocx').addEventListener('click', () => {
+                if (currentLowSalaryData.length === 0) {
+                    const isEnglish = document.getElementById('htmlLang').getAttribute('lang') === 'en';
+                    showMessage(isEnglish ? 'No data to export. Find employees first.' : 'Нет данных для экспорта. Сначала найдите сотрудников.', 'error');
+                    return;
+                }
+                exportToDocx(currentLowSalaryData, 'lowSalary');
+            });
         });
     </script>
 </body>

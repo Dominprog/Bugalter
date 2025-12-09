@@ -1,18 +1,11 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" id="htmlLang">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>БухгалтерПро - Профессиональная система учета</title>
+    <title>БухгалтерПро</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-        }
-
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
@@ -30,10 +23,16 @@
             --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
             --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             --border-radius: 12px;
             --border-radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         body {
@@ -41,6 +40,66 @@
             color: var(--light);
             line-height: 1.6;
             min-height: 100vh;
+        }
+
+        body.light-theme {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #0f172a;
+        }
+
+        body.light-theme .header {
+            background: rgba(248, 250, 252, 0.95);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .nav-links a {
+            color: #475569;
+        }
+
+        body.light-theme .nav-links a:hover,
+        body.light-theme .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        body.light-theme .dashboard-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .card-header {
+            background: rgba(241, 245, 249, 0.9);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        }
+
+        body.light-theme .card-title,
+        body.light-theme .form-label,
+        body.light-theme .setting-title {
+            color: #0f172a;
+        }
+
+        body.light-theme .card-description,
+        body.light-theme .setting-description {
+            color: #475569;
+        }
+
+        body.light-theme .form-control {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+
+        body.light-theme .footer {
+            background: rgba(248, 250, 252, 0.95);
+            color: #0f172a;
+        }
+
+        body.light-theme .footer-links a {
+            color: #64748b;
+        }
+
+        body.light-theme .footer-links a:hover {
+            color: #0f172a;
         }
 
         .container {
@@ -334,6 +393,14 @@
             margin: 1rem 0;
         }
 
+        body.large-font {
+            font-size: 18px;
+        }
+
+        body.small-font {
+            font-size: 14px;
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2rem;
@@ -451,10 +518,9 @@
                 </div>
                 <p>Профессиональное решение для автоматизации бухгалтерского учета</p>
                 <div class="footer-links">
-                    <a href="About the company.html">О компании</a>
+                    <a href="about.html">О компании</a>
                     <a href="contacts.html">Контакты</a>
                     <a href="support.html">Поддержка</a>
-                    <a href="documentation.html">Документация</a>
                 </div>
                 <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
             </div>
@@ -462,78 +528,198 @@
     </footer>
 
     <script>
-        const API_BASE = 'http://localhost:3000';
+    const API_BASE = 'http://localhost:3000';
 
-        async function apiCall(endpoint) {
-            try {
-                const response = await fetch(`${API_BASE}${endpoint}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return await response.json();
-            } catch (error) {
-                console.error('Ошибка API:', error);
-                showMessage(`Ошибка при загрузке данных: ${error.message}`, 'error');
-                return null;
+    async function apiCall(endpoint) {
+        try {
+            const response = await fetch(`${API_BASE}${endpoint}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            return await response.json();
+        } catch (error) {
+            console.error('Ошибка API:', error);
+            showMessage(`Ошибка при загрузке данных: ${error.message}`, 'error');
+            return null;
+        }
+    }
+    
+    function showMessage(message, type = 'info') {
+        const messageContainer = document.getElementById('messageContainer');
+        const messageEl = document.createElement('div');
+        messageEl.className = type === 'error' ? 'error-message' : 'success-message';
+        messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
+        messageContainer.innerHTML = '';
+        messageContainer.appendChild(messageEl);
+    }
+
+    async function loadEmployees() {
+        const employeesTable = document.getElementById('employeesTable');
+        employeesTable.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Загрузка сотрудников...</div></td></tr>';
+        
+        const data = await apiCall('/employees?month=12&year=2024');
+        
+        if (data && data.length > 0) {
+            const departments = await apiCall('/departments') || [];
+            
+            employeesTable.innerHTML = data.map(emp => {
+                const department = departments.find(dept => dept.id === emp.department_id);
+                return `
+                    <tr>
+                        <td><strong>${emp.id}</strong></td>
+                        <td>${emp.full_name}</td>
+                        <td>${emp.position}</td>
+                        <td>${parseFloat(emp.salary || 0).toLocaleString()} BYN</td>
+                        <td>${emp.hire_date}</td>
+                        <td>${department ? department.name : 'Не назначен'}</td>
+                        <td><span style="color: ${emp.status === 'активен' ? '#10b981' : '#ef4444'};">${emp.status || 'неизвестно'}</span></td>
+                    </tr>
+                `;
+            }).join('');
+            
+            updateStats(data, departments);
+            showMessage(`Данные успешно загружены (${data.length} сотрудников)`, 'success');
+        } else {
+            employeesTable.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">Нет данных о сотрудниках</td></tr>';
+        }
+    }
+
+    function updateStats(employees, departments) {
+        if (!employees || employees.length === 0) return;
+        
+        const totalSalary = employees.reduce((sum, emp) => sum + parseFloat(emp.salary || 0), 0);
+        const avgSalary = Math.round(totalSalary / employees.length);
+        
+        document.getElementById('totalEmployees').textContent = employees.length;
+        document.getElementById('totalSalary').textContent = totalSalary.toLocaleString();
+        document.getElementById('avgSalary').textContent = avgSalary.toLocaleString();
+        document.getElementById('totalDepartments').textContent = departments ? departments.length : '0';
+    }
+
+    function applySettings() {
+        const appearance = JSON.parse(localStorage.getItem('appearanceSettings') || '{}');
+        
+        if (appearance.theme === 'light') {
+            document.body.classList.add('light-theme');
+        } else {
+            document.body.classList.remove('light-theme');
         }
         
-        function showMessage(message, type = 'info') {
-            const messageContainer = document.getElementById('messageContainer');
-            const messageEl = document.createElement('div');
-            messageEl.className = type === 'error' ? 'error-message' : 'success-message';
-            messageEl.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
-            messageContainer.innerHTML = '';
-            messageContainer.appendChild(messageEl);
+        if (appearance.fontSize === 'large') {
+            document.body.classList.add('large-font');
+            document.body.classList.remove('small-font');
+        } else if (appearance.fontSize === 'small') {
+            document.body.classList.add('small-font');
+            document.body.classList.remove('large-font');
+        } else {
+            document.body.classList.remove('small-font', 'large-font');
         }
-
-        async function loadEmployees() {
-            const employeesTable = document.getElementById('employeesTable');
-            employeesTable.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;"><div class="loading"></div><div style="margin-top: 1rem;">Загрузка сотрудников...</div></td></tr>';
+        
+        if (appearance.language === 'en') {
+            document.getElementById('htmlLang').setAttribute('lang', 'en');
             
-            const data = await apiCall('/employees');
+            document.querySelector('title').textContent = 'AccountantPro - Professional Accounting System';
+            document.querySelector('.hero h1').textContent = 'Professional Employee Management System';
+            document.querySelector('.hero p').textContent = 'Payroll calculation and personnel management automation';
+            document.querySelector('.section-title h2').textContent = 'Data Management';
+            document.querySelector('.section-title p').textContent = 'Complete control over employee information';
+            document.querySelector('.card-title').innerHTML = '<i class="fas fa-users"></i> Employee List';
+            document.querySelector('.card-description').textContent = 'All information about company employees';
+            document.querySelector('#refreshEmployeesBtn').innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Data';
             
-            if (data && data.length > 0) {
-                const departments = await apiCall('/departments') || [];
-                
-                employeesTable.innerHTML = data.map(emp => {
-                    const department = departments.find(dept => dept.id === emp.department_id);
-                    return `
-                        <tr>
-                            <td><strong>${emp.id}</strong></td>
-                            <td>${emp.full_name}</td>
-                            <td>${emp.position}</td>
-                            <td>${parseFloat(emp.salary || 0).toLocaleString()} BYN</td>
-                            <td>${emp.hire_date}</td>
-                            <td>${department ? department.name : 'Не назначен'}</td>
-                            <td><span style="color: ${emp.status === 'активен' ? '#10b981' : '#ef4444'};">${emp.status || 'неизвестно'}</span></td>
-                        </tr>
-                    `;
-                }).join('');
-                
-                updateStats(data, departments);
-                showMessage(`Данные успешно загружены (${data.length} сотрудников)`, 'success');
-            } else {
-                employeesTable.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">Нет данных о сотрудниках</td></tr>';
+            const th = document.querySelectorAll('th');
+            th[0].textContent = 'ID';
+            th[1].textContent = 'Full Name';
+            th[2].textContent = 'Position';
+            th[3].textContent = 'Salary';
+            th[4].textContent = 'Hire Date';
+            th[5].textContent = 'Department';
+            th[6].textContent = 'Status';
+            
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks[0].textContent = 'Home';
+            navLinks[1].textContent = 'Employees';
+            navLinks[2].textContent = 'Departments';
+            navLinks[3].textContent = 'Reports';
+            navLinks[4].textContent = 'Settings';
+            
+            const logo = document.querySelector('.logo div:last-child');
+            logo.textContent = 'AccountantPro';
+            
+            const stats = document.querySelectorAll('.stat-label');
+            stats[0].textContent = 'Employees';
+            stats[1].textContent = 'Payroll Fund';
+            stats[2].textContent = 'Average Salary';
+            stats[3].textContent = 'Departments';
+            
+            document.querySelector('.footer p').textContent = 'Professional solution for accounting automation';
+            const footerLinks = document.querySelectorAll('.footer-links a');
+            footerLinks[0].textContent = 'About Company';
+            footerLinks[1].textContent = 'Contacts';
+            footerLinks[2].textContent = 'Support';
+            
+            document.querySelector('.footer p:last-child').innerHTML = '&copy; 2025 AccountantPro. All rights reserved.';
+            
+            const loadingText = document.querySelector('.employeesTable td div:last-child');
+            if (loadingText) loadingText.textContent = 'Loading employees...';
+            
+            const noDataText = document.querySelector('.employeesTable td');
+            if (noDataText && noDataText.textContent.includes('Нет данных')) {
+                noDataText.textContent = 'No employee data';
             }
-        }
-
-        function updateStats(employees, departments) {
-            if (!employees || employees.length === 0) return;
+        } else {
+            document.getElementById('htmlLang').setAttribute('lang', 'ru');
             
-            const totalSalary = employees.reduce((sum, emp) => sum + parseFloat(emp.salary || 0), 0);
-            const avgSalary = Math.round(totalSalary / employees.length);
+            document.querySelector('title').textContent = 'БухгалтерПро - Профессиональная система учета';
+            document.querySelector('.hero h1').textContent = 'Профессиональная система учета сотрудников';
+            document.querySelector('.hero p').textContent = 'Автоматизация расчета заработной платы и управления персоналом';
+            document.querySelector('.section-title h2').textContent = 'Управление данными';
+            document.querySelector('.section-title p').textContent = 'Полный контроль над информацией о сотрудниках';
+            document.querySelector('.card-title').innerHTML = '<i class="fas fa-users"></i> Список сотрудников';
+            document.querySelector('.card-description').textContent = 'Вся информация о сотрудниках компании';
+            document.querySelector('#refreshEmployeesBtn').innerHTML = '<i class="fas fa-sync-alt"></i> Обновить данные';
             
-            document.getElementById('totalEmployees').textContent = employees.length;
-            document.getElementById('totalSalary').textContent = totalSalary.toLocaleString();
-            document.getElementById('avgSalary').textContent = avgSalary.toLocaleString();
-            document.getElementById('totalDepartments').textContent = departments ? departments.length : '0';
+            const th = document.querySelectorAll('th');
+            th[0].textContent = 'ID';
+            th[1].textContent = 'ФИО';
+            th[2].textContent = 'Должность';
+            th[3].textContent = 'Оклад';
+            th[4].textContent = 'Дата приема';
+            th[5].textContent = 'Отдел';
+            th[6].textContent = 'Статус';
+            
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks[0].textContent = 'Главная';
+            navLinks[1].textContent = 'Сотрудники';
+            navLinks[2].textContent = 'Отделы';
+            navLinks[3].textContent = 'Отчеты';
+            navLinks[4].textContent = 'Настройки';
+            
+            const logo = document.querySelector('.logo div:last-child');
+            logo.textContent = 'БухгалтерПро';
+            
+            const stats = document.querySelectorAll('.stat-label');
+            stats[0].textContent = 'Сотрудников';
+            stats[1].textContent = 'Фонд оплаты';
+            stats[2].textContent = 'Средняя зарплата';
+            stats[3].textContent = 'Отделов';
+            
+            document.querySelector('.footer p').textContent = 'Профессиональное решение для автоматизации бухгалтерского учета';
+            const footerLinks = document.querySelectorAll('.footer-links a');
+            footerLinks[0].textContent = 'О компании';
+            footerLinks[1].textContent = 'Контакты';
+            footerLinks[2].textContent = 'Поддержка';
+            
+            document.querySelector('.footer p:last-child').innerHTML = '&copy; 2025 БухгалтерПро. Все права защищены.';
         }
+    }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            loadEmployees();
-            document.getElementById('refreshEmployeesBtn').addEventListener('click', loadEmployees);
-        });
-    </script>
+    document.addEventListener('DOMContentLoaded', function() {
+        loadEmployees();
+        document.getElementById('refreshEmployeesBtn').addEventListener('click', loadEmployees);
+        
+        applySettings();
+    });
+</script>
 </body>
 </html>

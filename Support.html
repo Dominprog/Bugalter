@@ -662,7 +662,6 @@
                     <a href="about.html">О компании</a>
                     <a href="contacts.html">Контакты</a>
                     <a href="support.html">Поддержка</a>
-                    <a href="documentation.html">Документация</a>
                 </div>
                 <p style="color: rgba(255,255,255,0.6);">&copy; 2025 БухгалтерПро. Все права защищены.</p>
             </div>
@@ -670,23 +669,370 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const faqItems = document.querySelectorAll('.faq-item');
-            
-            faqItems.forEach(item => {
-                const question = item.querySelector('.faq-question');
-                
-                question.addEventListener('click', () => {
-                    faqItems.forEach(otherItem => {
-                        if (otherItem !== item && otherItem.classList.contains('active')) {
-                            otherItem.classList.remove('active');
-                        }
-                    });
-                    
-                    item.classList.toggle('active');
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedLanguage = localStorage.getItem('selectedLanguage') || 'ru';
+        applyTranslations(savedLanguage);
+        
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
                 });
+                item.classList.toggle('active');
             });
         });
-    </script>
+        
+        document.title = savedLanguage === 'en' ? 'Support - AccountantPro' : 'Поддержка - БухгалтерПро';
+    });
+
+    const translations = {
+        'ru': {
+            'nav.home': 'Главная',
+            'nav.employees': 'Сотрудники',
+            'nav.departments': 'Отделы',
+            'nav.reports': 'Отчеты',
+            'nav.settings': 'Настройки',
+            'hero.title': 'Центр поддержки',
+            'hero.subtitle': 'Найдите ответы на ваши вопросы и получите помощь по работе с системой',
+            'faq.title': 'Часто задаваемые вопросы',
+            'faq.subtitle': 'Быстрые ответы на самые популярные вопросы',
+            'faq.card.title': 'FAQ по системе',
+            'faq.card.desc': 'Ответы на вопросы о функционале системы',
+            'faq.q1': 'Как ввести данные по отработанным часам сотрудника?',
+            'faq.a1': 'Для ввода данных по отработанным часам:',
+            'faq.step1': 'Перейдите в раздел "Сотрудники"',
+            'faq.step2': 'Выберите нужного сотрудника из списка',
+            'faq.step3': 'Нажмите кнопку "Редактировать"',
+            'faq.step4': 'В разделе "Отработанные часы" введите количество часов за каждый день месяца',
+            'faq.step5': 'Нажмите "Сохранить" для применения изменений',
+            'faq.q2': 'Как посмотреть сотрудников со сверхурочными часами?',
+            'faq.a2': 'Чтобы найти сотрудников со сверхурочными часами:',
+            'faq.q3': 'Как рассчитывается зарплата за вычетом подоходного налога?',
+            'faq.a3': 'Расчет зарплаты с учетом налога:',
+            'faq.q4': 'Как найти сотрудников с зарплатой ниже указанной?',
+            'faq.a4': 'Для поиска сотрудников с зарплатой ниже определенного уровня:',
+            'faq.q5': 'Как учитываются премии и единоразовые выплаты?',
+            'faq.a5': 'Учет премий и единоразовых выплат:',
+            'instructions.title': 'Инструкции по работе с системой',
+            'instructions.subtitle': 'Пошаговые руководства по основным функциям',
+            'instruction1.title': 'Добавление нового сотрудника',
+            'instruction1.desc': 'Инструкция по внесению данных о новом сотруднике в систему',
+            'instruction1.step1': '1. Перейдите в раздел "Сотрудники"',
+            'instruction1.step2': '2. Нажмите кнопку "Добавить сотрудника"',
+            'instruction1.step3': '3. Заполните все обязательные поля',
+            'instruction1.step4': '4. Укажите тип оплаты (оклад/почасовая)',
+            'instruction1.step5': '5. Сохраните данные',
+            'instruction2.title': 'Учет рабочего времени',
+            'instruction2.desc': 'Как правильно вводить данные об отработанных часах',
+            'instruction2.step1': '1. Откройте карточку сотрудника',
+            'instruction2.step2': '2. Перейдите во вкладку "Рабочее время"',
+            'instruction2.step3': '3. Введите часы по дням месяца',
+            'instruction2.step4': '4. Сверхурочные часы отмечаются автоматически',
+            'instruction2.step5': '5. Сохраните изменения',
+            'instruction3.title': 'Расчет заработной платы',
+            'instruction3.desc': 'Процесс расчета зарплаты с учетом всех факторов',
+            'instruction3.step1': '1. Система автоматически рассчитывает зарплату',
+            'instruction3.step2': '2. Учитываются отработанные часы и ставка',
+            'instruction3.step3': '3. Добавляются премии и надбавки',
+            'instruction3.step4': '4. Вычитается подоходный налог (12%)',
+            'instruction3.step5': '5. Результат можно посмотреть в отчетах',
+            'instruction4.title': 'Формирование отчетов',
+            'instruction4.desc': 'Создание различных отчетов по зарплате и рабочему времени',
+            'instruction4.step1': '1. Перейдите в раздел "Отчеты"',
+            'instruction4.step2': '2. Выберите тип отчета',
+            'instruction4.step3': '3. Укажите период формирования',
+            'instruction4.step4': '4. Настройте параметры отчета',
+            'instruction4.step5': '5. Сгенерируйте и сохраните отчет',
+            'instruction5.title': 'Настройка ставок и тарифов',
+            'instruction5.desc': 'Изменение почасовых ставок и тарифов для сотрудников',
+            'instruction5.step1': '1. Откройте раздел "Настройки"',
+            'instruction5.step2': '2. Перейдите во вкладку "Тарифы"',
+            'instruction5.step3': '3. Выберите разряд сотрудника',
+            'instruction5.step4': '4. Установите новую ставку',
+            'instruction5.step5': '5. Сохраните изменения',
+            'instruction6.title': 'Анализ данных',
+            'instruction6.desc': 'Использование аналитических инструментов системы',
+            'instruction6.step1': '1. Откройте раздел "Аналитика"',
+            'instruction6.step2': '2. Выберите интересующий показатель',
+            'instruction6.step3': '3. Настройте параметры анализа',
+            'instruction6.step4': '4. Просмотрите графики и диаграммы',
+            'instruction6.step5': '5. Экспортируйте данные при необходимости',
+            'contact.title': 'Свяжитесь с нами',
+            'contact.subtitle': 'Мы всегда готовы помочь с решением ваших вопросов',
+            'contact.phone.title': 'Телефон поддержки',
+            'contact.phone.number': '+375 (29) 345-63-23',
+            'contact.phone.hours': 'Пн-Пт: 9:00 - 18:00',
+            'contact.email.title': 'Электронная почта',
+            'contact.email.address': 'supportbuhpro.byt@gmail.com',
+            'contact.email.response': 'Ответ в течение 24 часов',
+            'contact.chat.title': 'Онлайн-чат',
+            'contact.chat.availability': 'Доступен в рабочее время',
+            'contact.chat.help': 'Быстрая помощь по срочным вопросам',
+            'footer.description': 'Профессиональное решение для автоматизации бухгалтерского учета',
+            'footer.about': 'О компании',
+            'footer.contacts': 'Контакты',
+            'footer.support': 'Поддержка',
+            'footer.copyright': '© 2025 БухгалтерПро. Все права защищены.'
+        },
+        'en': {
+            'nav.home': 'Home',
+            'nav.employees': 'Employees',
+            'nav.departments': 'Departments',
+            'nav.reports': 'Reports',
+            'nav.settings': 'Settings',
+            'hero.title': 'Support Center',
+            'hero.subtitle': 'Find answers to your questions and get help with the system',
+            'faq.title': 'Frequently Asked Questions',
+            'faq.subtitle': 'Quick answers to the most popular questions',
+            'faq.card.title': 'System FAQ',
+            'faq.card.desc': 'Answers to questions about system functionality',
+            'faq.q1': 'How to enter employee working hours data?',
+            'faq.a1': 'To enter working hours data:',
+            'faq.step1': '1. Go to the "Employees" section',
+            'faq.step2': '2. Select the desired employee from the list',
+            'faq.step3': '3. Click the "Edit" button',
+            'faq.step4': '4. In the "Worked Hours" section, enter hours for each day of the month',
+            'faq.step5': '5. Click "Save" to apply changes',
+            'faq.q2': 'How to view employees with overtime hours?',
+            'faq.a2': 'To find employees with overtime hours:',
+            'faq.q3': 'How is salary calculated minus income tax?',
+            'faq.a3': 'Salary calculation including tax:',
+            'faq.q4': 'How to find employees with salary below specified?',
+            'faq.a4': 'To search for employees with salary below a certain level:',
+            'faq.q5': 'How are bonuses and one-time payments accounted for?',
+            'faq.a5': 'Accounting for bonuses and one-time payments:',
+            'instructions.title': 'System Instructions',
+            'instructions.subtitle': 'Step-by-step guides for main functions',
+            'instruction1.title': 'Adding a New Employee',
+            'instruction1.desc': 'Instructions for entering new employee data into the system',
+            'instruction1.step1': '1. Go to the "Employees" section',
+            'instruction1.step2': '2. Click the "Add Employee" button',
+            'instruction1.step3': '3. Fill in all required fields',
+            'instruction1.step4': '4. Specify payment type (salary/hourly)',
+            'instruction1.step5': '5. Save data',
+            'instruction2.title': 'Working Time Tracking',
+            'instruction2.desc': 'How to correctly enter worked hours data',
+            'instruction2.step1': '1. Open employee card',
+            'instruction2.step2': '2. Go to the "Working Time" tab',
+            'instruction2.step3': '3. Enter hours by days of the month',
+            'instruction2.step4': '4. Overtime hours are marked automatically',
+            'instruction2.step5': '5. Save changes',
+            'instruction3.title': 'Salary Calculation',
+            'instruction3.desc': 'Salary calculation process considering all factors',
+            'instruction3.step1': '1. System automatically calculates salary',
+            'instruction3.step2': '2. Worked hours and rate are considered',
+            'instruction3.step3': '3. Bonuses and allowances are added',
+            'instruction3.step4': '4. Income tax (12%) is deducted',
+            'instruction3.step5': '5. Result can be viewed in reports',
+            'instruction4.title': 'Report Generation',
+            'instruction4.desc': 'Creating various reports on salary and working time',
+            'instruction4.step1': '1. Go to the "Reports" section',
+            'instruction4.step2': '2. Select report type',
+            'instruction4.step3': '3. Specify generation period',
+            'instruction4.step4': '4. Configure report parameters',
+            'instruction4.step5': '5. Generate and save report',
+            'instruction5.title': 'Setting Rates and Tariffs',
+            'instruction5.desc': 'Changing hourly rates and tariffs for employees',
+            'instruction5.step1': '1. Open the "Settings" section',
+            'instruction5.step2': '2. Go to the "Tariffs" tab',
+            'instruction5.step3': '3. Select employee grade',
+            'instruction5.step4': '4. Set new rate',
+            'instruction5.step5': '5. Save changes',
+            'instruction6.title': 'Data Analysis',
+            'instruction6.desc': 'Using system analytical tools',
+            'instruction6.step1': '1. Open the "Analytics" section',
+            'instruction6.step2': '2. Select the indicator of interest',
+            'instruction6.step3': '3. Configure analysis parameters',
+            'instruction6.step4': '4. View charts and diagrams',
+            'instruction6.step5': '5. Export data if necessary',
+            'contact.title': 'Contact Us',
+            'contact.subtitle': 'We are always ready to help solve your questions',
+            'contact.phone.title': 'Support Phone',
+            'contact.phone.number': '+375 (29) 345-63-23',
+            'contact.phone.hours': 'Mon-Fri: 9:00 - 18:00',
+            'contact.email.title': 'Email',
+            'contact.email.address': 'supportbuhpro.byt@gmail.com',
+            'contact.email.response': 'Response within 24 hours',
+            'contact.chat.title': 'Online Chat',
+            'contact.chat.availability': 'Available during working hours',
+            'contact.chat.help': 'Quick help for urgent questions',
+            'footer.description': 'Professional solution for accounting automation',
+            'footer.about': 'About Company',
+            'footer.contacts': 'Contacts',
+            'footer.support': 'Support',
+            'footer.copyright': '© 2025 AccountantPro. All rights reserved.'
+        }
+    };
+
+    function applyTranslations(lang) {
+        document.documentElement.setAttribute('lang', lang);
+        const langData = translations[lang] || translations['ru'];
+        
+        document.title = lang === 'en' ? 'Support - AccountantPro' : 'Поддержка - БухгалтерПро';
+        
+        const navLinks = document.querySelectorAll('.nav-links a');
+        navLinks.forEach(link => {
+            const text = link.textContent.trim();
+            if (text === 'Главная' || text === 'Home') link.textContent = langData['nav.home'];
+            if (text === 'Сотрудники' || text === 'Employees') link.textContent = langData['nav.employees'];
+            if (text === 'Отделы' || text === 'Departments') link.textContent = langData['nav.departments'];
+            if (text === 'Отчеты' || text === 'Reports') link.textContent = langData['nav.reports'];
+            if (text === 'Настройки' || text === 'Settings') link.textContent = langData['nav.settings'];
+        });
+        
+        const heroTitle = document.querySelector('.hero h1');
+        const heroSubtitle = document.querySelector('.hero p');
+        if (heroTitle) heroTitle.textContent = langData['hero.title'];
+        if (heroSubtitle) heroSubtitle.textContent = langData['hero.subtitle'];
+        
+        const sectionTitles = document.querySelectorAll('.section-title h2');
+        const sectionSubtitles = document.querySelectorAll('.section-title p');
+        if (sectionTitles[0]) sectionTitles[0].textContent = langData['faq.title'];
+        if (sectionSubtitles[0]) sectionSubtitles[0].textContent = langData['faq.subtitle'];
+        if (sectionTitles[1]) sectionTitles[1].textContent = langData['instructions.title'];
+        if (sectionSubtitles[1]) sectionSubtitles[1].textContent = langData['instructions.subtitle'];
+        if (sectionTitles[2]) sectionTitles[2].textContent = langData['contact.title'];
+        if (sectionSubtitles[2]) sectionSubtitles[2].textContent = langData['contact.subtitle'];
+        
+        const cardTitle = document.querySelector('.card-title');
+        const cardDesc = document.querySelector('.card-description');
+        if (cardTitle) {
+            const icon = cardTitle.querySelector('i');
+            cardTitle.textContent = langData['faq.card.title'];
+            if (icon) cardTitle.prepend(icon);
+        }
+        if (cardDesc) cardDesc.textContent = langData['faq.card.desc'];
+        
+        const faqQuestions = document.querySelectorAll('.faq-question h3');
+        const faqAnswers = document.querySelectorAll('.faq-answer');
+        if (faqQuestions[0]) faqQuestions[0].textContent = langData['faq.q1'];
+        if (faqQuestions[1]) faqQuestions[1].textContent = langData['faq.q2'];
+        if (faqQuestions[2]) faqQuestions[2].textContent = langData['faq.q3'];
+        if (faqQuestions[3]) faqQuestions[3].textContent = langData['faq.q4'];
+        if (faqQuestions[4]) faqQuestions[4].textContent = langData['faq.q5'];
+        
+        if (faqAnswers[0]) {
+            const p = faqAnswers[0].querySelector('p');
+            const lis = faqAnswers[0].querySelectorAll('li');
+            if (p) p.textContent = langData['faq.a1'];
+            if (lis[0]) lis[0].textContent = langData['faq.step1'];
+            if (lis[1]) lis[1].textContent = langData['faq.step2'];
+            if (lis[2]) lis[2].textContent = langData['faq.step3'];
+            if (lis[3]) lis[3].textContent = langData['faq.step4'];
+            if (lis[4]) lis[4].textContent = langData['faq.step5'];
+        }
+        
+        const instructionCards = document.querySelectorAll('.instruction-card');
+        if (instructionCards[0]) {
+            instructionCards[0].querySelector('h3').textContent = langData['instruction1.title'];
+            instructionCards[0].querySelector('p').textContent = langData['instruction1.desc'];
+            const steps1 = instructionCards[0].querySelectorAll('.instruction-steps li');
+            if (steps1[0]) steps1[0].textContent = langData['instruction1.step1'];
+            if (steps1[1]) steps1[1].textContent = langData['instruction1.step2'];
+            if (steps1[2]) steps1[2].textContent = langData['instruction1.step3'];
+            if (steps1[3]) steps1[3].textContent = langData['instruction1.step4'];
+            if (steps1[4]) steps1[4].textContent = langData['instruction1.step5'];
+        }
+        if (instructionCards[1]) {
+            instructionCards[1].querySelector('h3').textContent = langData['instruction2.title'];
+            instructionCards[1].querySelector('p').textContent = langData['instruction2.desc'];
+            const steps2 = instructionCards[1].querySelectorAll('.instruction-steps li');
+            if (steps2[0]) steps2[0].textContent = langData['instruction2.step1'];
+            if (steps2[1]) steps2[1].textContent = langData['instruction2.step2'];
+            if (steps2[2]) steps2[2].textContent = langData['instruction2.step3'];
+            if (steps2[3]) steps2[3].textContent = langData['instruction2.step4'];
+            if (steps2[4]) steps2[4].textContent = langData['instruction2.step5'];
+        }
+        if (instructionCards[2]) {
+            instructionCards[2].querySelector('h3').textContent = langData['instruction3.title'];
+            instructionCards[2].querySelector('p').textContent = langData['instruction3.desc'];
+            const steps3 = instructionCards[2].querySelectorAll('.instruction-steps li');
+            if (steps3[0]) steps3[0].textContent = langData['instruction3.step1'];
+            if (steps3[1]) steps3[1].textContent = langData['instruction3.step2'];
+            if (steps3[2]) steps3[2].textContent = langData['instruction3.step3'];
+            if (steps3[3]) steps3[3].textContent = langData['instruction3.step4'];
+            if (steps3[4]) steps3[4].textContent = langData['instruction3.step5'];
+        }
+        if (instructionCards[3]) {
+            instructionCards[3].querySelector('h3').textContent = langData['instruction4.title'];
+            instructionCards[3].querySelector('p').textContent = langData['instruction4.desc'];
+            const steps4 = instructionCards[3].querySelectorAll('.instruction-steps li');
+            if (steps4[0]) steps4[0].textContent = langData['instruction4.step1'];
+            if (steps4[1]) steps4[1].textContent = langData['instruction4.step2'];
+            if (steps4[2]) steps4[2].textContent = langData['instruction4.step3'];
+            if (steps4[3]) steps4[3].textContent = langData['instruction4.step4'];
+            if (steps4[4]) steps4[4].textContent = langData['instruction4.step5'];
+        }
+        if (instructionCards[4]) {
+            instructionCards[4].querySelector('h3').textContent = langData['instruction5.title'];
+            instructionCards[4].querySelector('p').textContent = langData['instruction5.desc'];
+            const steps5 = instructionCards[4].querySelectorAll('.instruction-steps li');
+            if (steps5[0]) steps5[0].textContent = langData['instruction5.step1'];
+            if (steps5[1]) steps5[1].textContent = langData['instruction5.step2'];
+            if (steps5[2]) steps5[2].textContent = langData['instruction5.step3'];
+            if (steps5[3]) steps5[3].textContent = langData['instruction5.step4'];
+            if (steps5[4]) steps5[4].textContent = langData['instruction5.step5'];
+        }
+        if (instructionCards[5]) {
+            instructionCards[5].querySelector('h3').textContent = langData['instruction6.title'];
+            instructionCards[5].querySelector('p').textContent = langData['instruction6.desc'];
+            const steps6 = instructionCards[5].querySelectorAll('.instruction-steps li');
+            if (steps6[0]) steps6[0].textContent = langData['instruction6.step1'];
+            if (steps6[1]) steps6[1].textContent = langData['instruction6.step2'];
+            if (steps6[2]) steps6[2].textContent = langData['instruction6.step3'];
+            if (steps6[3]) steps6[3].textContent = langData['instruction6.step4'];
+            if (steps6[4]) steps6[4].textContent = langData['instruction6.step5'];
+        }
+        
+        const contactCards = document.querySelectorAll('.contact-card');
+        if (contactCards[0]) {
+            contactCards[0].querySelector('h3').textContent = langData['contact.phone.title'];
+            contactCards[0].querySelectorAll('p')[0].textContent = langData['contact.phone.number'];
+            contactCards[0].querySelectorAll('p')[1].textContent = langData['contact.phone.hours'];
+        }
+        if (contactCards[1]) {
+            contactCards[1].querySelector('h3').textContent = langData['contact.email.title'];
+            contactCards[1].querySelectorAll('p')[0].textContent = langData['contact.email.address'];
+            contactCards[1].querySelectorAll('p')[1].textContent = langData['contact.email.response'];
+        }
+        if (contactCards[2]) {
+            contactCards[2].querySelector('h3').textContent = langData['contact.chat.title'];
+            contactCards[2].querySelectorAll('p')[0].textContent = langData['contact.chat.availability'];
+            contactCards[2].querySelectorAll('p')[1].textContent = langData['contact.chat.help'];
+        }
+        
+        const footer = document.querySelector('.footer');
+        if (footer) {
+            const description = footer.querySelector('p');
+            const links = footer.querySelectorAll('.footer-links a');
+            const copyright = footer.querySelector('p:last-child');
+            
+            if (description) description.textContent = langData['footer.description'];
+            
+            if (links.length >= 3) {
+                links[0].textContent = langData['footer.about'];
+                links[1].textContent = langData['footer.contacts'];
+                links[2].textContent = langData['footer.support'];
+            }
+            
+            if (copyright) {
+                if (lang === 'en') {
+                    copyright.innerHTML = '&copy; 2025 AccountantPro. All rights reserved.';
+                } else {
+                    copyright.innerHTML = '&copy; 2025 БухгалтерПро. Все права защищены.';
+                }
+            }
+            
+            const footerLogo = footer.querySelector('.footer-logo div:last-child');
+            if (footerLogo) {
+                footerLogo.textContent = lang === 'en' ? 'AccountantPro' : 'БухгалтерПро';
+            }
+        }
+    }
+</script>
 </body>
 </html>
